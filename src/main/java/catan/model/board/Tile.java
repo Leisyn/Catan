@@ -2,6 +2,7 @@ package catan.model.board;
 
 import java.util.LinkedList;
 
+import catan.model.board.Buildable.Construction;
 import catan.model.player.Player;
 
 public class Tile {
@@ -120,12 +121,12 @@ public class Tile {
 	 * @param p		the player who built this intersection
 	 * @param type	the type of building built
 	 */
-	public void setIntersection(String s, Player p, int type) {
+	public void setIntersection(String s, Player p, Construction c) {
 		switch (s) {
-			case "NO": interNW.player = p; interNW.building = type; break;
-			case "NE": interNE.player = p; interNE.building = type; break;
-			case "SO": interSW.player = p; interSW.building = type; break;
-			case "SE": interSE.player = p; interSE.building = type; break;
+			case "NO": interNW.player = p; interNW.construction = c; break;
+			case "NE": interNE.player = p; interNE.construction = c; break;
+			case "SO": interSW.player = p; interSW.construction = c; break;
+			case "SE": interSE.player = p; interSE.construction = c; break;
 		}
 	}
 	

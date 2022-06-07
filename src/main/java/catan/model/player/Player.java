@@ -6,6 +6,7 @@ import java.util.Random;
 
 import catan.model.Game;
 import catan.model.board.Buildable;
+import catan.model.board.Buildable.Construction;
 import catan.model.board.Harbor.HarborType;
 import catan.model.board.Intersection;
 import catan.model.board.Path;
@@ -337,9 +338,9 @@ public class Player {
 
 		// on effectue l'action demandee
 		switch (action) {
-			case "R": return build(0, false);
-			case "C": return build(1, false);
-			case "V": return build(2, false);
+			case "R": return build(Construction.ROAD, false);
+			case "C": return build(Construction.SETTLEMENT, false);
+			case "V": return build(Construction.CITY, false);
 			case "A": return buyACard();
 			case "J": return playACard();
 			default: return true;
@@ -371,18 +372,20 @@ public class Player {
 	}
 
 	// Demande au joueur la position o� il souhaite construire (0 : route / 1 : colonie / 2 : ville) et renvoie s'il a gagn� ou non
-	public boolean build(int typeAConstruire, boolean phaseInitiale) {
-		if (typeAConstruire == 0 && numRoad >= Game.maxAmountOfRoadForEachPlayer) {
+	public boolean build(Construction c, boolean phaseInitiale) {
+		if (c == Construction.NOTHING) return hasWon();
+		
+		if (c == Construction.ROAD && numRoad >= Game.maxAmountOfRoadForEachPlayer) {
 			System.out.println("Vous avez atteint le nombre maximum de routes.");
 			return hasWon();
 		}
 
-		if (typeAConstruire == 1 && numSettlement >= Game.maxAmountOfSettlementForEachPlayer) {
+		if (c == Construction.SETTLEMENT && numSettlement >= Game.maxAmountOfSettlementForEachPlayer) {
 			System.out.println("Vous avez atteint le nombre maximum de colonies.");
 			return hasWon();
 		}
 
-		if (typeAConstruire == 2 && numCity >= Game.maxAmountOfCityForEachPlayer) {
+		if (c == Construction.CITY && numCity >= Game.maxAmountOfCityForEachPlayer) {
 			System.out.println("Vous avez atteint le nombre maximum de villes.");
 			return hasWon();
 		}
@@ -392,7 +395,7 @@ public class Player {
 
 		// on demande a l'utilisateur la tuile autour duquelle il veut construire
 		while (position == null)
-			position = askPosition(0, typeAConstruire, phaseInitiale);
+			position = askPosition(0, c, phaseInitiale);
 
 		// on regarde s'il a demande de revenir
 		if (position.x == -1 && position.y == -1)
@@ -400,7 +403,7 @@ public class Player {
 
 		// on demande la direction dans laquelle il veut construire
 		while (direction == null)
-			direction = askDirection(position, typeAConstruire, phaseInitiale);
+			direction = askDirection(position, c, phaseInitiale);
 
 		// on regarde s'il a demande de revenir
 		if (direction.equals("RETOUR"))
@@ -408,7 +411,7 @@ public class Player {
 
 		// sinon, on construit
 		Buildable construction = actualGame.getBoard().getConstruction(position, direction);
-		actualGame.getBoard().build(actualGame, construction, this, typeAConstruire);
+		construction.build(actualGame, this, c);
 
 		// on renvoie si le joueur a gagne ou non
 		return hasWon();
@@ -644,27 +647,27 @@ public class Player {
 	}
 
 	// Demande la position d'une tuile au joueur
-	public Pair askPosition(int type, int typeAConstruire, boolean phaseInitiale) {
+	public Pair askPosition(int type, Construction c, boolean phaseInitiale) {
 		// on regarde s'il faut demander la tuile pour construire, ou la tuile pour placer le voleur
 		if (type == 1)
 			System.out.println("Sur quelle tuile voulez-vous placer le voleur ? (Veuillez entrer le nom de la tuile sous le format \"FO 6\", ou \"DES\" pour le d�sert)");
 
 		else {
 			if (phaseInitiale) {
-				if (typeAConstruire == 0)
+				if (c == Construction.ROAD)
 					System.out.println("Autour de quelle tuile voulez-vous construire votre route ? (Veuillez entrer le nom de la tuile sous le format \"FO6\", ou \"DES\" pour le d�sert)");
-				else if (typeAConstruire == 1)
+				else if (c == Construction.SETTLEMENT)
 					System.out.println("Autour de quelle tuile voulez-vous construire votre colonie ? (Veuillez entrer le nom de la tuile sous le format \"FO6\", ou \"DES\" pour le d�sert)");
-				else if (typeAConstruire == 2)
+				else if (c == Construction.CITY)
 					System.out.println("Autour de quelle tuile se trouve la colonie que vous souhaitez transformer en ville ? (Veuillez entrer le nom de la tuile sous le format \"FO6\", ou \"DES\" pour le d�sert)");
 			}
 
 			else {
-				if (typeAConstruire == 0)
+				if (c == Construction.ROAD)
 					System.out.println("Autour de quelle tuile voulez-vous construire votre route ? (Veuillez entrer le nom de la tuile sous le format \"FO6\", ou \"DES\" pour le d�sert, ou \"retour\" pour revenir)");
-				else if (typeAConstruire == 1)
+				else if (c == Construction.SETTLEMENT)
 					System.out.println("Autour de quelle tuile voulez-vous construire votre colonie ? (Veuillez entrer le nom de la tuile sous le format \"FO6\", ou \"DES\" pour le d�sert, ou \"retour\" pour revenir)");
-				else if (typeAConstruire == 2)
+				else if (c == Construction.CITY)
 					System.out.println("Autour de quelle tuile se trouve la colonie que vous souhaitez transformer en ville ? (Veuillez entrer le nom de la tuile sous le format \"FO6\", ou \"DES\" pour le d�sert, ou \"retour\" pour revenir)");
 			}
 		}
@@ -714,10 +717,8 @@ public class Player {
 		return null;
 	}
 
-	public String askDirection(Pair positionTuile, int action, boolean phaseInitiale) {
-		// on regarde si l'action donnee est correcte
-		if (action != 0 && action != 1 && action != 2)
-			throw new IllegalArgumentException("Identifiant d'action inconnu.");
+	public String askDirection(Pair positionTuile, Construction c, boolean phaseInitiale) {
+		if (c == Construction.NOTHING) return null;
 
 		System.out.println("Dans quelle direction voulez-vous construire ? (Veuillez entrez l'initial de la direction en format cardinal (N pour nord), ou \"retour\" pour revenir � la phase de construction)");
 		String d = actualGame.sc.next().toUpperCase();
@@ -729,7 +730,7 @@ public class Player {
 		}
 
 		// on regarde si l'utilisateur veut construire une route
-		if (action == 0) {
+		if (c == Construction.ROAD) {
 
 			// on regarde s'il lui reste des routes disponibles
 			if (numRoad >= 15) {
@@ -801,13 +802,13 @@ public class Player {
 		// on regarde si le joueur veut construire une intersection
 		else {
 			// on regarde s'il lui reste des colonies disponibles s'il veut construire une colonie
-			if (action == 1 && numSettlement >= Game.maxAmountOfSettlementForEachPlayer) {
+			if (c == Construction.SETTLEMENT && numSettlement >= Game.maxAmountOfSettlementForEachPlayer) {
 				System.out.println("Vous avez atteint le nombre maximum de colonie.\n");
 				return null;
 			}
 
 			// on regarde s'il lui reste des villes disponibles s'il veut construire une ville
-			else if (action == 2 && numCity >= Game.maxAmountOfCityForEachPlayer) {
+			else if (c == Construction.CITY && numCity >= Game.maxAmountOfCityForEachPlayer) {
 				System.out.println("Vous avez atteint le nombre maximum de ville.\n");
 				return null;
 			}
@@ -822,10 +823,10 @@ public class Player {
 			Tile t = actualGame.getBoard().getTiles()[positionTuile.x][positionTuile.y];
 
 			// si le joueur veut construire une ville
-			if (action == 2) {
+			if (c == Construction.CITY) {
 
 				// on regarde si l'intersection qu'il a donne contient une de ses colonies
-				if (t.getIntersection(d) == null || t.getIntersection(d).player != this || t.getIntersection(d).building != 1) {
+				if (t.getIntersection(d) == null || t.getIntersection(d).player != this || t.getIntersection(d).construction != Construction.SETTLEMENT) {
 					System.out.println("Impossible de construire une ville dans cette position.\n");
 					return null;
 				}

@@ -7,41 +7,39 @@ import catan.model.board.Harbor.HarborType;
 import catan.model.player.Player;
 
 public class Intersection implements Buildable {
-	public Player player; // le joueur qui a construit un batiment sur l'intersection (null si rien n'est
-							// construit)
-	public int building; // 0 : rien / 1 : colonie / 2 : ville
+	public Construction construction;
+	public Player player; // le joueur qui a construit un batiment sur l'intersection (null si rien n'est construit)
 
 	public Intersection() {
-		building = 0;
+		construction = Construction.NOTHING;
 		player = null;
 	}
 
 	@Override
 	public String toString() {
-		if (building == 0) return " ";
-		if (building == 1) return "*";
+		if (construction == Construction.NOTHING) return " ";
+		if (construction == Construction.SETTLEMENT) return "*";
 		return "#";
 	}
 
 	public boolean isBuilt() {
-		return building != 0;
+		return construction != Construction.NOTHING;
 	}
 
 	@Override
-	public void build(Game game, Player p, int type) {
-		if (type == 0)
-			return;
+	public void build(Game game, Player p, Construction c) {
+		if (c != Construction.SETTLEMENT && c != Construction.CITY) return;
 		
 		// on regarde si le joueur construit une ville
-		if (type == 2) {
+		if (c == Construction.CITY) {
 			// on construit l'intersection
 			player = p;
-			building = type;
+			construction = c;
 			
 			p.hasBuiltACity();
 
 			// on ajoute les points au joueur
-			p.points += type;
+			p.points += 2;
 
 			return;
 		}
@@ -72,12 +70,12 @@ public class Intersection implements Buildable {
 
 		// on construit l'intersection
 		player = p;
-		building = type;
+		construction = c;
 
 		p.hasBuiltASettlement();
 		
 		// on ajoute les points au joueur
-		p.points += type;
+		p.points += 1;
 
 		// on regarde si un port est en contact
 		if (game.getBoard().isInContactWithAHarbor(this)) {

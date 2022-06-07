@@ -4,5 +4,7 @@ import catan.model.Game;
 import catan.model.player.Player;
 
 public interface Buildable {
-	public void build(Game game, Player p, int type);
+	public enum Construction{NOTHING, ROAD, SETTLEMENT, CITY};
+	
+	public void build(Game game, Player p, Construction c);
 }

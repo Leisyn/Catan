@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import catan.model.board.Intersection;
 import catan.model.board.Board;
+import catan.model.board.Buildable.Construction;
 import catan.model.board.Tile;
 import catan.model.card.Card;
 import catan.model.card.KnightCard;
@@ -169,10 +170,10 @@ public class Game {
 			printTurnBanner(players[i]);
 			board.printBoard();
 			while (players[i].getNumSettlement() != 1)
-				players[i].build(1, true);  // on demande au joueur de placer une colonie
+				players[i].build(Construction.SETTLEMENT, true);  // on demande au joueur de placer une colonie
 			board.printBoard();
 			while (players[i].getNumRoad() != 1)
-				players[i].build(0, true);  // on demande au joueur de placer une route pres de la colonie qu'il vient de placer
+				players[i].build(Construction.ROAD, true);  // on demande au joueur de placer une route pres de la colonie qu'il vient de placer
 		}
 		
 		// 2e tour
@@ -180,10 +181,10 @@ public class Game {
 			printTurnBanner(players[i]);
 			board.printBoard();
 			while (players[i].getNumSettlement() != 2)
-				players[i].build(1, true);  // on demande au joueur de placer une colonie
+				players[i].build(Construction.SETTLEMENT, true);  // on demande au joueur de placer une colonie
 			board.printBoard();
 			while (players[i].getNumRoad() != 2)
-				players[i].build(0, true);  // on demande au joueur de placer une route pres de la colonie qu'il vient de placer
+				players[i].build(Construction.ROAD, true);  // on demande au joueur de placer une route pres de la colonie qu'il vient de placer
 		}
 	}
 	
@@ -280,7 +281,7 @@ public class Game {
 		
 		// on demande sur quelle tuile le joueur veut deplacer le voleur
 		while (pair == null) {
-			pair = p.askPosition(1, -1, true);
+			pair = p.askPosition(1, Construction.NOTHING, true);
 			
 			// on verifie que le voleur n'est pas deja sur la tuile (d'apres les regles, il est obligatoire de deplacer le voleur)
 			if (board.getTiles()[pair.x][pair.y].robberIsHere) {
@@ -344,9 +345,9 @@ public class Game {
 						}
 						
 						if (!resource.equals("rien")) {
-							if (in.player == p) System.out.println("You get " + in.building + " " + resource + ".");
-							else System.out.println(in.player.name + " get " + in.building + " " + resource + ".");
-							in.player.receiveResource(resource, in.building);
+							if (in.player == p) System.out.println("You get " + in.construction + " " + resource + ".");
+							else System.out.println(in.player.name + " get " + in.construction + " " + resource + ".");
+							in.player.receiveResource(resource, in.construction.ordinal() - 1);
 						}
 					}
 				}

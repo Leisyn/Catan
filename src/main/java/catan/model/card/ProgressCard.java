@@ -1,6 +1,7 @@
 package catan.model.card;
 
 import catan.model.Game;
+import catan.model.board.Buildable.Construction;
 import catan.model.player.Player;
 
 public class ProgressCard extends Card {
@@ -14,8 +15,8 @@ public class ProgressCard extends Card {
 		if (this.name.equals("construction")) {
 			
 			// on construit 2 routes
-			p.build(0, false);
-			p.build(0, false);
+			p.build(Construction.ROAD, false);
+			p.build(Construction.ROAD, false);
 		}
 		
 		// s'il s'agit d'une carte invention

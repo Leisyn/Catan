@@ -1,6 +1,7 @@
 package catan.model.board;
 
 import catan.model.Game;
+import catan.model.board.Buildable.Construction;
 import catan.model.board.Harbor.HarborType;
 import catan.model.board.Tile.TileType;
 import catan.model.other.Pair;
@@ -286,10 +287,6 @@ public class Board {
 		return tiles[positionTile.x][positionTile.y].getIntersection(direction);
 	}
 
-	public void build(Game game, Buildable construction, Player p, int type) {
-		construction.build(game, p, type);
-	}
-
 	// Calcule la route la plus longue du joueur donn�
 	public int calculateLongestRoad(Player p) {
 		int max = 0;
@@ -327,7 +324,7 @@ public class Board {
 		Intersection[] in = getAllIntersectionsInContactWith(r);
 
 		// on regarde si des batiments adverses bloquent les deux intersections
-		if ((in[0].building != 0 && in[0].player != p) || (in[1].building != 0 && in[1].player != p))
+		if ((in[0].construction != Construction.NOTHING && in[0].player != p) || (in[1].construction != Construction.NOTHING && in[1].player != p))
 			return n;
 
 		// on r�cup�re les 6 routes li�es � la route actuelle
@@ -336,7 +333,7 @@ public class Board {
 		int m;
 
 		// si aucun batiment adverse ne bloque la 1er intersection
-		if (in[0].building == 0 || in[0].player == p) {
+		if (in[0].construction == Construction.NOTHING || in[0].player == p) {
 
 			// on r�cup�re la route la plus longue a partir de la route � l'ouest / au nord
 			// et on la compare avec les deux routes les plus longues pr�c�dentes
@@ -379,7 +376,7 @@ public class Board {
 		}
 
 		// si aucun batiment adverse ne bloque la 2e intersection
-		if (in[1].building == 0 || in[1].player == p) {
+		if (in[1].construction == Construction.NOTHING || in[1].player == p) {
 
 			// on r�cup�re la route la plus longue a partir de la route � l'est / au sud et
 			// on la compare avec les deux routes les plus longues pr�c�dentes

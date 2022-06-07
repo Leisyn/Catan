@@ -4,27 +4,30 @@ import catan.model.Game;
 import catan.model.player.Player;
 
 public class Path implements Buildable {
-	public Player player;  // le joueur qui a construit la route (null si aucune route n'est construite)
+	public Construction construction;
+	public Player player;
 	
 	public Path() {
+		construction = Construction.NOTHING;
 		player = null;
 	}
 	
 	public void printH() {
-		if (player == null) System.out.print("       ");
+		if (construction == Construction.NOTHING) System.out.print("       ");
 		else System.out.print("-------");
 	}
 	
 	public void printV() {
-		if (player == null) System.out.print(" ");
+		if (construction == Construction.NOTHING) System.out.print(" ");
 		else System.out.print("|");
 	}
 
 	@Override
-	public void build(Game game, Player p, int type) {
-		// on construit la route
-		player = p;
+	public void build(Game game, Player p, Construction c) {
+		if (c != Construction.ROAD) return;
 		
+		construction = c;
+		player = p;
 		p.hasBuiltARoad();
 
 		// on calcule quelle est la longueur de cette route
@@ -33,11 +36,10 @@ public class Path implements Buildable {
 		// on stocke sa nouvelle longueur
 		p.longestRoad = n;
 
-		// si elle est plus longue que la route la plus longue pr�c�dente
+		// si elle est plus longue que la route la plus longue precedente
 		if (n > 5 && n > p.longestRoad) {
 
-			// on r�attribue la route la plus longue au cas-o� le joueur qui la poss�de
-			// change
+			// on reattribue la route la plus longue au cas-ou le joueur qui la possede change
 			game.assignLongestRoad();
 		}
 	}

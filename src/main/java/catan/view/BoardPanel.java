@@ -7,6 +7,7 @@ import catan.model.board.Intersection;
 import catan.model.board.Board;
 import catan.model.board.Path;
 import catan.model.board.Tile;
+import catan.model.board.Buildable.Construction;
 import catan.model.player.Player;
 
 import java.util.LinkedList;
@@ -144,7 +145,7 @@ public class BoardPanel extends JPanel implements MouseListener {
 					}
 				}
 				
-				if (p.getIntersections()[i][j] == null || p.getIntersections()[i][j].building != 2) {
+				if (p.getIntersections()[i][j] == null || p.getIntersections()[i][j].construction != Construction.CITY) {
 					Ellipse2D e = (Ellipse2D)intersections.get(n);
 					g.fillOval((int)e.getX(), (int)e.getY(), (int)e.getWidth(), (int)e.getHeight());
 				}
@@ -233,7 +234,7 @@ public class BoardPanel extends JPanel implements MouseListener {
 					}
 				}
 				
-				((Path) o).build(vue.jeu, vue.jeu.getPlayers()[vue.indiceJoueurActuel], 0);
+				((Path) o).build(vue.jeu, vue.jeu.getPlayers()[vue.indiceJoueurActuel], Construction.ROAD);
 				vue.descriptifJeu.setText("");
 				repaint();
 				vue.control.setCompteursJoueur();
@@ -254,7 +255,7 @@ public class BoardPanel extends JPanel implements MouseListener {
 			else {
 				if (!phaseInitiale) {
 					if (typeAction == 3) {
-						if (((Intersection)o).player != j || ((Intersection)o).building != 1) {
+						if (((Intersection)o).player != j || ((Intersection)o).construction != Construction.SETTLEMENT) {
 							vue.descriptifJeu.setText("Vous ne poss�dez pas de colonie � cette endroit.");
 							return;
 						}
@@ -273,8 +274,10 @@ public class BoardPanel extends JPanel implements MouseListener {
 						}
 					}
 				}
-					
-				((Intersection) o).build(vue.jeu, vue.jeu.getPlayers()[vue.indiceJoueurActuel], typeAction - 1);
+				
+				if (typeAction == 2) ((Intersection) o).build(vue.jeu, vue.jeu.getPlayers()[vue.indiceJoueurActuel], Construction.SETTLEMENT);
+				else ((Intersection) o).build(vue.jeu, vue.jeu.getPlayers()[vue.indiceJoueurActuel], Construction.CITY);
+				
 				vue.descriptifJeu.setText("");
 				repaint();
 				vue.control.setCompteursJoueur();
