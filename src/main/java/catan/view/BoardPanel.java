@@ -9,6 +9,7 @@ import catan.model.board.Path;
 import catan.model.board.Tile;
 import catan.model.board.Buildable.Construction;
 import catan.model.player.Player;
+import catan.model.player.Player.Resource;
 
 import java.util.LinkedList;
 import java.awt.geom.Ellipse2D;
@@ -322,7 +323,7 @@ public class BoardPanel extends JPanel implements MouseListener {
 					int n = rd.nextInt(joueurs.size());
 					
 					// on recupere une ressource du joueur adverse de facon aleatoire
-					String ressource = joueurs.get(n).loseARandomResource();
+					Resource ressource = joueurs.get(n).loseARandomResource();
 					
 					// s'il n'avait aucune ressource, on l'annonce
 					if (ressource.equals("rien"))

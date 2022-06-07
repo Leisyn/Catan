@@ -14,6 +14,7 @@ import catan.model.card.ProgressCard;
 import catan.model.card.VictoryCard;
 import catan.model.other.Pair;
 import catan.model.player.Player;
+import catan.model.player.Player.Resource;
 
 public class Game {
 	private Board board;
@@ -266,7 +267,7 @@ public class Game {
 				
 				// on lui demande de se defausser d'une ressource a la fois
 				for (int i = 0; i < n; i++) {
-					String resource = null;
+					Resource resource = null;
 					while (resource == null) resource = pl.askResourceToGive(1);
 					pl.loseResources(resource, 1);
 				}
@@ -311,10 +312,10 @@ public class Game {
 			while (opponent == null) opponent = p.askWhichPlayer(players);
 			
 			// on recupere une ressource du joueur adverse de facon aleatoire
-			String resource = opponent.loseARandomResource();
+			Resource resource = opponent.loseARandomResource();
 			
 			// s'il n'avait aucune ressource, on l'annonce
-			if (resource.equals("rien")) System.out.println("This player has no resources.\n");
+			if (resource == null) System.out.println("This player has no resources.\n");
 			
 			// sinon, on donne la ressource recupere au joueur actuel
 			else p.receiveResource(resource, 1);
@@ -333,18 +334,18 @@ public class Game {
 					
 					// on recupere toutes les intersections construites autour et on donne les ressources selon le type de batiment construit
 					for (Intersection in : t[i][j].getAllBuiltIntersections()) {
-						String resource = null;
+						Resource resource = null;
 						
 						switch (t[i][j].type) {
-							case PASTURE: resource = "laine"; break; 
-							case FOREST: resource = "bois"; break;
-							case HILLS: resource = "argile"; break;
-							case FIELDS: resource = "ble"; break;
-							case MOUNTAINS: resource = "minerai"; break;
-							default: resource = "rien";
+							case HILLS: resource = Resource.BRICK; break; 
+							case FOREST: resource = Resource.LUMBER; break;
+							case MOUNTAINS: resource = Resource.ORE; break;
+							case FIELDS: resource = Resource.GRAIN; break;
+							case PASTURE: resource = Resource.WOOL; break;
+							default: resource = null;
 						}
 						
-						if (!resource.equals("rien")) {
+						if (resource != null) {
 							if (in.player == p) System.out.println("You get " + in.construction + " " + resource + ".");
 							else System.out.println(in.player.name + " get " + in.construction + " " + resource + ".");
 							in.player.receiveResource(resource, in.construction.ordinal() - 1);

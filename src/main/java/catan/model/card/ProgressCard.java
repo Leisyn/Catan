@@ -3,6 +3,7 @@ package catan.model.card;
 import catan.model.Game;
 import catan.model.board.Buildable.Construction;
 import catan.model.player.Player;
+import catan.model.player.Player.Resource;
 
 public class ProgressCard extends Card {
 
@@ -23,20 +24,16 @@ public class ProgressCard extends Card {
 		if (this.name.equals("invention")) {
 			
 			// on demande la ressource que le joueur veut recevoir et on lui donne
-			String askedResource = null;
-			while (askedResource == null) {
-				askedResource = p.askResourceToReceive(1);
-			}
+			Resource askedResource = null;
+			while (askedResource == null) askedResource = p.askResourceToReceive(1);
 			
 			// on donne au joueur la ressource qu'il a souhait�
 			p.receiveResource(askedResource, 1);
 
 			
 			// on demande la 2e ressource que le joueur veut recevoir et on lui donne
-			String askedResource2 = null;
-			while (askedResource2 == null) {
-				askedResource2 = p.askResourceToReceive(1);
-			}
+			Resource askedResource2 = null;
+			while (askedResource2 == null) askedResource2 = p.askResourceToReceive(1);
 			
 			// on donne au joueur la ressource qu'il a souhait�
 			p.receiveResource(askedResource2, 1);
@@ -46,10 +43,8 @@ public class ProgressCard extends Card {
 		if (this.name.equals("monopole")) {
 
 			// on demande la ressource que le joueur veut recevoir
-			String askedResource = null;
-			while (askedResource == null) {
-				askedResource = p.askResourceToReceive(1);
-			}
+			Resource askedResource = null;
+			while (askedResource == null) askedResource = p.askResourceToReceive(1);
 			
 			// on donne au joueur la ressource qu'il a souhait�
 			p.receiveResource(askedResource, 1);		

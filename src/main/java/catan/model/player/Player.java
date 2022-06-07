@@ -11,6 +11,7 @@ import catan.model.board.Harbor.HarborType;
 import catan.model.board.Intersection;
 import catan.model.board.Path;
 import catan.model.board.Tile;
+import catan.model.board.Tile.TileType;
 import catan.model.card.Card;
 import catan.model.card.KnightCard;
 import catan.model.card.ProgressCard;
@@ -18,6 +19,20 @@ import catan.model.card.VictoryCard;
 import catan.model.other.Pair;
 
 public class Player {
+	public enum Resource{BRICK, LUMBER, ORE, GRAIN, WOOL};
+	
+	public Resource stringToResource(String s) {
+		s = s.toUpperCase();
+		switch(s) {
+			case "BRICK": return Resource.BRICK;
+			case "LUMBER": return Resource.LUMBER;
+			case "ORE": return Resource.ORE;
+			case "GRAIN": return Resource.GRAIN;
+			case "WOOL": return Resource.WOOL;
+			default: return null;
+		}
+	}
+	
 	public static int numPlayer = 1;
 
 	public final Game actualGame;
@@ -26,8 +41,8 @@ public class Player {
 	public final String name;
 
 	public LinkedList<Card> cards = new LinkedList<>();
-	public HashMap<String, Integer> tradeRate = new HashMap<>();
-	private HashMap<String, Integer> resources = new HashMap<>();
+	public HashMap<Resource, Integer> tradeRate = new HashMap<>();
+	private HashMap<Resource, Integer> resources = new HashMap<>();
 
 	public int points = 0;
 	public int longestRoad = 0;  // le nombre de routes constituant la route la plus longue du joueur
@@ -50,25 +65,25 @@ public class Player {
 		numPlayer++;
 
 		// on initialise les taux d'echanges du joueur (initialement a 4:1)
-		tradeRate.put("laine", 4);
-		tradeRate.put("bois", 4);
-		tradeRate.put("argile", 4);
-		tradeRate.put("bl�", 4);
-		tradeRate.put("minerai", 4);
+		tradeRate.put(Resource.BRICK, 4);
+		tradeRate.put(Resource.LUMBER, 4);
+		tradeRate.put(Resource.ORE, 4);
+		tradeRate.put(Resource.GRAIN, 4);
+		tradeRate.put(Resource.WOOL, 4);
 
 		// on initialise les ressources que le joueur possede au depart (aucune)
-		resources.put("laine", 0);
-		resources.put("bois", 0);
-		resources.put("argile", 0);
-		resources.put("bl�", 0);
-		resources.put("minerai", 0);
+		resources.put(Resource.BRICK, 0);
+		resources.put(Resource.LUMBER, 0);
+		resources.put(Resource.ORE, 0);
+		resources.put(Resource.GRAIN, 0);
+		resources.put(Resource.WOOL, 0);
 	}
 
-	public HashMap<String, Integer> getResources() {
+	public HashMap<Resource, Integer> getResources() {
 		return resources;
 	}
 
-	public HashMap<String, Integer> getTradeRate() {
+	public HashMap<Resource, Integer> getTradeRate() {
 		return tradeRate;
 	}
 
@@ -116,85 +131,74 @@ public class Player {
 		return points >= 10;
 	}
 
-	public void receiveResource(int typeTuile, int amount) {
-		// on recupere le nom de la resource a donner
-		String resource;
-		switch (typeTuile) {
-			case 2: resource = "laine"; break;
-			case 3: resource = "bois"; break;
-			case 4: resource = "argile"; break;
-			case 5: resource = "bl�"; break;
-			case 6: resource = "minerai"; break;
-			default: resource = "rien";
+	public void receiveResource(TileType type, int amount) {
+		Resource resource;
+		switch (type) {
+			case HILLS: resource = Resource.BRICK; break;
+			case FOREST: resource = Resource.LUMBER; break;
+			case MOUNTAINS: resource = Resource.ORE; break;
+			case FIELDS: resource = Resource.GRAIN; break;
+			case PASTURE: resource = Resource.WOOL; break;
+			default: resource = null;
 		}
 
 		// on l'ajoute aux ressources actuelles du joueur
-		if (!resource.equals("rien"))
-			resources.replace(resource, resources.get(resource) + amount);
+		if (resource != null) resources.replace(resource, resources.get(resource) + amount);
 	}
 
-	public void receiveResource(String resource, int amount) {
-		// on l'ajoute aux ressources actuelles du joueur
+	public void receiveResource(Resource resource, int amount) {
 		resources.replace(resource, resources.get(resource) + amount);
 	}
 
-	public void loseResources(int typeTuile, int amount) {
-		// on recupere le nom de la resource a recuperer
-		String resource;
-		switch (typeTuile) {
-			case 2: resource = "laine"; break;
-			case 3: resource = "bois"; break;
-			case 4: resource = "argile"; break;
-			case 5: resource = "bl�"; break;
-			case 6: resource = "minerai"; break;
-			default: resource = "rien";
+	public void loseResources(TileType type, int amount) {
+		Resource resource;
+		switch (type) {
+			case HILLS: resource = Resource.BRICK; break;
+			case FOREST: resource = Resource.LUMBER; break;
+			case MOUNTAINS: resource = Resource.ORE; break;
+			case FIELDS: resource = Resource.GRAIN; break;
+			case PASTURE: resource = Resource.WOOL; break;
+			default: resource = null;
 		}
 
-		// on l'enleve des ressources actuelles du joueur
-		if (!resource.equals("rien"))
-			resources.replace(resource, resources.get(resource) - amount);
+		if (resource != null) resources.replace(resource, resources.get(resource) - amount);
 	}
 
-	public void loseResources(String resource, int amount) {
-		// on l'ajoute aux ressources actuelles du joueur
+	public void loseResources(Resource resource, int amount) {
 		resources.replace(resource, resources.get(resource) - amount);
 	}
 
 	// TODO: remove the resource instead of only returning it
-	public String loseARandomResource() {
+	public Resource loseARandomResource() {
 		Random rd = new Random();
 		int n = 0;
 
-		// s'il n'a aucune resource, on ne renvoie rien
-		if (getNumResources() == 0)
-			return "rien";
-
-		// sinon, on tire une resource aleatoirement, juqu'a ce qu'on arrive sur une resource que le joueur possede
+		if (getNumResources() == 0) return null;
 		while (true) {
 			n = rd.nextInt(5);
 			switch (n) {
-				case 0: if (resources.get("laine") > 0) return "laine";
-				case 1: if (resources.get("bois") > 0) return "bois";
-				case 2: if (resources.get("argile") > 0) return "argile";
-				case 3: if (resources.get("bl�") > 0) return "bl�";
-				default: if (resources.get("minerai") > 0) return "minerai";
+				case 0: if (resources.get(Resource.BRICK) > 0) return Resource.BRICK;
+				case 1: if (resources.get(Resource.LUMBER) > 0) return Resource.LUMBER;
+				case 2: if (resources.get(Resource.ORE) > 0) return Resource.ORE;
+				case 3: if (resources.get(Resource.GRAIN) > 0) return Resource.GRAIN;
+				default: if (resources.get(Resource.WOOL) > 0) return Resource.WOOL;
 			}
 		}
 	}
 
 	public void changeTradeRate(HarborType type) {
 		switch (type) {
-			case BRICK: tradeRate.replace("argile", 2); break;
-			case LUMBER: tradeRate.replace("bois", 2); break;
-			case ORE: tradeRate.replace("minerai", 2); break;
-			case GRAIN: tradeRate.replace("ble", 2); break;
-			case WOOL: tradeRate.replace("laine", 2); break;
+			case BRICK: tradeRate.replace(Resource.BRICK, 2); break;
+			case LUMBER: tradeRate.replace(Resource.LUMBER, 2); break;
+			case ORE: tradeRate.replace(Resource.ORE, 2); break;
+			case GRAIN: tradeRate.replace(Resource.GRAIN, 2); break;
+			case WOOL: tradeRate.replace(Resource.WOOL, 2); break;
 			default:
-				tradeRate.replace("laine", 3);
-				tradeRate.replace("argile", 3);
-				tradeRate.replace("bois", 3);
-				tradeRate.replace("ble", 3);
-				tradeRate.replace("minerai", 3);
+				tradeRate.replace(Resource.BRICK, 3);
+				tradeRate.replace(Resource.LUMBER, 3);
+				tradeRate.replace(Resource.ORE, 3);
+				tradeRate.replace(Resource.GRAIN, 3);
+				tradeRate.replace(Resource.WOOL, 3);
 		}
 	}
 
@@ -292,15 +296,14 @@ public class Player {
 	}
 
 	public void trade() {
-		String resourceToGive = null;
-		String resourceToReceive = null;
+		Resource resourceToGive = null;
+		Resource resourceToReceive = null;
 
 		// on affiche les taux d'echanges du joueur
 		printTradeRate();
 
 		// on demande ce que le joueur veut echanger
-		while (resourceToGive == null)
-			resourceToGive = askResourceToGive(0);
+		while (resourceToGive == null) resourceToGive = askResourceToGive(0);
 		System.out.println();
 
 		// on regarde s'il a demande de retourner au menu d'action
@@ -308,8 +311,7 @@ public class Player {
 			return;
 
 		// on demande contre quoi le joueur veut echanger
-		while (resourceToReceive == null)
-			resourceToReceive = askResourceToReceive(0);
+		while (resourceToReceive == null) resourceToReceive = askResourceToReceive(0);
 		System.out.println();
 
 		// on regarde s'il a demande de retourner au menu d'action
@@ -496,8 +498,8 @@ public class Player {
 	// Affiche les ressources
 	public void printResources() {
 		System.out.println("Ressources actuelles :");
-		for (String s : resources.keySet())
-			System.out.println("  * " + resources.get(s) + " " + s);
+		for (Resource r : resources.keySet())
+			System.out.println("  * " + resources.get(r) + " " + r);
 		System.out.println();
 	}
 
@@ -517,9 +519,9 @@ public class Player {
 	public void printTradeRate() {
 		System.out.println("Taux d'�change :");
 
-		for (String s : tradeRate.keySet()) {
-			String avecMaj = s.toUpperCase().charAt(0) + s.substring(1);
-			System.out.println("  * " + avecMaj + " : " + tradeRate.get(s) + ":1");
+		for (Resource r : tradeRate.keySet()) {
+			String avecMaj = r.toString().toUpperCase().charAt(0) + r.toString().substring(1);
+			System.out.println("  * " + avecMaj + " : " + tradeRate.get(r) + ":1");
 		}
 
 		System.out.println();
@@ -875,7 +877,7 @@ public class Player {
 	}
 
 	// type = 0 marchander, type = 1 7 au de (pas de retour en arriere)
-	public String askResourceToGive(int type) {
+	public Resource askResourceToGive(int type) {
 		// on regarde s'il s'agit d'un type accepte
 		if (type != 0 && type != 1)
 			throw new IllegalArgumentException("Type inconnu");
@@ -886,37 +888,37 @@ public class Player {
 		else
 			System.out.println("Quel resource voulez-vous donner ? (Veuillez entrer le nom entier de la resource � donner)");
 
-		String resourceToGive = actualGame.sc.next().toLowerCase();
-
+		String answer = actualGame.sc.next().toLowerCase();
+		Resource resource = stringToResource(answer);
+		
 		// on regarde si le joueur est en train de marchander
 		if (type == 0) {
 
 			// on regarde s'il a demande de retourner au menu d'action
-			if (resourceToGive.equals("retour")) {
+			if (answer.equals("retour")) {
 				System.out.println();
-				return resourceToGive;
+				return null;
 			}
 
-			// selon son taux d'echange, on regarde s'il a assez de cette resource
-			if (resources.get(resourceToGive) < tradeRate.get(resourceToGive)) {
+			if (resource != null && (resources.get(resource) < tradeRate.get(resource))) {
 				System.out.println("Nombre insuffisant de resource.\n");
 				return null;
 			}
 		}
 
 		// on regarde si le joueur a rentre un nom de resource correct
-		if (!tradeRate.keySet().contains(resourceToGive)) {
+		if (!tradeRate.keySet().contains(resource)) {
 			System.out.println("Ressource inconnue.\n");
 			return null;
 		}
 
 		// toutes les conditions sont remplis, on renvoie ce que le joueur a rentre
 		System.out.println();
-		return resourceToGive;
+		return resource;
 	}
 
 	// type = 0 marchander, type = 1 carte invention (pas de retour en arriere)
-	public String askResourceToReceive(int type) {
+	public Resource askResourceToReceive(int type) {
 		// on regarde s'il s'agit d'un type accept�
 		if (type != 0 && type != 1)
 			throw new IllegalArgumentException("Type inconnu");
@@ -928,23 +930,24 @@ public class Player {
 			System.out.println("Quel resource souhaitez-vous recevoir ? (Veuillez entrer le nom entier de la resource voulue)");
 
 		// on r�cup�re ce que le joueur a entre
-		String resourceToReceive = actualGame.sc.next().toLowerCase();
+		String answer = actualGame.sc.next().toLowerCase();
+		Resource resource = stringToResource(answer);
 
 		// s'il est en train de marchander, on regarde s'il a demande de revenir en arriere
-		if (type == 0 && resourceToReceive.equals("retour")) {
+		if (type == 0 && answer.equals("retour")) {
 			System.out.println();
-			return resourceToReceive;
+			return null;
 		}
 
 		// on regarde sinon si le joueur a entre un nom de resource correct
-		if (!tradeRate.keySet().contains(resourceToReceive)) {
+		if (!tradeRate.keySet().contains(resource)) {
 			System.out.println("Ressource inconnue.\n");
 			return null;
 		}
 
 		// si oui, on renvoie ce qu'il a entr�
 		System.out.println();
-		return resourceToReceive;
+		return resource;
 	}
 
 	public Player askWhichPlayer(LinkedList<Player> joueurs) {
