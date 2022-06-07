@@ -7,7 +7,7 @@ import java.util.Random;
 import catan.model.Game;
 import catan.model.board.Buildable;
 import catan.model.board.Intersection;
-import catan.model.board.Road;
+import catan.model.board.Path;
 import catan.model.board.Tile;
 import catan.model.card.Card;
 import catan.model.card.KnightCard;
@@ -758,7 +758,7 @@ public class Player {
 			Tile t = actualGame.getBoard().getTiles()[positionTuile.x][positionTuile.y];
 
 			// on regarde si la route que le joueur veut construire est deja construite
-			if (t.getRoad(d).player != null) {
+			if (t.getPath(d).player != null) {
 				System.out.println("Cette route est deja occup�e.\n");
 				return null;
 			}
@@ -766,7 +766,7 @@ public class Player {
 			// on regarde s'il s'agit de la phase initiale
 			if (phaseInitiale) {
 				// on r�cup�re les deux intersections en contact avec la route que le joueur veut construire
-				Intersection[] intersections = actualGame.getBoard().getAllIntersectionsInContactWith(t.getRoad(d));
+				Intersection[] intersections = actualGame.getBoard().getAllIntersectionsInContactWith(t.getPath(d));
 
 				// on regarde si une de ces deux intersections appartient au joueur
 				if (intersections[0].player != this && intersections[1].player != this) {
@@ -782,7 +782,7 @@ public class Player {
 					in = intersections[1];
 
 				// on regarde si cette intersection n'a pas d�j� une route construite par le joueur (pendant la phase initiale, il faut construire la route pr�s de la colonie qu'on vient de construire)
-				Road[] r = actualGame.getBoard().getAllRoadsInContactWith(in);
+				Path[] r = actualGame.getBoard().getAllPathsInContactWith(in);
 				for (int i = 0; i < r.length; i++) {
 					if (r[i] != null && r[i].player == this) {
 						System.out.println("player la phase initiale, veuillez placer votre route pr�s de la colonie que vous venez juste de construire.\n");
@@ -793,7 +793,7 @@ public class Player {
 
 			else {
 				// on recupere les 6 routes en contact avec la route a construire
-				Road[] r = actualGame.getBoard().getAllRoadsInContactWith(t.getRoad(d));
+				Path[] r = actualGame.getBoard().getAllPathsInContactWith(t.getPath(d));
 				boolean enContact = false;
 
 				// on regarde si une de ces routes appartient au joueur
@@ -857,7 +857,7 @@ public class Player {
 			if (!phaseInitiale) {
 
 				// on recupere les 4 routes qui menent a l'intersection que le joueur veut construire
-				Road[] routes = actualGame.getBoard().getAllRoadsInContactWith(t.getIntersection(d));
+				Path[] routes = actualGame.getBoard().getAllPathsInContactWith(t.getIntersection(d));
 				boolean enContact = false;
 
 				// on regarde si une de ces routes appartient au joueur

@@ -48,7 +48,7 @@ public class Intersection implements Buildable {
 		// on regarde si le joueur construit une colonie
 
 		// on r�cup�re les 4 routes environnantes
-		Road[] r = game.getBoard().getAllRoadsInContactWith(this);
+		Path[] r = game.getBoard().getAllPathsInContactWith(this);
 
 		LinkedList<Player> ontLeurRouteLaPlusLongueBrise = new LinkedList<>();
 

@@ -7,13 +7,13 @@ import catan.model.player.Player;
 
 public class Board {
 	private Tile[][] tiles;
-	private Road[][] roads;
+	private Path[][] roads;
 	private Intersection[][] intersections;
 
 	// Cree le plateau de jeu, de taille 7x7
 	public Board() {
 		tiles = new Tile[7][7];
-		roads = new Road[13][7];
+		roads = new Path[13][7];
 		intersections = new Intersection[6][6];
 	}
 
@@ -21,7 +21,7 @@ public class Board {
 		return tiles;
 	}
 	
-	public Road[][] getRoads() {
+	public Path[][] getRoads() {
 		return roads;
 	}
 	
@@ -29,7 +29,7 @@ public class Board {
 		return intersections;
 	}
 	
-	public Pair getXY(Road r) {
+	public Pair getXY(Path r) {
 		for (int i = 0; i < roads.length; i++) {
 			for (int j = 0; j < roads[i].length; j++) {
 				if (roads[i][j] == r)
@@ -77,7 +77,7 @@ public class Board {
 	}
 
 	// Renvoie les 4 routes menant a l'intersection donnee dans l'ordre : N, S, O, E
-	public Road[] getAllRoadsInContactWith(Intersection in) {
+	public Path[] getAllPathsInContactWith(Intersection in) {
 		if (in == null)
 			throw new IllegalArgumentException("Intersection equals to null");
 
@@ -85,7 +85,7 @@ public class Board {
 		for (int i = 0; i < intersections.length; i++) {
 			for (int j = 0; j < intersections[i].length; j++) {
 				if (intersections[i][j] == in) {
-					Road[] res = new Road[4];
+					Path[] res = new Path[4];
 					int m = i * 2 + 1;
 					int n = j;
 
@@ -105,7 +105,7 @@ public class Board {
 
 	// Renvoie les 6 routes en contact a la route donnee dans l'ordre : O, NO, SO,
 	// E, NE, SE ou N, NO, NE, S, SO, SE
-	public Road[] getAllRoadsInContactWith(Road r) {
+	public Path[] getAllPathsInContactWith(Path r) {
 		if (r == null)
 			throw new IllegalArgumentException("Road equals to null");
 
@@ -113,7 +113,7 @@ public class Board {
 		for (int i = 1; i < roads.length - 1; i++) {
 			for (int j = 0; j < roads[i].length - 1; j++) {
 				if (roads[i][j] == r) {
-					Road[] res = new Road[6];
+					Path[] res = new Path[6];
 
 					// s'il s'agit d'une route horizontale
 					if (i % 2 == 1) {
@@ -144,7 +144,7 @@ public class Board {
 	}
 
 	// Renvoie les deux intersections se trouvant aux bouts de la route
-	public Intersection[] getAllIntersectionsInContactWith(Road r) {
+	public Intersection[] getAllIntersectionsInContactWith(Path r) {
 		if (r == null)
 			throw new IllegalArgumentException("Road equals to null");
 
@@ -280,7 +280,7 @@ public class Board {
 	
 	public Buildable getConstruction(Pair positionTile, String direction) {
 		if (direction.equals("N") || direction.equals("S") || direction.equals("O") || direction.equals("E"))
-			return tiles[positionTile.x][positionTile.y].getRoad(direction);
+			return tiles[positionTile.x][positionTile.y].getPath(direction);
 		
 		return tiles[positionTile.x][positionTile.y].getIntersection(direction);
 	}
@@ -302,12 +302,12 @@ public class Board {
 	}
 
 	// Calcule la longueur de la route de la route donn�e
-	public int calculateRoadLength(Road r) {
+	public int calculateRoadLength(Path r) {
 		boolean[][] visitedRoad = new boolean[roads.length][roads[0].length];
 		return calculateRoadLengthAux(visitedRoad, r.player, r, 0);
 	}
 
-	private int calculateRoadLengthAux(boolean[][] visitedRoad, Player p, Road r, int n) {
+	private int calculateRoadLengthAux(boolean[][] visitedRoad, Player p, Path r, int n) {
 		// on regarde s'il s'agit d'une route existante
 		if (r == null)
 			return n;
@@ -330,7 +330,7 @@ public class Board {
 			return n;
 
 		// on r�cup�re les 6 routes li�es � la route actuelle
-		Road[] routes = getAllRoadsInContactWith(r);
+		Path[] routes = getAllPathsInContactWith(r);
 		int[] max = new int[2];
 		int m;
 
@@ -441,10 +441,10 @@ public class Board {
 			tiles[i][j].printName();
 
 			if (j != tiles[i].length - 1) {
-				if (tiles[i][j].roadE == null)
+				if (tiles[i][j].pathE == null)
 					System.out.print(" ");
 				else
-					tiles[i][j].roadE.printV();
+					tiles[i][j].pathE.printV();
 			}
 		}
 		System.out.println("|");
@@ -456,10 +456,10 @@ public class Board {
 			tiles[i][j].printDetail();
 
 			if (j != tiles[i].length - 1) {
-				if (tiles[i][j].roadE == null)
+				if (tiles[i][j].pathE == null)
 					System.out.print(" ");
 				else
-					tiles[i][j].roadE.printV();
+					tiles[i][j].pathE.printV();
 			}
 		}
 		System.out.println("|");
@@ -468,10 +468,10 @@ public class Board {
 	private void printRoadAndIntersection(int i) {
 		System.out.print("|");
 		for (int j = 0; j < tiles[i].length; j++) {
-			if (tiles[i][j].roadS == null)
+			if (tiles[i][j].pathS == null)
 				System.out.print("       ");
 			else
-				tiles[i][j].roadS.printH();
+				tiles[i][j].pathS.printH();
 
 			if (j != tiles[i].length - 1) {
 				if (tiles[i][j].interSE == null)
@@ -493,7 +493,7 @@ public class Board {
 	}
 
 	// Initialise les tuiles
-		private static void iniTiles(Tile[][] t, Road[][] r, Intersection[][] in) {
+		private static void iniTiles(Tile[][] t, Path[][] r, Intersection[][] in) {
 			
 			// on initialises les tuiles elles-memes
 			for (int i = 0; i < t.length; i++) {
@@ -561,7 +561,7 @@ public class Board {
 			for (int i = 0; i < t.length; i++) {
 				for (int j = 0; j < t[i].length; j++) {
 					// on commence par les routes
-					Road nord, sud, est, ouest;
+					Path nord, sud, est, ouest;
 					
 					// on note les routes nord (la 1er ligne n'en a pas)
 					if (i != 0) nord = r[(i - 1) * 2 + 1][j];
@@ -580,7 +580,7 @@ public class Board {
 					else est = null;
 					
 					// on initialise les routes avec ce qu'on a note
-					t[i][j].iniRoad(nord, sud, est, ouest);
+					t[i][j].iniPath(nord, sud, est, ouest);
 					
 					
 					// on fini par les intersections
@@ -630,31 +630,31 @@ public class Board {
 		
 	// Initialise les routes construisables (les routes entre les tuiles marines
 	// sont laissees a null)
-	private static void iniRoads(Road[][] r) {
+	private static void iniRoads(Path[][] r) {
 		for (int i = 1; i < r.length - 1; i++) {
 
 			// la 2e et avant-avant-derniere ligne n'ont que 3 routes construisibles
 			if (i == 1 || i == 11) {
 				for (int j = 2; j < r[i].length - 2; j++)
-					r[i][j] = new Road();
+					r[i][j] = new Path();
 			}
 
 			// la 3e et avant-avant-avant derniere ligne n'ont que 4 routes construisibles
 			else if (i == 2 || i == 10) {
 				for (int j = 1; j < r[i].length - 2; j++)
-					r[i][j] = new Road();
+					r[i][j] = new Path();
 			}
 
 			// les lignes impaires ont 5 routes construisibles
 			else if (i % 2 != 0) {
 				for (int j = 1; j < r[i].length - 1; j++)
-					r[i][j] = new Road();
+					r[i][j] = new Path();
 			}
 
 			// les lignes paires ont 6 routes construisibles
 			else {
 				for (int j = 0; j < r[i].length - 1; j++)
-					r[i][j] = new Road();
+					r[i][j] = new Path();
 			}
 		}
 	}

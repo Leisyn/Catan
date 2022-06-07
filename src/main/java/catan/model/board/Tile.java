@@ -11,7 +11,7 @@ public class Tile {
 	public final int numToken;
 	public boolean robberIsHere;
 	
-	public Road roadN, roadS, roadE, roadW;
+	public Path pathN, pathS, pathE, pathW;
 	public Intersection interNW, interNE, interSW, interSE;
 	
 	/**
@@ -43,25 +43,25 @@ public class Tile {
 	}
 	
 	/**
-	 * Initialize all roads in contact with the tile.
-	 * @param n	the north road
-	 * @param s	the south road
-	 * @param e	the east road
-	 * @param o	the west road
+	 * Initialize all paths in contact with the tile.
+	 * @param n	the north path
+	 * @param s	the south path
+	 * @param e	the east path
+	 * @param o	the west path
 	 */
-	public void iniRoad(Road n, Road s, Road e, Road o) {
-		roadN = n;
-		roadS = s;
-		roadE = e;
-		roadW = o;
+	public void iniPath(Path n, Path s, Path e, Path o) {
+		pathN = n;
+		pathS = s;
+		pathE = e;
+		pathW = o;
 	}
 	
 	/**
 	 * Initialize all intersections in contact with the tile.
-	 * @param no	the north west road
-	 * @param ne	the north east road
-	 * @param sw	the south west road
-	 * @param se	the south east road
+	 * @param no	the north west intersection
+	 * @param ne	the north east intersection
+	 * @param sw	the south west intersection
+	 * @param se	the south east intersection
 	 */
 	public void iniIntersection(Intersection nw, Intersection ne, Intersection sw, Intersection se) {
 		interNW = nw;
@@ -71,31 +71,31 @@ public class Tile {
 	}
 	
 	/**
-	 * Get the road on the given direction.
+	 * Get the path on the given direction.
 	 * @param s	the initial of the wanted direction
-	 * @return the road on the given direction
+	 * @return the path on the given direction
 	 */
-	public Road getRoad(String s) {
+	public Path getPath(String s) {
 		switch (s) {
-			case "N": return roadN;
-			case "S": return roadS;
-			case "E": return roadE;
-			case "O": return roadW;
+			case "N": return pathN;
+			case "S": return pathS;
+			case "E": return pathE;
+			case "O": return pathW;
 			default: return null;
 		}
 	}
 	
 	/**
-	 * Modify the road on the given direction.
+	 * Modify the path on the given direction.
 	 * @param s	the initial of the wanted direction
-	 * @param p	the player who built this road
+	 * @param p	the player who built this path
 	 */
-	public void setRoad(String s, Player p) {
+	public void setPath(String s, Player p) {
 		switch (s) {
-			case "N": roadN.player = p; break;
-			case "S": roadS.player = p; break;
-			case "E": roadE.player = p; break;
-			case "O": roadW.player = p; break;
+			case "N": pathN.player = p; break;
+			case "S": pathS.player = p; break;
+			case "E": pathE.player = p; break;
+			case "O": pathW.player = p; break;
 		}
 	}
 	

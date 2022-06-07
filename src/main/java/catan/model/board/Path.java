@@ -3,10 +3,10 @@ package catan.model.board;
 import catan.model.Game;
 import catan.model.player.Player;
 
-public class Road implements Buildable {
+public class Path implements Buildable {
 	public Player player;  // le joueur qui a construit la route (null si aucune route n'est construite)
 	
-	public Road() {
+	public Path() {
 		player = null;
 	}
 	

@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 
 import catan.model.board.Intersection;
 import catan.model.board.Board;
-import catan.model.board.Road;
+import catan.model.board.Path;
 import catan.model.board.Tile;
 import catan.model.player.Player;
 
@@ -212,12 +212,12 @@ public class BoardPanel extends JPanel implements MouseListener {
 		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		
 		if (typeAction == 1) {
-			if (!(o instanceof Road))
+			if (!(o instanceof Path))
 				vue.descriptifJeu.setText("Veuillez cliquer sur une route.\n");
 			
 			else {
 				if (phaseInitiale) {
-					Intersection[] in = vue.jeu.getBoard().getAllIntersectionsInContactWith((Road)o);
+					Intersection[] in = vue.jeu.getBoard().getAllIntersectionsInContactWith((Path)o);
 					if (in[0].player != j && in[1].player != j) {
 						vue.descriptifJeu.setText("Veuillez construire votre route en contact d'une colonie.");
 						return;
@@ -225,7 +225,7 @@ public class BoardPanel extends JPanel implements MouseListener {
 				}
 				
 				else {
-					Road[] r = vue.jeu.getBoard().getAllRoadsInContactWith((Road)o);
+					Path[] r = vue.jeu.getBoard().getAllPathsInContactWith((Path)o);
 					if (r[0].player != j && r[1].player != j && r[2].player != j && r[3].player != j
 							&& r[4].player != j && r[5].player != j) {
 						vue.descriptifJeu.setText("Veuillez construire votre route en contact d'une autre.");
@@ -233,7 +233,7 @@ public class BoardPanel extends JPanel implements MouseListener {
 					}
 				}
 				
-				((Road) o).build(vue.jeu, vue.jeu.getPlayers()[vue.indiceJoueurActuel], 0);
+				((Path) o).build(vue.jeu, vue.jeu.getPlayers()[vue.indiceJoueurActuel], 0);
 				vue.descriptifJeu.setText("");
 				repaint();
 				vue.control.setCompteursJoueur();
@@ -261,7 +261,7 @@ public class BoardPanel extends JPanel implements MouseListener {
 					}
 					
 					else {
-						Road[] r = vue.jeu.getBoard().getAllRoadsInContactWith((Intersection)o);
+						Path[] r = vue.jeu.getBoard().getAllPathsInContactWith((Intersection)o);
 						if (r[0].player != j && r[1].player != j && r[2].player != j && r[3].player != j) {
 							vue.descriptifJeu.setText("Veuillez construire votre intersection en contact d'une de vos route.");
 							return;
