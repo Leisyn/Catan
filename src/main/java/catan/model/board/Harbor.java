@@ -4,7 +4,7 @@ public class Harbor extends Tile {
 	public final int typeHarbor;  // 0 : 3-1 / 1 : laine / 2 : argile / 3 : bois / 4 : ble / 5 : minerai
 	
 	public Harbor(int t) {
-		super(1, false);
+		super(TileType.HARBOR, false);
 		typeHarbor = t;
 	}
 	

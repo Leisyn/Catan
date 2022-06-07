@@ -328,18 +328,18 @@ public class Game {
 			for (int j = 0; j < t[i].length; j++) {
 				
 				// si le jeton de la tuile correspond et qu'il n'y a pas de voleur
-				if (t[i][j].token == n && !t[i][j].robberIsHere) {
+				if (t[i][j].numToken == n && !t[i][j].robberIsHere) {
 					
 					// on recupere toutes les intersections construites autour et on donne les ressources selon le type de batiment construit
 					for (Intersection in : t[i][j].getAllBuiltIntersections()) {
 						String resource = null;
 						
 						switch (t[i][j].type) {
-							case 2: resource = "laine"; break; 
-							case 3: resource = "bois"; break;
-							case 4: resource = "argile"; break;
-							case 5: resource = "ble"; break;
-							case 6: resource = "minerai"; break;
+							case PASTURE: resource = "laine"; break; 
+							case FOREST: resource = "bois"; break;
+							case HILLS: resource = "argile"; break;
+							case FIELDS: resource = "ble"; break;
+							case MOUNTAINS: resource = "minerai"; break;
 							default: resource = "rien";
 						}
 						

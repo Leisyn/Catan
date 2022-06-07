@@ -77,12 +77,12 @@ public class BoardPanel extends JPanel implements MouseListener {
 			for (int j = 0; j < p.getTiles()[i].length; j++) {
 				// on met en place la couleur
 				switch (p.getTiles()[i][j].type) {
-					case 2: g.setColor(couleurTuilePre); break;
-					case 3: g.setColor(couleurTuileForet); break;
-					case 4: g.setColor(couleurTuileColline); break;
-					case 5: g.setColor(couleurTuileChamps); break;
-					case 6: g.setColor(couleurTuileMontagne); break;
-					case 7: g.setColor(couleurTuileDesert); break;
+					case PASTURE: g.setColor(couleurTuilePre); break;
+					case FOREST: g.setColor(couleurTuileForet); break;
+					case HILLS: g.setColor(couleurTuileColline); break;
+					case FIELDS: g.setColor(couleurTuileChamps); break;
+					case MOUNTAINS: g.setColor(couleurTuileMontagne); break;
+					case DESERT: g.setColor(couleurTuileDesert); break;
 					default: g.setColor(couleurTuileMarine);
 				}
 				
@@ -162,7 +162,7 @@ public class BoardPanel extends JPanel implements MouseListener {
 		
 		for (int i = 0; i < p.getTiles().length; i++) {
 			for (int j = 0; j < p.getTiles()[i].length; j++) {
-				int jeton = p.getTiles()[i][j].token;
+				int jeton = p.getTiles()[i][j].numToken;
 				
 				if (jeton > 1) {
 					String nb = "" + jeton;

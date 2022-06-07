@@ -5,39 +5,50 @@ import java.util.LinkedList;
 import catan.model.player.Player;
 
 public class Tile {
-	public final int type;  // 0 : mer / 1 : port / 2 : pre / 3 : foret /  4 : colline / 5 : champs / 6 : montagne / 7 : desert
-	public final int token;  // le jeton de la tuile (0 si la tuile ne possede pas de jeton, entre 2 et 12 sinon (7 exclus))
-	public boolean robberIsHere;  // indique si le voleur est present sur la tuile
+	public enum TileType{SEA, HARBOR, HILLS, FOREST, MOUNTAINS, FIELDS, PASTURE, DESERT};
 	
-	public Road roadN, roadS, roadE, roadW;  // les routes nord, surd, est et ouest
-	public Intersection interNW, interNE, interSW, interSE;  // les intersections nord-ouest, nord-est, sud-ouest et sud-est
+	public final TileType type;
+	public final int numToken;
+	public boolean robberIsHere;
 	
-	// Constructeur general
-	public Tile(int type, int token, boolean robberIsHere) {
-		
-		// Gestion des exceptions
-		if (type < 0 || type > 7)
-			throw new IllegalArgumentException("Can't create the tile: unknown given type");
-		if (token < 2 || token > 12)
-			throw new IllegalArgumentException("Can't create the tile: unreachable token number");
-		if (token == 7)
-			throw new IllegalArgumentException("Can't create the tile: a tile can't have 7 as a token number");
+	public Road roadN, roadS, roadE, roadW;
+	public Intersection interNW, interNE, interSW, interSE;
+	
+	/**
+	 * Creates a general terrain tile with a number token on it.
+	 * @param type		the type of the tile
+	 * @param numToken	the number token of the tile
+	 */
+	public Tile(TileType type, int numToken) {
+		if (numToken < 2 || numToken > 12) throw new IllegalArgumentException("Can't create the tile: unreachable token number");
+		if (numToken == 7) throw new IllegalArgumentException("Can't create the tile: a tile can't have 7 as a token number");
 		
 		this.type = type;
-		this.token = token;
-		this.robberIsHere = robberIsHere;
+		this.numToken = numToken;
+		this.robberIsHere = false;
 	}
 	
-	// Constructeur pour les tuiles speciales (mer, port et desert)
-	public Tile(int type, boolean robberIsHere) {
-		if (type != 0 && type != 1 && type != 7)
+	/**
+	 * Creates a tile with no number token on it.
+	 * @param type			the type of the tile
+	 * @param robberIsHere	whether the robber is here or not
+	 */
+	public Tile(TileType type, boolean robberIsHere) {
+		if (type != TileType.SEA && type != TileType.HARBOR && type != TileType.DESERT)
 			throw new IllegalArgumentException("Can't create the tile: given type not corresponding");
 		
 		this.type = type;
-		token = 0;
+		this.numToken = 0;
 		this.robberIsHere = robberIsHere;
 	}
 	
+	/**
+	 * Initialize all roads in contact with the tile.
+	 * @param n	the north road
+	 * @param s	the south road
+	 * @param e	the east road
+	 * @param o	the west road
+	 */
 	public void iniRoad(Road n, Road s, Road e, Road o) {
 		roadN = n;
 		roadS = s;
@@ -45,98 +56,124 @@ public class Tile {
 		roadW = o;
 	}
 	
-	
-	public void iniIntersection(Intersection no, Intersection ne, Intersection so, Intersection se) {
-		interNW = no;
+	/**
+	 * Initialize all intersections in contact with the tile.
+	 * @param no	the north west road
+	 * @param ne	the north east road
+	 * @param sw	the south west road
+	 * @param se	the south east road
+	 */
+	public void iniIntersection(Intersection nw, Intersection ne, Intersection sw, Intersection se) {
+		interNW = nw;
 		interNE = ne;
-		interSW = so;
+		interSW = sw;
 		interSE = se;
 	}
 	
+	/**
+	 * Get the road on the given direction.
+	 * @param s	the initial of the wanted direction
+	 * @return the road on the given direction
+	 */
 	public Road getRoad(String s) {
 		switch (s) {
 			case "N": return roadN;
 			case "S": return roadS;
 			case "E": return roadE;
 			case "O": return roadW;
-			default: throw new IllegalArgumentException("Can't get the road: unknown direction");
+			default: return null;
 		}
 	}
 	
+	/**
+	 * Modify the road on the given direction.
+	 * @param s	the initial of the wanted direction
+	 * @param p	the player who built this road
+	 */
 	public void setRoad(String s, Player p) {
 		switch (s) {
 			case "N": roadN.player = p; break;
 			case "S": roadS.player = p; break;
 			case "E": roadE.player = p; break;
 			case "O": roadW.player = p; break;
-			default: throw new IllegalArgumentException("Can't modify the road: unknown direction");
 		}
 	}
 	
+	/**
+	 * Get the intersection on the given direction.
+	 * @param s	the initial of the wanted direction
+	 * @return the intersection on the given direction
+	 */
 	public Intersection getIntersection(String s) {
 		switch (s) {
 			case "NO": return interNW;
 			case "NE": return interNE;
 			case "SO": return interSW;
 			case "SE": return interSE;
-			default: throw new IllegalArgumentException("Can't get the intersection: unknown direction");
+			default: return null;
 		}
 	}
 	
+	/**
+	 * Modify the intersection on the given direction
+	 * @param s		the initial of the wanted direction
+	 * @param p		the player who built this intersection
+	 * @param type	the type of building built
+	 */
 	public void setIntersection(String s, Player p, int type) {
 		switch (s) {
 			case "NO": interNW.player = p; interNW.building = type; break;
 			case "NE": interNE.player = p; interNE.building = type; break;
 			case "SO": interSW.player = p; interSW.building = type; break;
 			case "SE": interSE.player = p; interSE.building = type; break;
-			default: throw new IllegalArgumentException("Can't modify the intersection: unknown direction");
 		}
 	}
 	
+	/**
+	 * Get all the intersections that have a building on built on them.
+	 * @return all the intersections that have been built
+	 */
 	public LinkedList<Intersection> getAllBuiltIntersections() {
 		LinkedList<Intersection> res = new LinkedList<>();
-		
-		// on regarde si un batiment est construit dans l'intersection NO
-		if (interNW.isBuilt())
-			res.add(interNW);
-		
-		// on regarde si un batiment est construit dans l'intersection NE
-		if (interNE.isBuilt())
-			res.add(interNE);
-		
-		// on regarde si un batiment est construit dans l'intersection SO
-		if (interSW.isBuilt())
-			res.add(interSW);
-		
-		// on regarde si un batiment est construit dans l'intersection SE
-		if (interSE.isBuilt())
-			res.add(interSE);
-		
+		if (interNW.isBuilt()) res.add(interNW);
+		if (interNE.isBuilt()) res.add(interNE);
+		if (interSW.isBuilt()) res.add(interSW);
+		if (interSE.isBuilt()) res.add(interSE);
 		return res;
 	}
 
+	/**
+	 * Print the name of the tile, with its number token if it has one.
+	 */
 	public void printName() {
 		switch (type) {
-			case 1: System.out.print(" PORT  "); return;
-			case 2: System.out.print(" PR "); break;
-			case 3: System.out.print(" FO "); break;
-			case 4: System.out.print(" CO "); break;
-			case 5: System.out.print(" CH "); break;
-			case 6: System.out.print(" MO "); break;
-			case 7: System.out.print("  DES  "); return;
+			case HARBOR: System.out.print(" HARBOR "); return;
+			case HILLS: System.out.print(" HI "); break;
+			case FOREST: System.out.print(" FO "); break;
+			case MOUNTAINS: System.out.print(" MO "); break;
+			case FIELDS: System.out.print(" FI "); break;
+			case PASTURE: System.out.print(" PA "); break;
+			case DESERT: System.out.print("  DES  "); return;
 			default: System.out.print("       "); return;
 		}
-		if (token < 10) System.out.print(" " + token + " ");
-		else System.out.print(token + " ");
+		if (numToken < 10) System.out.print(" " + numToken + " ");
+		else System.out.print(numToken + " ");
 	}
 	
+	/**
+	 * Print the detail of the tile. Unless the robber is present, only blank spaces will be printed.
+	 */
 	public void printDetail() {
 		if (robberIsHere) System.out.print("   V   ");
 		else System.out.print("       ");
 	}
 	
+	/**
+	 * Verify if the tile is a sea tile or a harbor.
+	 * @return	whether the tile is a marine tile
+	 */
 	public boolean isMarine() {
-		if (type == 0 || type == 1)
+		if (type == TileType.SEA || type == TileType.HARBOR)
 			return true;
 		return false;
 	}

@@ -1,6 +1,7 @@
 package catan.model.board;
 
 import catan.model.Game;
+import catan.model.board.Tile.TileType;
 import catan.model.other.Pair;
 import catan.model.player.Player;
 
@@ -178,23 +179,22 @@ public class Board {
 		if (jeton < 2 || jeton > 12)
 			return null;
 
-		int type;
+		TileType type;
 		switch (typeTuile.toUpperCase()) {
-			case "PR": type = 2; break;
-			case "FO": type = 3; break;
-			case "CO": type = 4; break;
-			case "CH": type = 5; break;
-			case "MO": type = 6; break;
-			case "DES": type = 7;
-			default: type = -1;
+			case "PR": type = TileType.PASTURE; break;
+			case "FO": type = TileType.FOREST; break;
+			case "CO": type = TileType.HILLS; break;
+			case "CH": type = TileType.FIELDS; break;
+			case "MO": type = TileType.MOUNTAINS; break;
+			case "DES": type = TileType.DESERT;
+			default: type = TileType.SEA;
 		}
 
-		if (type == -1)
-			return null;
+		if (type == TileType.SEA) return null;
 
 		for (int i = 0; i < tiles.length; i++) {
 			for (int j = 0; j < tiles[i].length; j++) {
-				if (tiles[i][j].type == type && tiles[i][j].token == jeton)
+				if (tiles[i][j].type == type && tiles[i][j].numToken == jeton)
 					return new Pair(i, j);
 			}
 		}
@@ -502,56 +502,56 @@ public class Board {
 						switch(j) {
 							case 2: t[i][j] = new Harbor(0); break;
 							case 4: t[i][j] = new Harbor(1); break;
-							default: t[i][j] = new Tile(0, false); break;
+							default: t[i][j] = new Tile(TileType.SEA, false); break;
 						}
 					} else if (i == 1) {
 						switch(j) {
-							case 2: t[i][j] = new Tile(3, 6, false); break;
-							case 3: t[i][j] = new Tile(2, 3, false); break;
-							case 4: t[i][j] = new Tile(5, 8, false); break;
-							default : t[i][j] = new Tile(0, false); break;
+							case 2: t[i][j] = new Tile(TileType.FOREST, 6); break;
+							case 3: t[i][j] = new Tile(TileType.PASTURE, 3); break;
+							case 4: t[i][j] = new Tile(TileType.FIELDS, 8); break;
+							default : t[i][j] = new Tile(TileType.SEA, false); break;
 						}
 					} else if (i == 2) {
 						switch(j) {
 							case 0: t[i][j] = new Harbor(5); break;
-							case 1: t[i][j] = new Tile(2, 2, false); break;
-							case 2: t[i][j] = new Tile(4, 4, false); break;
-							case 3: t[i][j] = new Tile(6, 5, false); break;
-							case 4: t[i][j] = new Tile(3, 9, false); break;
-							case 5: t[i][j] = new Tile(6, 11, false); break;
+							case 1: t[i][j] = new Tile(TileType.PASTURE, 2); break;
+							case 2: t[i][j] = new Tile(TileType.HILLS, 4); break;
+							case 3: t[i][j] = new Tile(TileType.MOUNTAINS, 5); break;
+							case 4: t[i][j] = new Tile(TileType.FOREST, 9); break;
+							case 5: t[i][j] = new Tile(TileType.MOUNTAINS, 11); break;
 							case 6: t[i][j] = new Harbor(0); break;
 						}
 					} else if (i == 3) {
 						switch(j) {
-							case 1: t[i][j] = new Tile(3, 5, false); break;
-							case 2: t[i][j] = new Tile(6, 3, false); break;
-							case 3: t[i][j] = new Tile(7, true); break;
-							case 4: t[i][j] = new Tile(2, 12, false); break;
-							case 5: t[i][j] = new Tile(4, 6, false); break;
-							default : t[i][j] = new Tile(0, false); break;
+							case 1: t[i][j] = new Tile(TileType.FOREST, 5); break;
+							case 2: t[i][j] = new Tile(TileType.MOUNTAINS, 3); break;
+							case 3: t[i][j] = new Tile(TileType.DESERT, true); break;
+							case 4: t[i][j] = new Tile(TileType.PASTURE, 12); break;
+							case 5: t[i][j] = new Tile(TileType.HILLS, 6); break;
+							default : t[i][j] = new Tile(TileType.SEA, false); break;
 						}
 					} else if (i == 4) {
 						switch(j) {
 							case 0: t[i][j] = new Harbor(4); break;
-							case 1: t[i][j] = new Tile(5, 10, false); break;
-							case 2: t[i][j] = new Tile(2, 4, false); break;
-							case 3: t[i][j] = new Tile(4, 8, false); break;
-							case 4: t[i][j] = new Tile(6, 10, false); break;
-							case 5: t[i][j] = new Tile(5, 9, false); break;
+							case 1: t[i][j] = new Tile(TileType.FIELDS, 10); break;
+							case 2: t[i][j] = new Tile(TileType.PASTURE, 4); break;
+							case 3: t[i][j] = new Tile(TileType.HILLS, 8); break;
+							case 4: t[i][j] = new Tile(TileType.MOUNTAINS, 10); break;
+							case 5: t[i][j] = new Tile(TileType.FIELDS, 9); break;
 							case 6: t[i][j] = new Harbor(2); break;
 						}
 					} else if (i == 5) {
 						switch(j) {
-							case 2: t[i][j] = new Tile(4, 2, false); break;
-							case 3: t[i][j] = new Tile(5, 11, false); break;
-							case 4: t[i][j] = new Tile(3, 12, false); break;
-							default : t[i][j] = new Tile(0, false); break;
+							case 2: t[i][j] = new Tile(TileType.HILLS, 2); break;
+							case 3: t[i][j] = new Tile(TileType.FIELDS, 11); break;
+							case 4: t[i][j] = new Tile(TileType.FOREST, 12); break;
+							default : t[i][j] = new Tile(TileType.SEA, false); break;
 						}
 					} else {
 						switch(j) {
 							case 2: t[i][j] = new Harbor(3); break;
 							case 4: t[i][j] = new Harbor(0); break;
-							default: t[i][j] = new Tile(0, false); break;
+							default: t[i][j] = new Tile(TileType.SEA, false); break;
 						}
 					}
 				}
