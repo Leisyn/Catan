@@ -1,5 +1,14 @@
+package catan.view;
+
 import java.awt.*;
 import javax.swing.JPanel;
+
+import catan.model.board.Intersection;
+import catan.model.board.Plateau;
+import catan.model.board.Route;
+import catan.model.board.Tuile;
+import catan.model.player.Joueur;
+
 import java.util.LinkedList;
 import java.awt.geom.Ellipse2D;
 import java.awt.event.*;
@@ -246,7 +255,7 @@ public class PlateauPanel extends JPanel implements MouseListener {
 				if (!phaseInitiale) {
 					if (typeAction == 3) {
 						if (((Intersection)o).joueur != j || ((Intersection)o).batiment != 1) {
-							vue.descriptifJeu.setText("Vous ne possédez pas de colonie à cette endroit.");
+							vue.descriptifJeu.setText("Vous ne possï¿½dez pas de colonie ï¿½ cette endroit.");
 							return;
 						}
 					}
@@ -259,7 +268,7 @@ public class PlateauPanel extends JPanel implements MouseListener {
 						}
 						
 						if (!vue.jeu.getPlateau().respecteRegleDistance((Intersection)o)) {
-							vue.descriptifJeu.setText("Veuillez respectez la règle de distance.");
+							vue.descriptifJeu.setText("Veuillez respectez la rï¿½gle de distance.");
 							return;
 						}
 					}
@@ -284,7 +293,7 @@ public class PlateauPanel extends JPanel implements MouseListener {
 				vue.descriptifJeu.setText("Veuillez cliquer sur une tuile.\n");
 				
 			else if (((Tuile)o).voleurEstIci)
-				vue.descriptifJeu.setText("Le voleur se trouve déjà sur la tuile.\n");
+				vue.descriptifJeu.setText("Le voleur se trouve dï¿½jï¿½ sur la tuile.\n");
 			
 			else {
 				Plateau p = vue.jeu.getPlateau();
@@ -305,7 +314,7 @@ public class PlateauPanel extends JPanel implements MouseListener {
 							joueurs.add(in.joueur);
 					}
 					
-					// on choisit un adversaire aléatoire
+					// on choisit un adversaire alï¿½atoire
 					Random rd = new Random();
 					int n = rd.nextInt(joueurs.size());
 					
@@ -314,7 +323,7 @@ public class PlateauPanel extends JPanel implements MouseListener {
 					
 					// s'il n'avait aucune ressource, on l'annonce
 					if (ressource.equals("rien"))
-						System.out.println("Ce joueur ne possédait aucune ressource.\n");
+						System.out.println("Ce joueur ne possï¿½dait aucune ressource.\n");
 					
 					// sinon, on donne la ressource recupere au joueur actuel
 					else

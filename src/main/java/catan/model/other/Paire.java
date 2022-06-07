@@ -1,3 +1,4 @@
+package catan.model.other;
 
 public class Paire {
 	public int x;

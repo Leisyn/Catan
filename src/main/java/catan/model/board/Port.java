@@ -1,3 +1,4 @@
+package catan.model.board;
 
 public class Port extends Tuile {
 	public final int typePort;  // 0 : 3-1 / 1 : laine / 2 : argile / 3 : bois / 4 : ble / 5 : minerai

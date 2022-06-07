@@ -1,6 +1,12 @@
+package catan.view;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import catan.controller.Controleur;
+import catan.model.Jeu;
+import catan.model.player.Joueur;
 
 import java.util.Scanner;
 import java.util.LinkedList;
@@ -100,7 +106,7 @@ public class Vue {
 		menuLancement = new ImageDeFondPanel(imageDeFond);
 		menuLancement.add(BorderLayout.SOUTH, start);
 		
-		JButton lancerDe = new JButton("Lancer les dés");
+		JButton lancerDe = new JButton("Lancer les dï¿½s");
 		
 		JTextArea nom1 = new JTextArea();
 		JTextArea nom2 = new JTextArea();
@@ -164,7 +170,7 @@ public class Vue {
 		gb.insets = new Insets(25, 25, 25, 50);
 		choixNbIA.add(troisIA, gb);
 		
-		// Le bouton quatreIA est mis en place dans la méthode changeNbJoueurEtPasse, dans Controleur
+		// Le bouton quatreIA est mis en place dans la mï¿½thode changeNbJoueurEtPasse, dans Controleur
 		
 		
 		
@@ -262,14 +268,14 @@ public class Vue {
 		
 		construireColonieInitiale.addActionListener(event -> {
 			construireColonieInitiale.setEnabled(false);
-			descriptifJeu.setText("Veuillez cliquer sur la colonie à construire.");
+			descriptifJeu.setText("Veuillez cliquer sur la colonie ï¿½ construire.");
 			plateau.typeAction = 2;
 			plateau.phaseInitiale = true;
 		});
 		
 		construireRouteInitiale.addActionListener(event -> {
 			construireRouteInitiale.setEnabled(false);
-			descriptifJeu.setText("Veuillez cliquer sur la route à construire.");
+			descriptifJeu.setText("Veuillez cliquer sur la route ï¿½ construire.");
 			plateau.typeAction = 1;
 		});
 		
@@ -357,7 +363,7 @@ public class Vue {
 		
 		boutonMarchander = new JButton("Marchander");
 		
-		passerPhaseConstruction = new JButton("Passer à la phase de construction");
+		passerPhaseConstruction = new JButton("Passer ï¿½ la phase de construction");
 		
 		passerPhaseConstruction.addActionListener(event -> {
 			cPlateauMarchand.show(listePanelPlateauMarchand, listePlateauMarchand[0]);
@@ -476,7 +482,7 @@ public class Vue {
 		donnerBois = new JButton("4 bois");
 		donnerBois.setEnabled(false);
 		
-		donnerBle = new JButton("4 blé");
+		donnerBle = new JButton("4 blï¿½");
 		donnerBle.setEnabled(false);
 		
 		donnerArgile = new JButton("4 argile");
@@ -491,7 +497,7 @@ public class Vue {
 		recevoirBois = new JButton("1 bois");
 		recevoirBois.setEnabled(false);
 		
-		recevoirBle = new JButton("1 blé");
+		recevoirBle = new JButton("1 blï¿½");
 		recevoirBle.setEnabled(false);
 		
 		recevoirArgile = new JButton("1 argile");

@@ -1,5 +1,16 @@
+package catan.model.player;
+
 import java.util.ArrayList;
 import java.util.Random;
+
+import catan.model.Jeu;
+import catan.model.board.Intersection;
+import catan.model.board.Route;
+import catan.model.board.Tuile;
+import catan.model.card.Carte;
+import catan.model.card.CarteChevalier;
+import catan.model.card.CarteProgres;
+import catan.model.other.Paire;
 
 
 
@@ -425,7 +436,7 @@ public class Robot extends Joueur {
 			}
 			// sinon, le joueur a rentre une tuile inconnue
 			System.out.println("Tuile inexistante.\n");
-			return false;
+			//return false;
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -627,7 +638,7 @@ public class Robot extends Joueur {
 
 			// toutes les conditions de constructions sont correctes, on renvoie ce que l'utilisateur a entre
 			System.out.println();
-			return true; //a mettre return direction;
+			//return true; //a mettre return direction;
 
 
 
@@ -641,7 +652,7 @@ public class Robot extends Joueur {
 				return aGagne();
 
 			// sinon, on construit
-			jeuActuel.getPlateau().construire(jeuActuel, typeAConstruire, this, position, direction);
+			//jeuActuel.getPlateau().construire(jeuActuel, typeAConstruire, this, position, direction);
 
 	        // on incrémente le compteur
 			if (typeAConstruire == 0)

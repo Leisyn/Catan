@@ -1,4 +1,9 @@
+package catan.model.board;
+
 import java.util.LinkedList;
+
+import catan.model.Jeu;
+import catan.model.player.Joueur;
 
 public class Intersection implements IConstructible {
 	public Joueur joueur; // le joueur qui a construit un batiment sur l'intersection (null si rien n'est
@@ -46,16 +51,16 @@ public class Intersection implements IConstructible {
 
 		// on regarde si le joueur construit une colonie
 
-		// on récupère les 4 routes environnantes
+		// on rï¿½cupï¿½re les 4 routes environnantes
 		Route[] r = jeu.getPlateau().getAllRoutes(this);
 
 		LinkedList<Joueur> ontLeurRouteLaPlusLongueBrise = new LinkedList<>();
 
-		// on regarde si une de ces routes appartient à un adversaire
+		// on regarde si une de ces routes appartient ï¿½ un adversaire
 		for (int i = 0; i < r.length; i++) {
 			if (r[i] != null && r[i].joueur != null && r[i].joueur != j) {
 
-				// on regarde si une autre de ces routes appartient à cette adversaire
+				// on regarde si une autre de ces routes appartient ï¿½ cette adversaire
 				for (int k = i; k < r.length; k++) {
 					if (r[k].joueur == r[i].joueur) {
 
@@ -83,12 +88,12 @@ public class Intersection implements IConstructible {
 			j.changeTauxEchange(typePort);
 		}
 
-		// pour chaque joueur qui ont eu leur route la plus longue brisée, on calcule
+		// pour chaque joueur qui ont eu leur route la plus longue brisï¿½e, on calcule
 		// leur nouvelle route la plus longue
 		for (Joueur jo : ontLeurRouteLaPlusLongueBrise)
 			jo.routeLaPlusLongue = Math.max(jo.routeLaPlusLongue, jeu.getPlateau().calculeRouteLaPlusLongue(jo));
 
-		// on réattribue la route la plus longue au cas ou le joueur qui la possede a
+		// on rï¿½attribue la route la plus longue au cas ou le joueur qui la possede a
 		// change
 		jeu.giveRouteLaPlusLongue();
 

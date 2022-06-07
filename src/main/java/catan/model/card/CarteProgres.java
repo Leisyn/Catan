@@ -1,3 +1,7 @@
+package catan.model.card;
+
+import catan.model.Jeu;
+import catan.model.player.Joueur;
 
 public class CarteProgres extends Carte {
 
@@ -23,7 +27,7 @@ public class CarteProgres extends Carte {
 				ressourceDemandee = j.demandeRessourceARecevoir(1);
 			}
 			
-			// on donne au joueur la ressource qu'il a souhaité
+			// on donne au joueur la ressource qu'il a souhaitï¿½
 			j.obtient(ressourceDemandee, 1);
 
 			
@@ -33,7 +37,7 @@ public class CarteProgres extends Carte {
 				ressourceDemandee2 = j.demandeRessourceARecevoir(1);
 			}
 			
-			// on donne au joueur la ressource qu'il a souhaité
+			// on donne au joueur la ressource qu'il a souhaitï¿½
 			j.obtient(ressourceDemandee2, 1);
 		}
 	
@@ -46,7 +50,7 @@ public class CarteProgres extends Carte {
 				ressourceDemandee = j.demandeRessourceARecevoir(1);
 			}
 			
-			// on donne au joueur la ressource qu'il a souhaité
+			// on donne au joueur la ressource qu'il a souhaitï¿½
 			j.obtient(ressourceDemandee, 1);		
 
 			// on compte et on retire toutes les ressources de ce type que les autres joueurs ont
@@ -58,7 +62,7 @@ public class CarteProgres extends Carte {
 	        	jeu.getJoueurs()[i].perd(ressourceDemandee, cmpt);
 			}
 			
-			// on donne le nombre compté au joueur
+			// on donne le nombre comptï¿½ au joueur
 			j.obtient(ressourceDemandee, cmpt2);
 		}
 
@@ -67,14 +71,14 @@ public class CarteProgres extends Carte {
 	@Override
 	public String toString() {
 		if (this.nom.equals("construction")) {
-			return "Carte Progrès - Construction de Routes";
+			return "Carte Progrï¿½s - Construction de Routes";
 		}
 		
 		if (this.nom.equals("invention")) {
-			return "Carte Progrès - Invention";
+			return "Carte Progrï¿½s - Invention";
 		}
 		
-		return "Carte Progrès - Monopole";
+		return "Carte Progrï¿½s - Monopole";
 	}
 }
 

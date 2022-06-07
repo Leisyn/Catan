@@ -1,3 +1,7 @@
+package catan.model.card;
+
+import catan.model.Jeu;
+import catan.model.player.Joueur;
 
 public class CarteVictoire extends Carte {
 
@@ -13,11 +17,11 @@ public class CarteVictoire extends Carte {
 	@Override
 	public String toString() {
 		if (this.nom.equals("bibliotheque")) {
-			return "CarteVictoire - Bibliothèque";
+			return "CarteVictoire - Bibliothï¿½que";
 		}
 		
 		if (this.nom.equals("marche")) {
-			return "CarteVictoire - Place du marché";
+			return "CarteVictoire - Place du marchï¿½";
 		}
 		
 		if (this.nom.equals("parlement")){
@@ -25,10 +29,10 @@ public class CarteVictoire extends Carte {
 		}
 		
 		if (this.nom.equals("eglise")) {
-			return "CarteVictoire - Église";
+			return "CarteVictoire - ï¿½glise";
 		}
 		
-		return "CarteVictoire - Université";
+		return "CarteVictoire - Universitï¿½";
 	}
 }
 

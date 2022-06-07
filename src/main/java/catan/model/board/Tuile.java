@@ -1,4 +1,8 @@
+package catan.model.board;
+
 import java.util.LinkedList;
+
+import catan.model.player.Joueur;
 
 public class Tuile {
 	public final int type;  // 0 : mer / 1 : port / 2 : pre / 3 : foret /  4 : colline / 5 : champs / 6 : montagne / 7 : desert
@@ -13,11 +17,11 @@ public class Tuile {
 		
 		// Gestion des exceptions
 		if (type < 0 || type > 7)
-			throw new IllegalArgumentException("Impossible de créer la tuile : type donné inconnu.");
+			throw new IllegalArgumentException("Impossible de crï¿½er la tuile : type donnï¿½ inconnu.");
 		if (jeton < 2 || jeton > 12)
-			throw new IllegalArgumentException("Impossible de créer la tuile : jeton non atteignable.");
+			throw new IllegalArgumentException("Impossible de crï¿½er la tuile : jeton non atteignable.");
 		if (jeton == 7)
-			throw new IllegalArgumentException("Impossible de créer la tuile : une tuile ne peut pas avoir un jeton égal à 7.");
+			throw new IllegalArgumentException("Impossible de crï¿½er la tuile : une tuile ne peut pas avoir un jeton ï¿½gal ï¿½ 7.");
 		
 		this.type = type;
 		this.jeton = jeton;
@@ -27,7 +31,7 @@ public class Tuile {
 	// Constructeur pour les tuiles speciales (mer, port et desert)
 	public Tuile(int type, boolean voleurEstIci) {
 		if (type != 0 && type != 1 && type != 7)
-			throw new IllegalArgumentException("Impossible de créer la tuile : type donné non correspondant.");
+			throw new IllegalArgumentException("Impossible de crï¿½er la tuile : type donnï¿½ non correspondant.");
 		
 		this.type = type;
 		jeton = 0;

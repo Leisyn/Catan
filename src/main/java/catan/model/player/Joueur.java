@@ -1,7 +1,20 @@
+package catan.model.player;
+
 import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
+
+import catan.model.Jeu;
+import catan.model.board.IConstructible;
+import catan.model.board.Intersection;
+import catan.model.board.Route;
+import catan.model.board.Tuile;
+import catan.model.card.Carte;
+import catan.model.card.CarteChevalier;
+import catan.model.card.CarteProgres;
+import catan.model.card.CarteVictoire;
+import catan.model.other.Paire;
 
 public class Joueur {
 	public static int nbJoueur = 1;
@@ -19,9 +32,9 @@ public class Joueur {
 	public int routeLaPlusLongue = 0;  // le nombre de routes constituant la route la plus longue du joueur
 	public int armeeLaPlusPuissante = 0;  // le nombre de carte chevalier joue
 
-	private int nbColonie = 0;  // le nombre de colonie (5 max)
-	private int nbVille = 0;  // le nombre de ville (4 max)
-	private int nbRoute = 0;  // le nombre de routes (15 max)
+	protected int nbColonie = 0;  // le nombre de colonie (5 max)
+	protected int nbVille = 0;  // le nombre de ville (4 max)
+	protected int nbRoute = 0;  // le nombre de routes (15 max)
 
 	public Joueur(String n, Jeu j) {
 		// on verifie que le nom n'est pas null
@@ -414,7 +427,7 @@ public class Joueur {
 	}
 
 	// Achete une carte de la liste de carte disponible
-	private boolean acheteCarte() {
+	protected boolean acheteCarte() {
 		if (jeuActuel.carteDispo.size() == 0) {
 			System.out.println("Il n'y a plus de cartes disponibles � l'achat.\n");
 			return aGagne();

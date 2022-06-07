@@ -1,7 +1,11 @@
+package catan.model.card;
+
+import catan.model.Jeu;
+import catan.model.player.Joueur;
 
 public abstract class Carte {
 	protected int type;  // 0 : chevalier / 1 : progres / 2 : victoire
-	protected String nom;
+	public String nom;
 	
 	static String[] nomAccepte = {"chevalier", "construction", "invention",
 			"monopole", "bibliotheque", "marche", "parlement", "eglise", "universite"};

@@ -1,3 +1,7 @@
+package catan.model.board;
+
+import catan.model.Jeu;
+import catan.model.player.Joueur;
 
 public class Route implements IConstructible {
 	public Joueur joueur;  // le joueur qui a construit la route (null si aucune route n'est construite)
@@ -37,10 +41,10 @@ public class Route implements IConstructible {
 		// on stocke sa nouvelle longueur
 		j.routeLaPlusLongue = n;
 
-		// si elle est plus longue que la route la plus longue précédente
+		// si elle est plus longue que la route la plus longue prï¿½cï¿½dente
 		if (n > 5 && n > j.routeLaPlusLongue) {
 
-			// on réattribue la route la plus longue au cas-où le joueur qui la possède
+			// on rï¿½attribue la route la plus longue au cas-oï¿½ le joueur qui la possï¿½de
 			// change
 			jeu.giveRouteLaPlusLongue();
 		}

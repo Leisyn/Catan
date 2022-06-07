@@ -1,5 +1,11 @@
+package catan.model.board;
+
 import java.util.LinkedList;
 import java.util.Scanner;
+
+import catan.model.Jeu;
+import catan.model.other.Paire;
+import catan.model.player.Joueur;
 
 public class Plateau {
 	private Tuile[][] tuiles;
@@ -36,10 +42,10 @@ public class Plateau {
 		return null;
 	}
 	
-	// Renvoie les 4 routes en contact avec l'intersection donnée dans l'ordre : NO, NE, SO, SE
+	// Renvoie les 4 routes en contact avec l'intersection donnï¿½e dans l'ordre : NO, NE, SO, SE
 	public Tuile[] getAllTuiles(Intersection in) {
 		if (in == null)
-			throw new IllegalArgumentException("Intersection égale à null");
+			throw new IllegalArgumentException("Intersection ï¿½gale ï¿½ null");
 
 		// on cherche l'intersection donnee
 		for (int i = 0; i < intersections.length; i++) {
@@ -58,7 +64,7 @@ public class Plateau {
 			}
 		}
 		
-		// l'intersection n'a pas été trouvée
+		// l'intersection n'a pas ï¿½tï¿½ trouvï¿½e
 		return null;
 	}
 	
@@ -72,10 +78,10 @@ public class Plateau {
 		return null;
 	}
 
-	// Renvoie les 4 routes menant à l'intersection donnée dans l'ordre : N, S, O, E
+	// Renvoie les 4 routes menant ï¿½ l'intersection donnï¿½e dans l'ordre : N, S, O, E
 	public Route[] getAllRoutes(Intersection in) {
 		if (in == null)
-			throw new IllegalArgumentException("Intersection égale à null");
+			throw new IllegalArgumentException("Intersection ï¿½gale ï¿½ null");
 
 		// on cherche l'intersection donnee
 		for (int i = 0; i < intersections.length; i++) {
@@ -99,13 +105,13 @@ public class Plateau {
 		return null;
 	}
 
-	// Renvoie les 6 routes en contact à la route donnée dans l'ordre : O, NO, SO,
+	// Renvoie les 6 routes en contact ï¿½ la route donnï¿½e dans l'ordre : O, NO, SO,
 	// E, NE, SE ou N, NO, NE, S, SO, SE
 	public Route[] getAllRoutes(Route r) {
 		if (r == null)
-			throw new IllegalArgumentException("Route égale à null");
+			throw new IllegalArgumentException("Route ï¿½gale ï¿½ null");
 
-		// on cherche la route donnée
+		// on cherche la route donnï¿½e
 		for (int i = 1; i < routes.length - 1; i++) {
 			for (int j = 0; j < routes[i].length - 1; j++) {
 				if (routes[i][j] == r) {
@@ -114,7 +120,7 @@ public class Plateau {
 					// s'il s'agit d'une route horizontale
 					if (i % 2 == 1) {
 
-						// on cherche la route à l'ouest
+						// on cherche la route ï¿½ l'ouest
 						res[0] = routes[i][j - 1];
 
 						// on cherche la route au nord-ouest
@@ -123,7 +129,7 @@ public class Plateau {
 						// on cherche la route au sud-ouest
 						res[2] = routes[i + 1][j - 1];
 
-						// on cherche la route à l'est
+						// on cherche la route ï¿½ l'est
 						res[3] = routes[i][j + 1];
 
 						// on cherche la route au nord-est
@@ -132,7 +138,7 @@ public class Plateau {
 						// on cherche la route au sud-est
 						res[5] = routes[i + 1][j];
 
-						// on renvoie les 6 routes trouvées
+						// on renvoie les 6 routes trouvï¿½es
 						return res;
 					}
 
@@ -156,23 +162,23 @@ public class Plateau {
 						// on cherche la route au sud-est
 						res[5] = routes[i + 1][j + 1];
 
-						// on renvoie les 6 routes trouvées
+						// on renvoie les 6 routes trouvï¿½es
 						return res;
 					}
 				}
 			}
 		}
 
-		// on n'a pas trouvé la route donnée
+		// on n'a pas trouvï¿½ la route donnï¿½e
 		return null;
 	}
 
 	// Renvoie les deux intersections se trouvant aux bouts de la route
 	public Intersection[] getAllIntersections(Route r) {
 		if (r == null)
-			throw new IllegalArgumentException("Route égale à null");
+			throw new IllegalArgumentException("Route ï¿½gale ï¿½ null");
 
-		// on cherche la route donnée
+		// on cherche la route donnï¿½e
 		for (int i = 1; i < routes.length - 1; i++) {
 			for (int j = 0; j < routes[i].length - 1; j++) {
 				if (routes[i][j] == r) {
@@ -199,7 +205,7 @@ public class Plateau {
 			}
 		}
 
-		// on n'a pas trouvé la route
+		// on n'a pas trouvï¿½ la route
 		return null;
 	}
 
@@ -319,7 +325,7 @@ public class Plateau {
 		construction.construire(jeu, j, type);
 	}
 
-	// Calcule la route la plus longue du joueur donné
+	// Calcule la route la plus longue du joueur donnï¿½
 	public int calculeRouteLaPlusLongue(Joueur joueur) {
 		int max = 0;
 		for (int i = 1; i < routes.length - 1; i++) {
@@ -331,7 +337,7 @@ public class Plateau {
 		return max;
 	}
 
-	// Calcule la longueur de la route de la route donnée
+	// Calcule la longueur de la route de la route donnï¿½e
 	public int calculeLongueurRoute(Route r) {
 		boolean[][] routesVu = new boolean[routes.length][routes[0].length];
 		return calculeLongueurRouteAux(routesVu, r.joueur, r, 0);
@@ -352,14 +358,14 @@ public class Plateau {
 		if (r.joueur != joueur)
 			return n;
 
-		// on récupère les intersections au bout de la route
+		// on rï¿½cupï¿½re les intersections au bout de la route
 		Intersection[] in = getAllIntersections(r);
 
 		// on regarde si des batiments adverses bloquent les deux intersections
 		if ((in[0].batiment != 0 && in[0].joueur != joueur) || (in[1].batiment != 0 && in[1].joueur != joueur))
 			return n;
 
-		// on récupère les 6 routes liées à la route actuelle
+		// on rï¿½cupï¿½re les 6 routes liï¿½es ï¿½ la route actuelle
 		Route[] routes = getAllRoutes(r);
 		int[] max = new int[2];
 		int m;
@@ -367,8 +373,8 @@ public class Plateau {
 		// si aucun batiment adverse ne bloque la 1er intersection
 		if (in[0].batiment == 0 || in[0].joueur == joueur) {
 
-			// on récupère la route la plus longue a partir de la route à l'ouest / au nord
-			// et on la compare avec les deux routes les plus longues précédentes
+			// on rï¿½cupï¿½re la route la plus longue a partir de la route ï¿½ l'ouest / au nord
+			// et on la compare avec les deux routes les plus longues prï¿½cï¿½dentes
 			m = calculeLongueurRouteAux(routesVu, joueur, routes[0], n);
 			if (m > max[1]) {
 				if (m < max[0])
@@ -380,8 +386,8 @@ public class Plateau {
 				}
 			}
 
-			// on récupère la route la plus longue a partir de la route au nord-ouest et on
-			// la compare avec les deux routes les plus longues précédentes
+			// on rï¿½cupï¿½re la route la plus longue a partir de la route au nord-ouest et on
+			// la compare avec les deux routes les plus longues prï¿½cï¿½dentes
 			m = calculeLongueurRouteAux(routesVu, joueur, routes[1], n);
 			if (m > max[1]) {
 				if (m < max[0])
@@ -393,8 +399,8 @@ public class Plateau {
 				}
 			}
 
-			// on récupère la route la plus longue a partir de la route au sud-ouest / au
-			// nord-est et on la compare avec les deux routes les plus longues précédentes
+			// on rï¿½cupï¿½re la route la plus longue a partir de la route au sud-ouest / au
+			// nord-est et on la compare avec les deux routes les plus longues prï¿½cï¿½dentes
 			m = calculeLongueurRouteAux(routesVu, joueur, routes[2], n);
 			if (m > max[1]) {
 				if (m < max[0])
@@ -410,8 +416,8 @@ public class Plateau {
 		// si aucun batiment adverse ne bloque la 2e intersection
 		if (in[1].batiment == 0 || in[1].joueur == joueur) {
 
-			// on récupère la route la plus longue a partir de la route à l'est / au sud et
-			// on la compare avec les deux routes les plus longues précédentes
+			// on rï¿½cupï¿½re la route la plus longue a partir de la route ï¿½ l'est / au sud et
+			// on la compare avec les deux routes les plus longues prï¿½cï¿½dentes
 			m = calculeLongueurRouteAux(routesVu, joueur, routes[3], n);
 			if (m > max[1]) {
 				if (m < max[0])
@@ -423,8 +429,8 @@ public class Plateau {
 				}
 			}
 
-			// on récupère la route la plus longue a partir de la route au nord-est / au
-			// sud-ouest et on la compare avec les deux routes les plus longues précédentes
+			// on rï¿½cupï¿½re la route la plus longue a partir de la route au nord-est / au
+			// sud-ouest et on la compare avec les deux routes les plus longues prï¿½cï¿½dentes
 			m = calculeLongueurRouteAux(routesVu, joueur, routes[4], n);
 			if (m > max[1]) {
 				if (m < max[0])
@@ -436,8 +442,8 @@ public class Plateau {
 				}
 			}
 
-			// on récupère la route la plus longue a partir de la route au sud-est, on la
-			// compare avec les deux routes les plus longues précédentes
+			// on rï¿½cupï¿½re la route la plus longue a partir de la route au sud-est, on la
+			// compare avec les deux routes les plus longues prï¿½cï¿½dentes
 			m = calculeLongueurRouteAux(routesVu, joueur, routes[5], n);
 			if (m > max[1]) {
 				if (m < max[0])
@@ -450,7 +456,7 @@ public class Plateau {
 			}
 		}
 
-		// on renvoie la somme entre les deux routes les plus longues calculées
+		// on renvoie la somme entre les deux routes les plus longues calculï¿½es
 		return max[0] + max[1] + 1;
 	}
 

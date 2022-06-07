@@ -1,3 +1,7 @@
+package catan.model.card;
+
+import catan.model.Jeu;
+import catan.model.player.Joueur;
 
 public class CarteChevalier extends Carte {
 
@@ -6,13 +10,13 @@ public class CarteChevalier extends Carte {
 	}
 
 	public void jouer(Jeu jeu, Joueur j) {
-		// on augmente l'armée la plus puissante du joueur
+		// on augmente l'armï¿½e la plus puissante du joueur
 		j.armeeLaPlusPuissante++;
 		
-		// on réattribue l'armée la plus puissante si besoin
+		// on rï¿½attribue l'armï¿½e la plus puissante si besoin
 		jeu.giveArmeeLaPlusPuissante();
 		
-		// on déplace le voleur
+		// on dï¿½place le voleur
 		jeu.auVoleur(j);
 	}
 

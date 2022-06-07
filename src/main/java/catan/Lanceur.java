@@ -1,4 +1,12 @@
+package catan;
+
 import java.util.Scanner;
+
+import catan.model.Jeu;
+import catan.model.player.Joueur;
+import catan.model.player.Robot;
+import catan.view.Vue;
+
 import java.awt.EventQueue;
 import java.util.LinkedList;
 
@@ -32,7 +40,7 @@ public class Lanceur {
 			}
 			System.out.println();
 			
-			// on crée le jeu contenant le nombre de joueurs souhaités
+			// on crï¿½e le jeu contenant le nombre de joueurs souhaitï¿½s
 			int nbJoueur = Integer.parseInt(reponse);
 			Jeu jeu = new Jeu(nbJoueur, sc);
 	

@@ -1,4 +1,13 @@
+package catan.controller;
+
 import javax.swing.*;
+
+import catan.model.Jeu;
+import catan.model.card.Carte;
+import catan.model.player.Joueur;
+import catan.model.player.Robot;
+import catan.view.Vue;
+
 import java.awt.*;
 import java.util.Scanner;
 
@@ -145,7 +154,7 @@ public class Controleur {
 		vue.nomJoueurActuel.setText("Tour de " + j.nom);
 		vue.nbPointsActuel.setText("Nombre de points : " + j.points);
 		vue.routeLaPlusLongueActuel.setText("Route la plus longue : " + j.routeLaPlusLongue);
-		vue.armeeLaPlusPuissanteActuel.setText("Armée la plus puissante : " + j.armeeLaPlusPuissante);
+		vue.armeeLaPlusPuissanteActuel.setText("Armï¿½e la plus puissante : " + j.armeeLaPlusPuissante);
 	}
 	
 	public void setCompteursJeu() {
@@ -155,16 +164,16 @@ public class Controleur {
 			vue.routeLaPlusLongueJeu.setText("Route la plus longue : personne");
 		
 		if (vue.jeu.aLArmeeLaPlusPuissante != null)
-			vue.armeeLaPlusPuissanteJeu.setText("Armée la plus puissante : " + vue.jeu.aLArmeeLaPlusPuissante + " (" + vue.jeu.aLArmeeLaPlusPuissante.armeeLaPlusPuissante + ")");
+			vue.armeeLaPlusPuissanteJeu.setText("Armï¿½e la plus puissante : " + vue.jeu.aLArmeeLaPlusPuissante + " (" + vue.jeu.aLArmeeLaPlusPuissante.armeeLaPlusPuissante + ")");
 		else
-			vue.armeeLaPlusPuissanteJeu.setText("Armée la plus puissante : personne");
+			vue.armeeLaPlusPuissanteJeu.setText("Armï¿½e la plus puissante : personne");
 	}
 	
 	public void setRessourcesJoueur() {
 		Joueur j = vue.jeu.getJoueurs()[vue.indiceJoueurActuel];
 		
 		vue.nbArgileActuel.setText("Argile : " + j.getRessources().get("argile"));
-		vue.nbBleActuel.setText("Blé : " + j.getRessources().get("blé"));
+		vue.nbBleActuel.setText("Blï¿½ : " + j.getRessources().get("blï¿½"));
 		vue.nbBoisActuel.setText("Bois : " + j.getRessources().get("bois"));
 		vue.nbLaineActuel.setText("Laine : " + j.getRessources().get("laine"));
 		vue.nbMineraiActuel.setText("Minerai : " + j.getRessources().get("minerai"));
@@ -200,7 +209,7 @@ public class Controleur {
 			donnerArg.setEnabled(true);
 		}
 		
-		if (j.getRessources().get("blé") < j.getTauxEchange().get("blé"))
+		if (j.getRessources().get("blï¿½") < j.getTauxEchange().get("blï¿½"))
 			donnerBle.setEnabled(false);
 		
 		else {
@@ -308,7 +317,7 @@ public class Controleur {
 	
 	public void lanceDe() {
 		int n = vue.jeu.lanceDe();
-		vue.descriptifJeu.setText("Un " + n + " a été lancé !\n");
+		vue.descriptifJeu.setText("Un " + n + " a ï¿½tï¿½ lancï¿½ !\n");
 		
 		if (n != 7)
 			vue.jeu.donneRessource(n, vue.jeu.getJoueurs()[vue.indiceJoueurActuel]);
@@ -317,7 +326,7 @@ public class Controleur {
 	}
 	
 	public void auVoleur() {
-		vue.descriptifJeu.setText(vue.descriptifJeu.getText() + "\nAu voleur !\nCliquez sur une tuile pour déplacer le voleur.");
+		vue.descriptifJeu.setText(vue.descriptifJeu.getText() + "\nAu voleur !\nCliquez sur une tuile pour dï¿½placer le voleur.");
 		vue.plateau.typeAction = 4;
 	}
 }

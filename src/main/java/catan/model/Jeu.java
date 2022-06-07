@@ -1,6 +1,18 @@
+package catan.model;
+
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
+
+import catan.model.board.Intersection;
+import catan.model.board.Plateau;
+import catan.model.board.Tuile;
+import catan.model.card.Carte;
+import catan.model.card.CarteChevalier;
+import catan.model.card.CarteProgres;
+import catan.model.card.CarteVictoire;
+import catan.model.other.Paire;
+import catan.model.player.Joueur;
 
 public class Jeu {
 	private Plateau plateau;
@@ -31,11 +43,11 @@ public class Jeu {
 	}
 	
 	public void iniJoueurs(LinkedList<Joueur> j) {
-		// on vérifie que la liste donnée contient le nombre de joueurs correspondant au jeu
+		// on vï¿½rifie que la liste donnï¿½e contient le nombre de joueurs correspondant au jeu
 		if (joueurs.length != j.size())
-			throw new IllegalArgumentException("Le nombre de joueurs donnés est différent du nombre de joueur attendu.");
+			throw new IllegalArgumentException("Le nombre de joueurs donnï¿½s est diffï¿½rent du nombre de joueur attendu.");
 		
-		// on tire les joueurs aléatoirement, afin que le joueur qui commence soit aléatoire
+		// on tire les joueurs alï¿½atoirement, afin que le joueur qui commence soit alï¿½atoire
 		Random rd = new Random();
 
 		for (int i = 0; i < joueurs.length; i++) {
@@ -80,10 +92,10 @@ public class Jeu {
 	
 	
 	public void giveRouteLaPlusLongue() {
-		// on récupère le nombre minimum de routes requis pour être attribué la route la plus longue
+		// on rï¿½cupï¿½re le nombre minimum de routes requis pour ï¿½tre attribuï¿½ la route la plus longue
 		int max = minRoutePlusLongue;
 		
-		// on récupère le joueur qui a la route la plus longue
+		// on rï¿½cupï¿½re le joueur qui a la route la plus longue
 		Joueur avant = aLaRouteLaPlusLongue;
 				
 		// on attribue la route la plus longue au joueur ayant la plus longue route, atteignant au moins le nombre requis
@@ -94,10 +106,10 @@ public class Jeu {
 			}
 		}
 		
-		// si le joueur qui a la route la plus longue n'est plus le même
+		// si le joueur qui a la route la plus longue n'est plus le mï¿½me
 		if (aLaRouteLaPlusLongue != avant) {
 			
-			// on enlève 2 points au joueur qui avait la route la plus longue
+			// on enlï¿½ve 2 points au joueur qui avait la route la plus longue
 			if (avant != null)
 				avant.points -= 2;
 			
@@ -108,13 +120,13 @@ public class Jeu {
 	}
 	
 	public void giveArmeeLaPlusPuissante() {
-		// on récupère le nombre minimum de routes requis pour être attribué la route la plus longue
+		// on rï¿½cupï¿½re le nombre minimum de routes requis pour ï¿½tre attribuï¿½ la route la plus longue
 		int max = minArmeeLaPlusPuissante;
 		
-		// on récupère le joueur qui a l'armée la plus puissante
+		// on rï¿½cupï¿½re le joueur qui a l'armï¿½e la plus puissante
 		Joueur avant = aLArmeeLaPlusPuissante;
 				
-		// on attribue l'armée la plus puissante au joueur ayant joué le plus de cartes chevalier, atteignant au moins le nombre requis
+		// on attribue l'armï¿½e la plus puissante au joueur ayant jouï¿½ le plus de cartes chevalier, atteignant au moins le nombre requis
 		for (int i = 0; i < joueurs.length; i++) {
 			if (joueurs[i].armeeLaPlusPuissante > max) {
 				max = joueurs[i].armeeLaPlusPuissante;
@@ -122,14 +134,14 @@ public class Jeu {
 			}
 		}
 		
-		// si le joueur qui a l'armée la plus puissante n'est plus le même
+		// si le joueur qui a l'armï¿½e la plus puissante n'est plus le mï¿½me
 		if (aLArmeeLaPlusPuissante != avant) {
 			
-			// on enlève 2 points au joueur qui avait l'armée la plus puissante
+			// on enlï¿½ve 2 points au joueur qui avait l'armï¿½e la plus puissante
 			if (avant != null)
 				avant.points -= 2;
 			
-			// on ajoute 2 points au joueur qui a l'armée la plus puissante
+			// on ajoute 2 points au joueur qui a l'armï¿½e la plus puissante
 			if (aLArmeeLaPlusPuissante != null)
 				aLArmeeLaPlusPuissante.points += 2;
 		}
@@ -139,7 +151,7 @@ public class Jeu {
 		// on lance la phase initiale du jeu
 		phaseInitiale();
 		
-		// on lance le tour de chacun des joueurs, jusqu'à ce qu'un des joueurs gagne
+		// on lance le tour de chacun des joueurs, jusqu'ï¿½ ce qu'un des joueurs gagne
 		int i = 0;
 		while (!unTour(joueurs[i])) {
 			if (i == joueurs.length - 1) i = 0;
@@ -147,7 +159,7 @@ public class Jeu {
 		}
 		
 		// on affiche le gagnant
-		System.out.println(joueurs[i].nom + " a gagné !");
+		System.out.println(joueurs[i].nom + " a gagnï¿½ !");
 	}
 	
 	// Lance la phase initiale du jeu
@@ -160,7 +172,7 @@ public class Jeu {
 				joueurs[i].construire(1, true);  // on demande au joueur de placer une colonie
 			plateau.affichePlateau();
 			while (joueurs[i].getNbRoute() != 1)
-				joueurs[i].construire(0, true);  // on demande au joueur de placer une route près de la colonie qu'il vient de placer
+				joueurs[i].construire(0, true);  // on demande au joueur de placer une route prï¿½s de la colonie qu'il vient de placer
 		}
 		
 		// 2e tour
@@ -171,7 +183,7 @@ public class Jeu {
 				joueurs[i].construire(1, true);  // on demande au joueur de placer une colonie
 			plateau.affichePlateau();
 			while (joueurs[i].getNbRoute() != 2)
-				joueurs[i].construire(0, true);  // on demande au joueur de placer une route près de la colonie qu'il vient de placer
+				joueurs[i].construire(0, true);  // on demande au joueur de placer une route prï¿½s de la colonie qu'il vient de placer
 		}
 	}
 	
@@ -190,7 +202,7 @@ public class Jeu {
 		// on affiche le nom du joueur actuel
 		afficheNomTour(j);
 		
-		// on affiche l'état du plateau
+		// on affiche l'ï¿½tat du plateau
 		plateau.affichePlateau();
 		
 		// on affiche ses points et ses cartes actuelles
@@ -208,7 +220,7 @@ public class Jeu {
 		
 		// on lance le de et on effectue l'action correspondante
 		int n = lanceDe();
-		System.out.println("Vous avez lancé un " + n + ".");
+		System.out.println("Vous avez lancï¿½ un " + n + ".");
 		
 		if (n == 7)
 			septAuDe(j);
@@ -244,7 +256,7 @@ public class Jeu {
 	
 	private void septAuDe(Joueur j) {
 		System.out.println("\n=================");
-		System.out.println("| SEPT AUX DÉES |");
+		System.out.println("| SEPT AUX Dï¿½ES |");
 		System.out.println("=================\n");
 		
 		// on regarde si un joueur a plus de 7 ressources
@@ -254,9 +266,9 @@ public class Jeu {
 				// si oui, il doit se defausser de la moitie de ses ressources
 				int n = jo.getNbRessource() / 2;
 				if (jo == j)
-					System.out.println("Vous avez plus de 7 ressources, veuillez vous défausser de " + n + " ressources.\n");
+					System.out.println("Vous avez plus de 7 ressources, veuillez vous dï¿½fausser de " + n + " ressources.\n");
 				else
-					System.out.println(jo.nom + " a plus de 7 ressources, il doit se défausser de " + n + " ressources.\n");
+					System.out.println(jo.nom + " a plus de 7 ressources, il doit se dï¿½fausser de " + n + " ressources.\n");
 				
 				// on affiche ses ressources
 				jo.afficheRessources();
@@ -286,7 +298,7 @@ public class Jeu {
 			
 			// on verifie que le voleur n'est pas deja sur la tuile (d'apres les regles, il est obligatoire de deplacer le voleur)
 			if (plateau.getTuiles()[p.x][p.y].voleurEstIci) {
-				System.out.println("Le voleur se trouve déjà sur la tuile.\n");
+				System.out.println("Le voleur se trouve dï¿½jï¿½ sur la tuile.\n");
 				p = null;
 			}
 		}
@@ -318,7 +330,7 @@ public class Jeu {
 			
 			// s'il n'avait aucune ressource, on l'annonce
 			if (ressource.equals("rien"))
-				System.out.println("Ce joueur ne possédait aucune ressource.\n");
+				System.out.println("Ce joueur ne possï¿½dait aucune ressource.\n");
 			
 			// sinon, on donne la ressource recupere au joueur actuel
 			else
@@ -344,7 +356,7 @@ public class Jeu {
 							case 2: ressource = "laine"; break; 
 							case 3: ressource = "bois"; break;
 							case 4: ressource = "argile"; break;
-							case 5: ressource = "blé"; break;
+							case 5: ressource = "blï¿½"; break;
 							case 6: ressource = "minerai"; break;
 							default: ressource = "rien";
 						}
