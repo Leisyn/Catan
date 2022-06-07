@@ -1,10 +1,10 @@
 package catan.model.other;
 
-public class Paire {
+public class Pair {
 	public int x;
 	public int y;
 	
-	public Paire(int a, int b) {
+	public Pair(int a, int b) {
 		x = a;
 		y = b;
 	}

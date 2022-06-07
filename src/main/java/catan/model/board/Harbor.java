@@ -1,16 +1,16 @@
 package catan.model.board;
 
-public class Port extends Tuile {
-	public final int typePort;  // 0 : 3-1 / 1 : laine / 2 : argile / 3 : bois / 4 : ble / 5 : minerai
+public class Harbor extends Tile {
+	public final int typeHarbor;  // 0 : 3-1 / 1 : laine / 2 : argile / 3 : bois / 4 : ble / 5 : minerai
 	
-	public Port(int t) {
+	public Harbor(int t) {
 		super(1, false);
-		typePort = t;
+		typeHarbor = t;
 	}
 	
 	@Override
-	public void afficheDetail() {
-		switch (typePort) {
+	public void printDetail() {
+		switch (typeHarbor) {
 			case 1: System.out.print("  LAI  "); return;
 			case 2: System.out.print("  ARG  "); return;
 			case 3: System.out.print("  BOI  "); return;

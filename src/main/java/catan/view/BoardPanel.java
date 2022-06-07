@@ -4,18 +4,18 @@ import java.awt.*;
 import javax.swing.JPanel;
 
 import catan.model.board.Intersection;
-import catan.model.board.Plateau;
-import catan.model.board.Route;
-import catan.model.board.Tuile;
-import catan.model.player.Joueur;
+import catan.model.board.Board;
+import catan.model.board.Road;
+import catan.model.board.Tile;
+import catan.model.player.Player;
 
 import java.util.LinkedList;
 import java.awt.geom.Ellipse2D;
 import java.awt.event.*;
 import java.util.Random;
 
-public class PlateauPanel extends JPanel implements MouseListener {
-	Vue vue;
+public class BoardPanel extends JPanel implements MouseListener {
+	View vue;
 	public int typeAction = 0;  // 0 : rien, 1 : construire route, 2 : construire colonie, 3 : construire ville, 4 : voleur
 	public boolean phaseInitiale = false;
 	
@@ -38,7 +38,7 @@ public class PlateauPanel extends JPanel implements MouseListener {
 	Color couleurJ3 = new Color(49, 158, 239);
 	Color couleurJ4 = new Color(247, 200, 83);
 	
-	public PlateauPanel(Vue vue) {
+	public BoardPanel(View vue) {
 		addMouseListener(this);
 		this.vue = vue;
 		
@@ -69,14 +69,14 @@ public class PlateauPanel extends JPanel implements MouseListener {
 	
 	public void paintComponent(Graphics g) {
 		int n = 0;
-		Plateau p = vue.jeu.getPlateau();
+		Board p = vue.jeu.getBoard();
 		
 		n = 0;
 		
-		for (int i = 0; i < p.getTuiles().length; i++) {
-			for (int j = 0; j < p.getTuiles()[i].length; j++) {
+		for (int i = 0; i < p.getTiles().length; i++) {
+			for (int j = 0; j < p.getTiles()[i].length; j++) {
 				// on met en place la couleur
-				switch (p.getTuiles()[i][j].type) {
+				switch (p.getTiles()[i][j].type) {
 					case 2: g.setColor(couleurTuilePre); break;
 					case 3: g.setColor(couleurTuileForet); break;
 					case 4: g.setColor(couleurTuileColline); break;
@@ -97,18 +97,18 @@ public class PlateauPanel extends JPanel implements MouseListener {
 		int a = 0;
 		n = 0;
 		
-		for (int i = 0; i < p.getRoutes().length; i += 2) {
-			if (i % 2 == 0) a = p.getRoutes()[i].length - 1;
-			else a = p.getRoutes()[i].length;
+		for (int i = 0; i < p.getRoads().length; i += 2) {
+			if (i % 2 == 0) a = p.getRoads()[i].length - 1;
+			else a = p.getRoads()[i].length;
 			
 			for (int j = 0; j < a; j++) {
 				// on met en place la couleur
-				if (p.getRoutes()[i][j] == null)
+				if (p.getRoads()[i][j] == null)
 					g.setColor(couleurTuileMarine);
-				else if (p.getRoutes()[i][j].joueur == null)
+				else if (p.getRoads()[i][j].player == null)
 					g.setColor(couleurRouteIntersectionDefaut);
 				else {
-					switch (p.getRoutes()[i][j].joueur.id) {
+					switch (p.getRoads()[i][j].player.id) {
 						case 1: g.setColor(couleurJ1); break;
 						case 2: g.setColor(couleurJ2); break;
 						case 3: g.setColor(couleurJ3); break;
@@ -122,7 +122,7 @@ public class PlateauPanel extends JPanel implements MouseListener {
 				
 				n++;
 			}
-			if (i == p.getRoutes().length - 1) i = -1;
+			if (i == p.getRoads().length - 1) i = -1;
 		}
 		
 		n = 0;
@@ -132,11 +132,11 @@ public class PlateauPanel extends JPanel implements MouseListener {
 				if (p.getIntersections()[i][j] == null)
 					g.setColor(couleurTuileMarine);
 				
-				else if (p.getIntersections()[i][j].joueur == null)
+				else if (p.getIntersections()[i][j].player == null)
 					g.setColor(couleurRouteIntersectionDefaut);
 				
 				else {
-					switch (p.getIntersections()[i][j].joueur.id) {
+					switch (p.getIntersections()[i][j].player.id) {
 						case 1: g.setColor(couleurJ1); break;
 						case 2: g.setColor(couleurJ2); break;
 						case 3: g.setColor(couleurJ3); break;
@@ -144,7 +144,7 @@ public class PlateauPanel extends JPanel implements MouseListener {
 					}
 				}
 				
-				if (p.getIntersections()[i][j] == null || p.getIntersections()[i][j].batiment != 2) {
+				if (p.getIntersections()[i][j] == null || p.getIntersections()[i][j].building != 2) {
 					Ellipse2D e = (Ellipse2D)intersections.get(n);
 					g.fillOval((int)e.getX(), (int)e.getY(), (int)e.getWidth(), (int)e.getHeight());
 				}
@@ -160,9 +160,9 @@ public class PlateauPanel extends JPanel implements MouseListener {
 		
 		g.setFont(new Font(null, Font.BOLD, 20));
 		
-		for (int i = 0; i < p.getTuiles().length; i++) {
-			for (int j = 0; j < p.getTuiles()[i].length; j++) {
-				int jeton = p.getTuiles()[i][j].jeton;
+		for (int i = 0; i < p.getTiles().length; i++) {
+			for (int j = 0; j < p.getTiles()[i].length; j++) {
+				int jeton = p.getTiles()[i][j].token;
 				
 				if (jeton > 1) {
 					String nb = "" + jeton;
@@ -184,20 +184,20 @@ public class PlateauPanel extends JPanel implements MouseListener {
 	}
 
 	public Object getObject(int x, int y) {
-		Plateau p = vue.jeu.getPlateau();
+		Board p = vue.jeu.getBoard();
 		int a = x % 100;
 		int b = y % 100;
 		
 		if (a % 75 == a && b % 75 == b)
-			return p.getTuiles()[y / 100][x / 100];
+			return p.getTiles()[y / 100][x / 100];
 		
 		if (a % 75 != a && b % 75 != b)
 			return p.getIntersections()[y / 100][x / 100];
 		
 		if (a % 75 == a)
-			return p.getRoutes()[(y / 100) * 2 + 1][x / 100];
+			return p.getRoads()[(y / 100) * 2 + 1][x / 100];
 		
-		return p.getRoutes()[(y / 100) * 2][x / 100];
+		return p.getRoads()[(y / 100) * 2][x / 100];
 	}
 
 	@Override
@@ -209,31 +209,31 @@ public class PlateauPanel extends JPanel implements MouseListener {
 		int y = e.getY();
 
 		Object o = getObject(x, y);
-		Joueur j = vue.jeu.getJoueurs()[vue.indiceJoueurActuel];
+		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		
 		if (typeAction == 1) {
-			if (!(o instanceof Route))
+			if (!(o instanceof Road))
 				vue.descriptifJeu.setText("Veuillez cliquer sur une route.\n");
 			
 			else {
 				if (phaseInitiale) {
-					Intersection[] in = vue.jeu.getPlateau().getAllIntersections((Route)o);
-					if (in[0].joueur != j && in[1].joueur != j) {
+					Intersection[] in = vue.jeu.getBoard().getAllIntersectionsInContactWith((Road)o);
+					if (in[0].player != j && in[1].player != j) {
 						vue.descriptifJeu.setText("Veuillez construire votre route en contact d'une colonie.");
 						return;
 					}
 				}
 				
 				else {
-					Route[] r = vue.jeu.getPlateau().getAllRoutes((Route)o);
-					if (r[0].joueur != j && r[1].joueur != j && r[2].joueur != j && r[3].joueur != j
-							&& r[4].joueur != j && r[5].joueur != j) {
+					Road[] r = vue.jeu.getBoard().getAllRoadsInContactWith((Road)o);
+					if (r[0].player != j && r[1].player != j && r[2].player != j && r[3].player != j
+							&& r[4].player != j && r[5].player != j) {
 						vue.descriptifJeu.setText("Veuillez construire votre route en contact d'une autre.");
 						return;
 					}
 				}
 				
-				((Route) o).construire(vue.jeu, vue.jeu.getJoueurs()[vue.indiceJoueurActuel], 0);
+				((Road) o).build(vue.jeu, vue.jeu.getPlayers()[vue.indiceJoueurActuel], 0);
 				vue.descriptifJeu.setText("");
 				repaint();
 				vue.control.setCompteursJoueur();
@@ -254,27 +254,27 @@ public class PlateauPanel extends JPanel implements MouseListener {
 			else {
 				if (!phaseInitiale) {
 					if (typeAction == 3) {
-						if (((Intersection)o).joueur != j || ((Intersection)o).batiment != 1) {
+						if (((Intersection)o).player != j || ((Intersection)o).building != 1) {
 							vue.descriptifJeu.setText("Vous ne poss�dez pas de colonie � cette endroit.");
 							return;
 						}
 					}
 					
 					else {
-						Route[] r = vue.jeu.getPlateau().getAllRoutes((Intersection)o);
-						if (r[0].joueur != j && r[1].joueur != j && r[2].joueur != j && r[3].joueur != j) {
+						Road[] r = vue.jeu.getBoard().getAllRoadsInContactWith((Intersection)o);
+						if (r[0].player != j && r[1].player != j && r[2].player != j && r[3].player != j) {
 							vue.descriptifJeu.setText("Veuillez construire votre intersection en contact d'une de vos route.");
 							return;
 						}
 						
-						if (!vue.jeu.getPlateau().respecteRegleDistance((Intersection)o)) {
+						if (!vue.jeu.getBoard().respectDistanceRule((Intersection)o)) {
 							vue.descriptifJeu.setText("Veuillez respectez la r�gle de distance.");
 							return;
 						}
 					}
 				}
 					
-				((Intersection) o).construire(vue.jeu, vue.jeu.getJoueurs()[vue.indiceJoueurActuel], typeAction - 1);
+				((Intersection) o).build(vue.jeu, vue.jeu.getPlayers()[vue.indiceJoueurActuel], typeAction - 1);
 				vue.descriptifJeu.setText("");
 				repaint();
 				vue.control.setCompteursJoueur();
@@ -289,29 +289,29 @@ public class PlateauPanel extends JPanel implements MouseListener {
 		}
 		
 		if (typeAction == 4) {
-			if (!(o instanceof Tuile))
+			if (!(o instanceof Tile))
 				vue.descriptifJeu.setText("Veuillez cliquer sur une tuile.\n");
 				
-			else if (((Tuile)o).voleurEstIci)
+			else if (((Tile)o).robberIsHere)
 				vue.descriptifJeu.setText("Le voleur se trouve d�j� sur la tuile.\n");
 			
 			else {
-				Plateau p = vue.jeu.getPlateau();
+				Board p = vue.jeu.getBoard();
 				
-				p.retireVoleur();
-				p.placeVoleur((Tuile)o);
+				p.removeRobber();
+				p.placeRobber((Tile)o);
 				
 				// on regarde s'il y a des intersections construites autour de la nouvelle position du voleur
-				LinkedList<Intersection> intersections = ((Tuile)o).getToutesInterConstruites();
+				LinkedList<Intersection> intersections = ((Tile)o).getAllBuiltIntersections();
 				
 				if (!intersections.isEmpty()) {
 					
 					// on recupere tous les joueurs adverses qui ont une intersection construite autour de la nouvelle position du voleur
-					LinkedList<Joueur> joueurs = new LinkedList<>();
+					LinkedList<Player> joueurs = new LinkedList<>();
 					
 					for (Intersection in : intersections) {
-						if (!joueurs.contains(in.joueur) && in.joueur != vue.jeu.getJoueurs()[vue.indiceJoueurActuel])
-							joueurs.add(in.joueur);
+						if (!joueurs.contains(in.player) && in.player != vue.jeu.getPlayers()[vue.indiceJoueurActuel])
+							joueurs.add(in.player);
 					}
 					
 					// on choisit un adversaire al�atoire
@@ -319,7 +319,7 @@ public class PlateauPanel extends JPanel implements MouseListener {
 					int n = rd.nextInt(joueurs.size());
 					
 					// on recupere une ressource du joueur adverse de facon aleatoire
-					String ressource = joueurs.get(n).perdRessourceAleatoire();
+					String ressource = joueurs.get(n).loseARandomResource();
 					
 					// s'il n'avait aucune ressource, on l'annonce
 					if (ressource.equals("rien"))
@@ -327,7 +327,7 @@ public class PlateauPanel extends JPanel implements MouseListener {
 					
 					// sinon, on donne la ressource recupere au joueur actuel
 					else
-						vue.jeu.getJoueurs()[vue.indiceJoueurActuel].obtient(ressource, 1);
+						vue.jeu.getPlayers()[vue.indiceJoueurActuel].receiveResource(ressource, 1);
 				}
 				
 				typeAction = 0;

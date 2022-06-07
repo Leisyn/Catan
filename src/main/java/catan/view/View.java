@@ -4,9 +4,9 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import catan.controller.Controleur;
-import catan.model.Jeu;
-import catan.model.player.Joueur;
+import catan.controller.Controller;
+import catan.model.Game;
+import catan.model.player.Player;
 
 import java.util.Scanner;
 import java.util.LinkedList;
@@ -16,9 +16,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Vue {
+public class View {
 	public Scanner sc;
-	public Controleur control = new Controleur(this);
+	public Controller control = new Controller(this);
 	
 	private JFrame lancement = new JFrame();
 	private BufferedImage imageDeFond;
@@ -52,7 +52,7 @@ public class Vue {
 	public JLabel descriptifJeu = new JLabel();
 	
 	public JPanel menuJeu = new JPanel();
-	public PlateauPanel plateau = new PlateauPanel(this);
+	public BoardPanel plateau = new BoardPanel(this);
 	private JPanel marchander = new JPanel();
 	private JPanel compteursActuel = new JPanel();
 	private JPanel ressources = new JPanel();
@@ -82,12 +82,12 @@ public class Vue {
 	
 	public int nbJoueurs;
 	public int nbIA;
-	public LinkedList<Joueur> listeJoueurs = new LinkedList<>();
+	public LinkedList<Player> listeJoueurs = new LinkedList<>();
 	
-	public Jeu jeu;
+	public Game jeu;
 	public int indiceJoueurActuel = 0;
 	
-	public Vue(Scanner sc) {	
+	public View(Scanner sc) {	
 		this.sc = sc;
 		
 		// Mise en place du menu de lancement
@@ -325,7 +325,7 @@ public class Vue {
 		jouerCarte1.setEnabled(false);
 		
 		lancerDe.addActionListener(event -> {
-			int n = jeu.lanceDe();
+			int n = jeu.throwDice();
 			cChoix.show(listePanelChoix, listeChoix[2]);
 		});
 		
@@ -430,8 +430,8 @@ public class Vue {
 		
 		passerTour = new JButton("Passer");
 		passerTour.addActionListener(event -> {
-			if (jeu != null && jeu.getJoueurs().length > 0) {
-				indiceJoueurActuel = (indiceJoueurActuel + 1) % jeu.getJoueurs().length;
+			if (jeu != null && jeu.getPlayers().length > 0) {
+				indiceJoueurActuel = (indiceJoueurActuel + 1) % jeu.getPlayers().length;
 				control.setAllCompteurs();
 				cChoix.show(listePanelChoix, listeChoix[1]);
 			}

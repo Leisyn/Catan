@@ -1,101 +1,98 @@
 package catan.model.board;
 
-import java.util.LinkedList;
-import java.util.Scanner;
+import catan.model.Game;
+import catan.model.other.Pair;
+import catan.model.player.Player;
 
-import catan.model.Jeu;
-import catan.model.other.Paire;
-import catan.model.player.Joueur;
-
-public class Plateau {
-	private Tuile[][] tuiles;
-	private Route[][] routes;
+public class Board {
+	private Tile[][] tiles;
+	private Road[][] roads;
 	private Intersection[][] intersections;
 
 	// Cree le plateau de jeu, de taille 7x7
-	public Plateau() {
-		tuiles = new Tuile[7][7];
-		routes = new Route[13][7];
+	public Board() {
+		tiles = new Tile[7][7];
+		roads = new Road[13][7];
 		intersections = new Intersection[6][6];
 	}
 
-	public Tuile[][] getTuiles() {
-		return tuiles;
+	public Tile[][] getTiles() {
+		return tiles;
 	}
 	
-	public Route[][] getRoutes() {
-		return routes;
+	public Road[][] getRoads() {
+		return roads;
 	}
 	
 	public Intersection[][] getIntersections() {
 		return intersections;
 	}
 	
-	public Paire getXY(Route r) {
-		for (int i = 0; i < routes.length; i++) {
-			for (int j = 0; j < routes[i].length; j++) {
-				if (routes[i][j] == r)
-					return new Paire(i, j);
+	public Pair getXY(Road r) {
+		for (int i = 0; i < roads.length; i++) {
+			for (int j = 0; j < roads[i].length; j++) {
+				if (roads[i][j] == r)
+					return new Pair(i, j);
 			}
 		}
 		
 		return null;
 	}
 	
-	// Renvoie les 4 routes en contact avec l'intersection donn�e dans l'ordre : NO, NE, SO, SE
-	public Tuile[] getAllTuiles(Intersection in) {
+	// Renvoie les 4 routes en contact avec l'intersection donnee dans l'ordre : NO, NE, SO, SE
+	public Tile[] getAllTilesInContactWith(Intersection in) {
 		if (in == null)
-			throw new IllegalArgumentException("Intersection �gale � null");
+			throw new IllegalArgumentException("Intersection equals to null");
 
 		// on cherche l'intersection donnee
 		for (int i = 0; i < intersections.length; i++) {
 			for (int j = 0; j < intersections[i].length; j++) {
 				if (intersections[i][j] == in) {
-					Tuile[] res = new Tuile[4];
+					Tile[] res = new Tile[4];
 					
 					// on ajoute les 4 tuiles en contact avec l'intersection
-					res[0] = tuiles[i][j];
-					res[1] = tuiles[i][j + 1];
-					res[2] = tuiles[i + 1][j];
-					res[3] = tuiles[i + 1][j + 1];
+					res[0] = tiles[i][j];
+					res[1] = tiles[i][j + 1];
+					res[2] = tiles[i + 1][j];
+					res[3] = tiles[i + 1][j + 1];
 					
 					return res;
 				}
 			}
 		}
 		
-		// l'intersection n'a pas �t� trouv�e
+		// l'intersection n'a pas ete trouvee
 		return null;
 	}
 	
-	public Port getPort(Intersection in) {
-		Tuile[] t = getAllTuiles(in);
+	public Harbor getHarborInContactWith(Intersection in) {
+		Tile[] t = getAllTilesInContactWith(in);
 		for (int i = 0; i < t.length; i++) {
-			if (t[i] instanceof Port)
-				return (Port)t[i];
+			if (t[i] instanceof Harbor)
+				return (Harbor)t[i];
 		}
 		
 		return null;
 	}
 
-	// Renvoie les 4 routes menant � l'intersection donn�e dans l'ordre : N, S, O, E
-	public Route[] getAllRoutes(Intersection in) {
+	// Renvoie les 4 routes menant a l'intersection donnee dans l'ordre : N, S, O, E
+	public Road[] getAllRoadsInContactWith(Intersection in) {
 		if (in == null)
-			throw new IllegalArgumentException("Intersection �gale � null");
+			throw new IllegalArgumentException("Intersection equals to null");
 
 		// on cherche l'intersection donnee
 		for (int i = 0; i < intersections.length; i++) {
 			for (int j = 0; j < intersections[i].length; j++) {
 				if (intersections[i][j] == in) {
-					Route[] res = new Route[4];
+					Road[] res = new Road[4];
 					int m = i * 2 + 1;
 					int n = j;
 
 					// on ajoute les 4 routes menant a cette intersections
-					res[0] = routes[m][n];
-					res[1] = routes[m - 1][n];
-					res[2] = routes[m][n + 1];
-					res[3] = routes[m + 1][n];
+					res[0] = roads[m][n];
+					res[1] = roads[m - 1][n];
+					res[2] = roads[m][n + 1];
+					res[3] = roads[m + 1][n];
 
 					return res;
 				}
@@ -105,112 +102,79 @@ public class Plateau {
 		return null;
 	}
 
-	// Renvoie les 6 routes en contact � la route donn�e dans l'ordre : O, NO, SO,
+	// Renvoie les 6 routes en contact a la route donnee dans l'ordre : O, NO, SO,
 	// E, NE, SE ou N, NO, NE, S, SO, SE
-	public Route[] getAllRoutes(Route r) {
+	public Road[] getAllRoadsInContactWith(Road r) {
 		if (r == null)
-			throw new IllegalArgumentException("Route �gale � null");
+			throw new IllegalArgumentException("Road equals to null");
 
-		// on cherche la route donn�e
-		for (int i = 1; i < routes.length - 1; i++) {
-			for (int j = 0; j < routes[i].length - 1; j++) {
-				if (routes[i][j] == r) {
-					Route[] res = new Route[6];
+		// on cherche la route donnee
+		for (int i = 1; i < roads.length - 1; i++) {
+			for (int j = 0; j < roads[i].length - 1; j++) {
+				if (roads[i][j] == r) {
+					Road[] res = new Road[6];
 
 					// s'il s'agit d'une route horizontale
 					if (i % 2 == 1) {
-
-						// on cherche la route � l'ouest
-						res[0] = routes[i][j - 1];
-
-						// on cherche la route au nord-ouest
-						res[1] = routes[i - 1][j - 1];
-
-						// on cherche la route au sud-ouest
-						res[2] = routes[i + 1][j - 1];
-
-						// on cherche la route � l'est
-						res[3] = routes[i][j + 1];
-
-						// on cherche la route au nord-est
-						res[4] = routes[i - 1][j];
-
-						// on cherche la route au sud-est
-						res[5] = routes[i + 1][j];
-
-						// on renvoie les 6 routes trouv�es
-						return res;
+						res[0] = roads[i][j - 1];  // on cherche la route a l'ouest
+						res[1] = roads[i - 1][j - 1];  // on cherche la route au nord-ouest
+						res[2] = roads[i + 1][j - 1];  // on cherche la route au sud-ouest
+						res[3] = roads[i][j + 1];  // on cherche la route a l'est
+						res[4] = roads[i - 1][j];  // on cherche la route au nord-est
+						res[5] = roads[i + 1][j];  // on cherche la route au sud-est
+						return res;  // on renvoie les 6 routes trouvees
 					}
 
 					// s'il s'agit d'une route verticale
 					else {
-						// on cherche la route au nord
-						res[0] = routes[i - 2][j];
-
-						// on cherche la route au nord-ouest
-						res[1] = routes[i - 1][j];
-
-						// on cherche la route au nord-est
-						res[2] = routes[i - 1][j + 1];
-
-						// on cherche la route au sud
-						res[3] = routes[i + 2][j];
-
-						// on cherche la route au sud-ouest
-						res[4] = routes[i + 1][j];
-
-						// on cherche la route au sud-est
-						res[5] = routes[i + 1][j + 1];
-
-						// on renvoie les 6 routes trouv�es
-						return res;
+						res[0] = roads[i - 2][j];  // on cherche la route au nord
+						res[1] = roads[i - 1][j];  // on cherche la route au nord-ouest
+						res[2] = roads[i - 1][j + 1];  // on cherche la route au nord-est
+						res[3] = roads[i + 2][j];  // on cherche la route au sud
+						res[4] = roads[i + 1][j];  // on cherche la route au sud-ouest
+						res[5] = roads[i + 1][j + 1];  // on cherche la route au sud-est
+						return res;  // on renvoie les 6 routes trouvees
 					}
 				}
 			}
 		}
-
-		// on n'a pas trouv� la route donn�e
+		// on n'a pas trouve la route donnee
 		return null;
 	}
 
 	// Renvoie les deux intersections se trouvant aux bouts de la route
-	public Intersection[] getAllIntersections(Route r) {
+	public Intersection[] getAllIntersectionsInContactWith(Road r) {
 		if (r == null)
-			throw new IllegalArgumentException("Route �gale � null");
+			throw new IllegalArgumentException("Road equals to null");
 
-		// on cherche la route donn�e
-		for (int i = 1; i < routes.length - 1; i++) {
-			for (int j = 0; j < routes[i].length - 1; j++) {
-				if (routes[i][j] == r) {
+		// on cherche la route donnee
+		for (int i = 1; i < roads.length - 1; i++) {
+			for (int j = 0; j < roads[i].length - 1; j++) {
+				if (roads[i][j] == r) {
 
 					// on regarde s'il s'agit d'une route hozizontale
 					if (i % 2 == 1) {
 						// on renvoie les intersections nord et sud
 						Intersection inO = intersections[i / 2][j - 1];
 						Intersection inE = intersections[i / 2][j];
-
 						Intersection[] res = {inO, inE};
 						return res;
 					}
 
-					// sinon, il s'agit d'une route verticale
-
-					// on renvoie les intersections ouest et est
+					// sinon, il s'agit d'une route verticale : on renvoie les intersections ouest et est
 					Intersection inN = intersections[i / 2 - 1][j];
 					Intersection inS = intersections[i / 2][j];
-
 					Intersection[] res = {inN, inS};
 					return res;
 				}
 			}
 		}
-
-		// on n'a pas trouv� la route
+		// on n'a pas trouve la route
 		return null;
 	}
 
 	// Renvoie la position ou se trouve la tuile demandee
-	public Paire position(String typeTuile, int jeton) {
+	public Pair position(String typeTuile, int jeton) {
 		if (jeton < 2 || jeton > 12)
 			return null;
 
@@ -228,21 +192,21 @@ public class Plateau {
 		if (type == -1)
 			return null;
 
-		for (int i = 0; i < tuiles.length; i++) {
-			for (int j = 0; j < tuiles[i].length; j++) {
-				if (tuiles[i][j].type == type && tuiles[i][j].jeton == jeton)
-					return new Paire(i, j);
+		for (int i = 0; i < tiles.length; i++) {
+			for (int j = 0; j < tiles[i].length; j++) {
+				if (tiles[i][j].type == type && tiles[i][j].token == jeton)
+					return new Pair(i, j);
 			}
 		}
 		return null;
 	}
 
 	// Retire le voleur du plateau
-	public void retireVoleur() {
-		for (int i = 1; i < tuiles.length - 1; i++) {
-			for (int j = 1; j < tuiles[i].length - 1; j++) {
-				if (tuiles[i][j].voleurEstIci) {
-					tuiles[i][j].voleurEstIci = false;
+	public void removeRobber() {
+		for (int i = 1; i < tiles.length - 1; i++) {
+			for (int j = 1; j < tiles[i].length - 1; j++) {
+				if (tiles[i][j].robberIsHere) {
+					tiles[i][j].robberIsHere = false;
 					return;
 				}
 			}
@@ -250,24 +214,24 @@ public class Plateau {
 	}
 
 	// Place le voleur a la position donnee
-	public void placeVoleur(Paire p) {
-		tuiles[p.x][p.x].voleurEstIci = true;
+	public void placeRobber(Pair p) {
+		tiles[p.x][p.x].robberIsHere = true;
 	}
 	
-	public void placeVoleur(Tuile t) {
-		for (int i = 1; i < tuiles.length - 1; i++) {
-			for (int j = 1; j < tuiles[i].length - 1; j++) {
-				if (tuiles[i][j] == t) {
-					tuiles[i][j].voleurEstIci = true;
+	public void placeRobber(Tile t) {
+		for (int i = 1; i < tiles.length - 1; i++) {
+			for (int j = 1; j < tiles[i].length - 1; j++) {
+				if (tiles[i][j] == t) {
+					tiles[i][j].robberIsHere = true;
 					return;
 				}
 			}
 		}
 	}
 
-	public boolean respecteRegleDistance(Intersection in) {
+	public boolean respectDistanceRule(Intersection in) {
 		if (in == null)
-			throw new IllegalArgumentException("Intersection null.");
+			throw new IllegalArgumentException("Intersection null");
 		
 		// on cherche l'intersection en question
 		for (int i = 0; i < intersections.length; i++) {
@@ -277,19 +241,19 @@ public class Plateau {
 				if (intersections[i][j] == in) {
 
 					// on regarde si l'intersection nord est construite
-					if (i > 0 && intersections[i - 1][j] != null && intersections[i - 1][j].joueur != null)
+					if (i > 0 && intersections[i - 1][j] != null && intersections[i - 1][j].player != null)
 						return false;
 
 					// on regarde si l'intersection sud est construite
-					if (i < intersections.length - 1 && intersections[i + 1][j] != null && intersections[i + 1][j].joueur != null)
+					if (i < intersections.length - 1 && intersections[i + 1][j] != null && intersections[i + 1][j].player != null)
 						return false;
 
 					// on regarde si l'intersection ouest est construite
-					if (j > 0 && intersections[i][j - 1] != null && intersections[i][j - 1].joueur != null)
+					if (j > 0 && intersections[i][j - 1] != null && intersections[i][j - 1].player != null)
 						return false;
 
 					// on regarde si l'intersection est est construite
-					if (j < intersections[i].length - 1 && intersections[i][j + 1] != null && intersections[i][j + 1].joueur != null)
+					if (j < intersections[i].length - 1 && intersections[i][j + 1] != null && intersections[i][j + 1].player != null)
 						return false;
 
 					// si aucune des intersections autour n'est construite, alors la regle de
@@ -303,79 +267,79 @@ public class Plateau {
 		return false;
 	}
 	
-	public boolean enContactAvecPort(Intersection in) {
-		Tuile[] tuilesContact = getAllTuiles(in);
+	public boolean isInContactWithAHarbor(Intersection in) {
+		Tile[] tilesInContactWith = getAllTilesInContactWith(in);
 		
-		for (int i = 0; i < tuilesContact.length; i++) {
-			if (tuilesContact[i] instanceof Port)
+		for (int i = 0; i < tilesInContactWith.length; i++) {
+			if (tilesInContactWith[i] instanceof Harbor)
 				return true;
 		}
 		
 		return false;
 	}
 	
-	public IConstructible getConstruction(Paire positionTuile, String direction) {
+	public Buildable getConstruction(Pair positionTile, String direction) {
 		if (direction.equals("N") || direction.equals("S") || direction.equals("O") || direction.equals("E"))
-			return tuiles[positionTuile.x][positionTuile.y].getRoute(direction);
+			return tiles[positionTile.x][positionTile.y].getRoad(direction);
 		
-		return tuiles[positionTuile.x][positionTuile.y].getIntersection(direction);
+		return tiles[positionTile.x][positionTile.y].getIntersection(direction);
 	}
 
-	public void construire(Jeu jeu, IConstructible construction, Joueur j, int type) {
-		construction.construire(jeu, j, type);
+	public void build(Game game, Buildable construction, Player p, int type) {
+		construction.build(game, p, type);
 	}
 
 	// Calcule la route la plus longue du joueur donn�
-	public int calculeRouteLaPlusLongue(Joueur joueur) {
+	public int calculateLongestRoad(Player p) {
 		int max = 0;
-		for (int i = 1; i < routes.length - 1; i++) {
-			for (int j = 0; j < routes[i].length - 1; j++) {
-				if (routes[i][j] != null && routes[i][j].joueur == joueur)
-					max = Math.max(max, calculeLongueurRoute(routes[i][j]));
+		for (int i = 1; i < roads.length - 1; i++) {
+			for (int j = 0; j < roads[i].length - 1; j++) {
+				if (roads[i][j] != null && roads[i][j].player == p)
+					max = Math.max(max, calculateRoadLength(roads[i][j]));
 			}
 		}
 		return max;
 	}
 
 	// Calcule la longueur de la route de la route donn�e
-	public int calculeLongueurRoute(Route r) {
-		boolean[][] routesVu = new boolean[routes.length][routes[0].length];
-		return calculeLongueurRouteAux(routesVu, r.joueur, r, 0);
+	public int calculateRoadLength(Road r) {
+		boolean[][] visitedRoad = new boolean[roads.length][roads[0].length];
+		return calculateRoadLengthAux(visitedRoad, r.player, r, 0);
 	}
 
-	private int calculeLongueurRouteAux(boolean[][] routesVu, Joueur joueur, Route r, int n) {
+	private int calculateRoadLengthAux(boolean[][] visitedRoad, Player p, Road r, int n) {
 		// on regarde s'il s'agit d'une route existante
 		if (r == null)
 			return n;
 
-		Paire p = getXY(r);
-		if (p == null || routesVu[p.x][p.y])
+		Pair pair = getXY(r);
+		if (pair == null || visitedRoad[pair.x][pair.y])
 			return n;
 		
-		routesVu[p.x][p.y] = true;
+		visitedRoad[pair.x][pair.y] = true;
 		
 		// on regarde si la route appartient au joueur
-		if (r.joueur != joueur)
+		if (r.player != p)
 			return n;
 
 		// on r�cup�re les intersections au bout de la route
-		Intersection[] in = getAllIntersections(r);
+		Intersection[] in = getAllIntersectionsInContactWith(r);
 
 		// on regarde si des batiments adverses bloquent les deux intersections
-		if ((in[0].batiment != 0 && in[0].joueur != joueur) || (in[1].batiment != 0 && in[1].joueur != joueur))
+		if ((in[0].building != 0 && in[0].player != p) || (in[1].building != 0 && in[1].player != p))
 			return n;
 
 		// on r�cup�re les 6 routes li�es � la route actuelle
-		Route[] routes = getAllRoutes(r);
+		Road[] routes = getAllRoadsInContactWith(r);
 		int[] max = new int[2];
 		int m;
 
 		// si aucun batiment adverse ne bloque la 1er intersection
-		if (in[0].batiment == 0 || in[0].joueur == joueur) {
+		if (in[0].building == 0 || in[0].player == p) {
 
 			// on r�cup�re la route la plus longue a partir de la route � l'ouest / au nord
 			// et on la compare avec les deux routes les plus longues pr�c�dentes
-			m = calculeLongueurRouteAux(routesVu, joueur, routes[0], n);
+			m = calculateRoadLengthAux(visitedRoad, p, routes[0], n);
 			if (m > max[1]) {
 				if (m < max[0])
 					max[1] = m;
@@ -388,7 +352,7 @@ public class Plateau {
 
 			// on r�cup�re la route la plus longue a partir de la route au nord-ouest et on
 			// la compare avec les deux routes les plus longues pr�c�dentes
-			m = calculeLongueurRouteAux(routesVu, joueur, routes[1], n);
+			m = calculateRoadLengthAux(visitedRoad, p, routes[1], n);
 			if (m > max[1]) {
 				if (m < max[0])
 					max[1] = m;
@@ -401,7 +365,7 @@ public class Plateau {
 
 			// on r�cup�re la route la plus longue a partir de la route au sud-ouest / au
 			// nord-est et on la compare avec les deux routes les plus longues pr�c�dentes
-			m = calculeLongueurRouteAux(routesVu, joueur, routes[2], n);
+			m = calculateRoadLengthAux(visitedRoad, p, routes[2], n);
 			if (m > max[1]) {
 				if (m < max[0])
 					max[1] = m;
@@ -414,11 +378,11 @@ public class Plateau {
 		}
 
 		// si aucun batiment adverse ne bloque la 2e intersection
-		if (in[1].batiment == 0 || in[1].joueur == joueur) {
+		if (in[1].building == 0 || in[1].player == p) {
 
 			// on r�cup�re la route la plus longue a partir de la route � l'est / au sud et
 			// on la compare avec les deux routes les plus longues pr�c�dentes
-			m = calculeLongueurRouteAux(routesVu, joueur, routes[3], n);
+			m = calculateRoadLengthAux(visitedRoad, p, routes[3], n);
 			if (m > max[1]) {
 				if (m < max[0])
 					max[1] = m;
@@ -431,7 +395,7 @@ public class Plateau {
 
 			// on r�cup�re la route la plus longue a partir de la route au nord-est / au
 			// sud-ouest et on la compare avec les deux routes les plus longues pr�c�dentes
-			m = calculeLongueurRouteAux(routesVu, joueur, routes[4], n);
+			m = calculateRoadLengthAux(visitedRoad, p, routes[4], n);
 			if (m > max[1]) {
 				if (m < max[0])
 					max[1] = m;
@@ -444,7 +408,7 @@ public class Plateau {
 
 			// on r�cup�re la route la plus longue a partir de la route au sud-est, on la
 			// compare avec les deux routes les plus longues pr�c�dentes
-			m = calculeLongueurRouteAux(routesVu, joueur, routes[5], n);
+			m = calculateRoadLengthAux(visitedRoad, p, routes[5], n);
 			if (m > max[1]) {
 				if (m < max[0])
 					max[1] = m;
@@ -460,135 +424,134 @@ public class Plateau {
 		return max[0] + max[1] + 1;
 	}
 
-	public void affichePlateau() {
+	public void printBoard() {
 		System.out.println("---------------------------------------------------------");
-		for (int i = 0; i < tuiles.length; i++) {
-			afficheNomTuile(i);
-			afficheDetailTuile(i);
-			if (i != tuiles.length - 1) // il n'y a pas de routes et intersections sous la derniere ligne de tuile
-				afficheRouteEtIntersection(i);
+		for (int i = 0; i < tiles.length; i++) {
+			printTileName(i);
+			printTileDetails(i);
+			if (i != tiles.length - 1) // il n'y a pas de routes et intersections sous la derniere ligne de tuile
+				printRoadAndIntersection(i);
 		}
 		System.out.println("---------------------------------------------------------");
 	}
 
-	private void afficheNomTuile(int i) {
+	private void printTileName(int i) {
 		System.out.print("|");
-		for (int j = 0; j < tuiles[i].length; j++) {
-			tuiles[i][j].afficheNom();
-			;
+		for (int j = 0; j < tiles[i].length; j++) {
+			tiles[i][j].printName();
 
-			if (j != tuiles[i].length - 1) {
-				if (tuiles[i][j].rouE == null)
+			if (j != tiles[i].length - 1) {
+				if (tiles[i][j].roadE == null)
 					System.out.print(" ");
 				else
-					tuiles[i][j].rouE.afficheV();
+					tiles[i][j].roadE.printV();
 			}
 		}
 		System.out.println("|");
 	}
 
-	private void afficheDetailTuile(int i) {
+	private void printTileDetails(int i) {
 		System.out.print("|");
-		for (int j = 0; j < tuiles[i].length; j++) {
-			tuiles[i][j].afficheDetail();
+		for (int j = 0; j < tiles[i].length; j++) {
+			tiles[i][j].printDetail();
 
-			if (j != tuiles[i].length - 1) {
-				if (tuiles[i][j].rouE == null)
+			if (j != tiles[i].length - 1) {
+				if (tiles[i][j].roadE == null)
 					System.out.print(" ");
 				else
-					tuiles[i][j].rouE.afficheV();
+					tiles[i][j].roadE.printV();
 			}
 		}
 		System.out.println("|");
 	}
 
-	private void afficheRouteEtIntersection(int i) {
+	private void printRoadAndIntersection(int i) {
 		System.out.print("|");
-		for (int j = 0; j < tuiles[i].length; j++) {
-			if (tuiles[i][j].rouS == null)
+		for (int j = 0; j < tiles[i].length; j++) {
+			if (tiles[i][j].roadS == null)
 				System.out.print("       ");
 			else
-				tuiles[i][j].rouS.afficheH();
+				tiles[i][j].roadS.printH();
 
-			if (j != tuiles[i].length - 1) {
-				if (tuiles[i][j].interSE == null)
+			if (j != tiles[i].length - 1) {
+				if (tiles[i][j].interSE == null)
 					System.out.print(" ");
 				else
-					System.out.print(tuiles[i][j].interSE);
+					System.out.print(tiles[i][j].interSE);
 			}
 		}
 		System.out.println("|");
 	}
 
 	// Initialise un plateau
-	public static Plateau iniPlateau() {
-		Plateau res = new Plateau();
-		iniRoutes(res.routes);
+	public static Board iniBoard() {
+		Board res = new Board();
+		iniRoads(res.roads);
 		iniIntersections(res.intersections);
-		iniTuiles(res.tuiles, res.routes, res.intersections);
+		iniTiles(res.tiles, res.roads, res.intersections);
 		return res;
 	}
 
 	// Initialise les tuiles
-		private static void iniTuiles(Tuile[][] t, Route[][] r, Intersection[][] in) {
+		private static void iniTiles(Tile[][] t, Road[][] r, Intersection[][] in) {
 			
 			// on initialises les tuiles elles-memes
 			for (int i = 0; i < t.length; i++) {
 				for (int j = 0; j < t[i].length; j++) {
 					if (i == 0) {
 						switch(j) {
-							case 2: t[i][j] = new Port(0); break;
-							case 4: t[i][j] = new Port(1); break;
-							default: t[i][j] = new Tuile(0, false); break;
+							case 2: t[i][j] = new Harbor(0); break;
+							case 4: t[i][j] = new Harbor(1); break;
+							default: t[i][j] = new Tile(0, false); break;
 						}
 					} else if (i == 1) {
 						switch(j) {
-							case 2: t[i][j] = new Tuile(3, 6, false); break;
-							case 3: t[i][j] = new Tuile(2, 3, false); break;
-							case 4: t[i][j] = new Tuile(5, 8, false); break;
-							default : t[i][j] = new Tuile(0, false); break;
+							case 2: t[i][j] = new Tile(3, 6, false); break;
+							case 3: t[i][j] = new Tile(2, 3, false); break;
+							case 4: t[i][j] = new Tile(5, 8, false); break;
+							default : t[i][j] = new Tile(0, false); break;
 						}
 					} else if (i == 2) {
 						switch(j) {
-							case 0: t[i][j] = new Port(5); break;
-							case 1: t[i][j] = new Tuile(2, 2, false); break;
-							case 2: t[i][j] = new Tuile(4, 4, false); break;
-							case 3: t[i][j] = new Tuile(6, 5, false); break;
-							case 4: t[i][j] = new Tuile(3, 9, false); break;
-							case 5: t[i][j] = new Tuile(6, 11, false); break;
-							case 6: t[i][j] = new Port(0); break;
+							case 0: t[i][j] = new Harbor(5); break;
+							case 1: t[i][j] = new Tile(2, 2, false); break;
+							case 2: t[i][j] = new Tile(4, 4, false); break;
+							case 3: t[i][j] = new Tile(6, 5, false); break;
+							case 4: t[i][j] = new Tile(3, 9, false); break;
+							case 5: t[i][j] = new Tile(6, 11, false); break;
+							case 6: t[i][j] = new Harbor(0); break;
 						}
 					} else if (i == 3) {
 						switch(j) {
-							case 1: t[i][j] = new Tuile(3, 5, false); break;
-							case 2: t[i][j] = new Tuile(6, 3, false); break;
-							case 3: t[i][j] = new Tuile(7, true); break;
-							case 4: t[i][j] = new Tuile(2, 12, false); break;
-							case 5: t[i][j] = new Tuile(4, 6, false); break;
-							default : t[i][j] = new Tuile(0, false); break;
+							case 1: t[i][j] = new Tile(3, 5, false); break;
+							case 2: t[i][j] = new Tile(6, 3, false); break;
+							case 3: t[i][j] = new Tile(7, true); break;
+							case 4: t[i][j] = new Tile(2, 12, false); break;
+							case 5: t[i][j] = new Tile(4, 6, false); break;
+							default : t[i][j] = new Tile(0, false); break;
 						}
 					} else if (i == 4) {
 						switch(j) {
-							case 0: t[i][j] = new Port(4); break;
-							case 1: t[i][j] = new Tuile(5, 10, false); break;
-							case 2: t[i][j] = new Tuile(2, 4, false); break;
-							case 3: t[i][j] = new Tuile(4, 8, false); break;
-							case 4: t[i][j] = new Tuile(6, 10, false); break;
-							case 5: t[i][j] = new Tuile(5, 9, false); break;
-							case 6: t[i][j] = new Port(2); break;
+							case 0: t[i][j] = new Harbor(4); break;
+							case 1: t[i][j] = new Tile(5, 10, false); break;
+							case 2: t[i][j] = new Tile(2, 4, false); break;
+							case 3: t[i][j] = new Tile(4, 8, false); break;
+							case 4: t[i][j] = new Tile(6, 10, false); break;
+							case 5: t[i][j] = new Tile(5, 9, false); break;
+							case 6: t[i][j] = new Harbor(2); break;
 						}
 					} else if (i == 5) {
 						switch(j) {
-							case 2: t[i][j] = new Tuile(4, 2, false); break;
-							case 3: t[i][j] = new Tuile(5, 11, false); break;
-							case 4: t[i][j] = new Tuile(3, 12, false); break;
-							default : t[i][j] = new Tuile(0, false); break;
+							case 2: t[i][j] = new Tile(4, 2, false); break;
+							case 3: t[i][j] = new Tile(5, 11, false); break;
+							case 4: t[i][j] = new Tile(3, 12, false); break;
+							default : t[i][j] = new Tile(0, false); break;
 						}
 					} else {
 						switch(j) {
-							case 2: t[i][j] = new Port(3); break;
-							case 4: t[i][j] = new Port(0); break;
-							default: t[i][j] = new Tuile(0, false); break;
+							case 2: t[i][j] = new Harbor(3); break;
+							case 4: t[i][j] = new Harbor(0); break;
+							default: t[i][j] = new Tile(0, false); break;
 						}
 					}
 				}
@@ -598,7 +561,7 @@ public class Plateau {
 			for (int i = 0; i < t.length; i++) {
 				for (int j = 0; j < t[i].length; j++) {
 					// on commence par les routes
-					Route nord, sud, est, ouest;
+					Road nord, sud, est, ouest;
 					
 					// on note les routes nord (la 1er ligne n'en a pas)
 					if (i != 0) nord = r[(i - 1) * 2 + 1][j];
@@ -617,7 +580,7 @@ public class Plateau {
 					else est = null;
 					
 					// on initialise les routes avec ce qu'on a note
-					t[i][j].iniRoute(nord, sud, est, ouest);
+					t[i][j].iniRoad(nord, sud, est, ouest);
 					
 					
 					// on fini par les intersections
@@ -667,31 +630,31 @@ public class Plateau {
 		
 	// Initialise les routes construisables (les routes entre les tuiles marines
 	// sont laissees a null)
-	private static void iniRoutes(Route[][] r) {
+	private static void iniRoads(Road[][] r) {
 		for (int i = 1; i < r.length - 1; i++) {
 
 			// la 2e et avant-avant-derniere ligne n'ont que 3 routes construisibles
 			if (i == 1 || i == 11) {
 				for (int j = 2; j < r[i].length - 2; j++)
-					r[i][j] = new Route();
+					r[i][j] = new Road();
 			}
 
 			// la 3e et avant-avant-avant derniere ligne n'ont que 4 routes construisibles
 			else if (i == 2 || i == 10) {
 				for (int j = 1; j < r[i].length - 2; j++)
-					r[i][j] = new Route();
+					r[i][j] = new Road();
 			}
 
 			// les lignes impaires ont 5 routes construisibles
 			else if (i % 2 != 0) {
 				for (int j = 1; j < r[i].length - 1; j++)
-					r[i][j] = new Route();
+					r[i][j] = new Road();
 			}
 
 			// les lignes paires ont 6 routes construisibles
 			else {
 				for (int j = 0; j < r[i].length - 1; j++)
-					r[i][j] = new Route();
+					r[i][j] = new Road();
 			}
 		}
 	}

@@ -1,23 +1,23 @@
 package catan.model.card;
 
-import catan.model.Jeu;
-import catan.model.player.Joueur;
+import catan.model.Game;
+import catan.model.player.Player;
 
-public class CarteChevalier extends Carte {
+public class KnightCard extends Card {
 
-	public CarteChevalier() {
+	public KnightCard() {
 		super(0, "chevalier");
 	}
 
-	public void jouer(Jeu jeu, Joueur j) {
+	public void jouer(Game game, Player p) {
 		// on augmente l'arm�e la plus puissante du joueur
-		j.armeeLaPlusPuissante++;
+		p.largestArmy++;
 		
 		// on r�attribue l'arm�e la plus puissante si besoin
-		jeu.giveArmeeLaPlusPuissante();
+		game.assignLargestArmy();
 		
 		// on d�place le voleur
-		jeu.auVoleur(j);
+		game.onTheRobber(p);
 	}
 
 	@Override

@@ -2,25 +2,24 @@ package catan.controller;
 
 import javax.swing.*;
 
-import catan.model.Jeu;
-import catan.model.card.Carte;
-import catan.model.player.Joueur;
+import catan.model.Game;
+import catan.model.card.Card;
+import catan.model.player.Player;
 import catan.model.player.Robot;
-import catan.view.Vue;
+import catan.view.View;
 
 import java.awt.*;
-import java.util.Scanner;
 
-public class Controleur {
-	private Vue vue;
+public class Controller {
+	private View vue;
 	
-	public Controleur(Vue vue) {
+	public Controller(View vue) {
 		this.vue = vue;
 	}
 	
 	public void changeNbJoueurEtPasse(int n, JButton quatreIA) {
 		vue.nbJoueurs = n;
-		vue.jeu = new Jeu(vue.nbJoueurs, vue.sc);
+		vue.jeu = new Game(vue.nbJoueurs, vue.sc);
 		
 		vue.cConfig.show(vue.listePanelConfig, vue.listeConfig[1]);
 		
@@ -43,7 +42,7 @@ public class Controleur {
 			for (int i = 1; i <= vue.nbJoueurs; i++)
 				vue.listeJoueurs.add(new Robot(("IA " + i), vue.jeu));
 			
-			vue.jeu.iniJoueurs(vue.listeJoueurs);
+			vue.jeu.iniPlayers(vue.listeJoueurs);
 			vue.cMenu.show(vue.listePanel, vue.listeMenu[2]);
 			setAllCompteurs();
 			return;
@@ -118,18 +117,18 @@ public class Controleur {
 		
 		String n = nom.getText();
 		valide.setEnabled(false);
-		vue.listeJoueurs.add(new Joueur(n, vue.jeu));
+		vue.listeJoueurs.add(new Player(n, vue.jeu));
 		
 		if (vue.listeJoueurs.size() == vue.nbJoueurs) {
-			vue.jeu.iniJoueurs(vue.listeJoueurs);
+			vue.jeu.iniPlayers(vue.listeJoueurs);
 			vue.cMenu.show(vue.listePanel, vue.listeMenu[2]);
 			setAllCompteurs();
 		}
 		
 		else if (vue.listeJoueurs.size() == nbHumain) {
 			for (int i = nbHumain + 1; i <= vue.nbJoueurs; i++)
-				vue.listeJoueurs.add(new Joueur("Robot " + i, vue.jeu));
-			vue.jeu.iniJoueurs(vue.listeJoueurs);
+				vue.listeJoueurs.add(new Player("Robot " + i, vue.jeu));
+			vue.jeu.iniPlayers(vue.listeJoueurs);
 			vue.cMenu.show(vue.listePanel, vue.listeMenu[2]);
 			setAllCompteurs();
 		}
@@ -149,47 +148,47 @@ public class Controleur {
 	}
 	
 	public void setCompteursJoueur() {
-		Joueur j = vue.jeu.getJoueurs()[vue.indiceJoueurActuel];
+		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 
-		vue.nomJoueurActuel.setText("Tour de " + j.nom);
+		vue.nomJoueurActuel.setText("Tour de " + j.name);
 		vue.nbPointsActuel.setText("Nombre de points : " + j.points);
-		vue.routeLaPlusLongueActuel.setText("Route la plus longue : " + j.routeLaPlusLongue);
-		vue.armeeLaPlusPuissanteActuel.setText("Arm�e la plus puissante : " + j.armeeLaPlusPuissante);
+		vue.routeLaPlusLongueActuel.setText("Route la plus longue : " + j.longestRoad);
+		vue.armeeLaPlusPuissanteActuel.setText("Arm�e la plus puissante : " + j.largestArmy);
 	}
 	
 	public void setCompteursJeu() {
-		if (vue.jeu.aLaRouteLaPlusLongue != null)
-			vue.routeLaPlusLongueJeu.setText("Route la plus longue : " + vue.jeu.aLaRouteLaPlusLongue + " (" + vue.jeu.aLaRouteLaPlusLongue.routeLaPlusLongue + ")");
+		if (vue.jeu.playerWithLongestRoad != null)
+			vue.routeLaPlusLongueJeu.setText("Route la plus longue : " + vue.jeu.playerWithLongestRoad + " (" + vue.jeu.playerWithLongestRoad.longestRoad + ")");
 		else
 			vue.routeLaPlusLongueJeu.setText("Route la plus longue : personne");
 		
-		if (vue.jeu.aLArmeeLaPlusPuissante != null)
-			vue.armeeLaPlusPuissanteJeu.setText("Arm�e la plus puissante : " + vue.jeu.aLArmeeLaPlusPuissante + " (" + vue.jeu.aLArmeeLaPlusPuissante.armeeLaPlusPuissante + ")");
+		if (vue.jeu.playerWithLargestArmy != null)
+			vue.armeeLaPlusPuissanteJeu.setText("Arm�e la plus puissante : " + vue.jeu.playerWithLargestArmy + " (" + vue.jeu.playerWithLargestArmy.largestArmy + ")");
 		else
 			vue.armeeLaPlusPuissanteJeu.setText("Arm�e la plus puissante : personne");
 	}
 	
 	public void setRessourcesJoueur() {
-		Joueur j = vue.jeu.getJoueurs()[vue.indiceJoueurActuel];
+		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		
-		vue.nbArgileActuel.setText("Argile : " + j.getRessources().get("argile"));
-		vue.nbBleActuel.setText("Bl� : " + j.getRessources().get("bl�"));
-		vue.nbBoisActuel.setText("Bois : " + j.getRessources().get("bois"));
-		vue.nbLaineActuel.setText("Laine : " + j.getRessources().get("laine"));
-		vue.nbMineraiActuel.setText("Minerai : " + j.getRessources().get("minerai"));
+		vue.nbArgileActuel.setText("Argile : " + j.getResources().get("argile"));
+		vue.nbBleActuel.setText("Bl� : " + j.getResources().get("bl�"));
+		vue.nbBoisActuel.setText("Bois : " + j.getResources().get("bois"));
+		vue.nbLaineActuel.setText("Laine : " + j.getResources().get("laine"));
+		vue.nbMineraiActuel.setText("Minerai : " + j.getResources().get("minerai"));
 	}
 	
 	public void setCartesJoueur() {
-		Joueur j = vue.jeu.getJoueurs()[vue.indiceJoueurActuel];
+		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		
-		for (Carte c : j.cartes)
+		for (Card c : j.cards)
 			vue.listeCarte.setText(vue.listeCarte.getText() + "\n* " + c);
 	}
 	
 	public void autorisePhaseProductionEtCommerce(JButton jouerCarte) {
-		Joueur j = vue.jeu.getJoueurs()[vue.indiceJoueurActuel];
+		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		
-		if (j.aUneCarteJouable())
+		if (j.hasAPlayableCard())
 			jouerCarte.setEnabled(true);
 		else
 			jouerCarte.setEnabled(false);
@@ -198,10 +197,10 @@ public class Controleur {
 	public void autoriseMarchander(JButton donnerArg, JButton donnerBle, JButton donnerBois,
 			JButton donnerLaine, JButton donnerMin, JButton recevoirArg, JButton recevoirBle,
 			JButton recevoirBois, JButton recevoirLaine, JButton recevoirMin) {
-		Joueur j = vue.jeu.getJoueurs()[vue.indiceJoueurActuel];
+		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		boolean peutEchanger = false;
 		
-		if (j.getRessources().get("argile") < j.getTauxEchange().get("argile"))
+		if (j.getResources().get("argile") < j.getTradeRate().get("argile"))
 			donnerArg.setEnabled(false);
 		
 		else {
@@ -209,7 +208,7 @@ public class Controleur {
 			donnerArg.setEnabled(true);
 		}
 		
-		if (j.getRessources().get("bl�") < j.getTauxEchange().get("bl�"))
+		if (j.getResources().get("bl�") < j.getTradeRate().get("bl�"))
 			donnerBle.setEnabled(false);
 		
 		else {
@@ -217,7 +216,7 @@ public class Controleur {
 			donnerBle.setEnabled(true);
 		}
 		
-		if (j.getRessources().get("bois") < j.getTauxEchange().get("bois"))
+		if (j.getResources().get("bois") < j.getTradeRate().get("bois"))
 			donnerBois.setEnabled(false);
 		
 		else {
@@ -225,7 +224,7 @@ public class Controleur {
 			donnerBois.setEnabled(true);
 		}
 		
-		if (j.getRessources().get("laine") < j.getTauxEchange().get("laine"))
+		if (j.getResources().get("laine") < j.getTradeRate().get("laine"))
 			donnerLaine.setEnabled(false);
 		
 		else {
@@ -233,7 +232,7 @@ public class Controleur {
 			donnerLaine.setEnabled(true);
 		}
 		
-		if (j.getRessources().get("minerai") < j.getTauxEchange().get("minerai"))
+		if (j.getResources().get("minerai") < j.getTradeRate().get("minerai"))
 			donnerMin.setEnabled(false);
 		
 		else {
@@ -258,36 +257,36 @@ public class Controleur {
 	
 	public void autorisePhaseConstruction(JButton route, JButton colonie,
 			JButton ville, JButton achete, JButton jouerCarte) {
-		Joueur j = vue.jeu.getJoueurs()[vue.indiceJoueurActuel];
+		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		
-		if (j.aLesRessources("R"))
+		if (j.hasTheResourcesTo("R"))
 			route.setEnabled(true);
 		else
 			route.setEnabled(false);
 		
-		if (j.aLesRessources("C"))
+		if (j.hasTheResourcesTo("C"))
 			colonie.setEnabled(true);
 		else
 			colonie.setEnabled(false);
 		
-		if (j.aLesRessources("V"))
+		if (j.hasTheResourcesTo("V"))
 			ville.setEnabled(true);
 		else
 			ville.setEnabled(false);
 		
-		if (j.aLesRessources("A"))
+		if (j.hasTheResourcesTo("A"))
 			achete.setEnabled(true);
 		else
 			achete.setEnabled(false);
 		
-		if (j.aUneCarteJouable())
+		if (j.hasAPlayableCard())
 			jouerCarte.setEnabled(true);
 		else
 			jouerCarte.setEnabled(false);
 	}
 	
 	public void changeJoueurOuPassePhaseProduction() {
-		int c = vue.jeu.getJoueurs()[vue.indiceJoueurActuel].getNbColonie();
+		int c = vue.jeu.getPlayers()[vue.indiceJoueurActuel].getNumSettlement();
 		
 		if (c == 2 && vue.indiceJoueurActuel == 0) {
 			vue.cChoix.show(vue.listePanelChoix, vue.listeChoix[1]);
@@ -309,18 +308,18 @@ public class Controleur {
 	
 	public boolean phaseInitialeFini() {
 		for (int i = 0; i < vue.nbJoueurs; i++) {
-			if (vue.jeu.getJoueurs()[i].getNbColonie() != 2 || vue.jeu.getJoueurs()[i].getNbRoute() != 2)
+			if (vue.jeu.getPlayers()[i].getNumSettlement() != 2 || vue.jeu.getPlayers()[i].getNumRoad() != 2)
 				return false;
 		}
 		return true;
 	}
 	
 	public void lanceDe() {
-		int n = vue.jeu.lanceDe();
+		int n = vue.jeu.throwDice();
 		vue.descriptifJeu.setText("Un " + n + " a �t� lanc� !\n");
 		
 		if (n != 7)
-			vue.jeu.donneRessource(n, vue.jeu.getJoueurs()[vue.indiceJoueurActuel]);
+			vue.jeu.giveResources(n, vue.jeu.getPlayers()[vue.indiceJoueurActuel]);
 		else
 			auVoleur();
 	}
