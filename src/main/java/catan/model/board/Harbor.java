@@ -1,21 +1,23 @@
 package catan.model.board;
 
 public class Harbor extends Tile {
-	public final int typeHarbor;  // 0 : 3-1 / 1 : laine / 2 : argile / 3 : bois / 4 : ble / 5 : minerai
+	public enum HarborType{GENERIC, BRICK, LUMBER, ORE, GRAIN, WOOL};
 	
-	public Harbor(int t) {
+	public final HarborType harborType;
+	
+	public Harbor(HarborType type) {
 		super(TileType.HARBOR, false);
-		typeHarbor = t;
+		harborType = type;
 	}
 	
 	@Override
 	public void printDetail() {
-		switch (typeHarbor) {
-			case 1: System.out.print("  LAI  "); return;
-			case 2: System.out.print("  ARG  "); return;
-			case 3: System.out.print("  BOI  "); return;
-			case 4: System.out.print("  BLE  "); return;
-			case 5: System.out.print("  MIN  "); return;
+		switch (harborType) {
+			case BRICK: System.out.print("  BRI  "); return;
+			case LUMBER: System.out.print("  LUM  "); return;
+			case ORE: System.out.print("  ORE  "); return;
+			case GRAIN: System.out.print("  GRA  "); return;
+			case WOOL: System.out.print("  WOO  "); return;
 			default: System.out.print("  3-1  ");
 		}
 	}

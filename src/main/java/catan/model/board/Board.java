@@ -1,6 +1,7 @@
 package catan.model.board;
 
 import catan.model.Game;
+import catan.model.board.Harbor.HarborType;
 import catan.model.board.Tile.TileType;
 import catan.model.other.Pair;
 import catan.model.player.Player;
@@ -500,8 +501,8 @@ public class Board {
 				for (int j = 0; j < t[i].length; j++) {
 					if (i == 0) {
 						switch(j) {
-							case 2: t[i][j] = new Harbor(0); break;
-							case 4: t[i][j] = new Harbor(1); break;
+							case 2: t[i][j] = new Harbor(HarborType.GENERIC); break;
+							case 4: t[i][j] = new Harbor(HarborType.WOOL); break;
 							default: t[i][j] = new Tile(TileType.SEA, false); break;
 						}
 					} else if (i == 1) {
@@ -513,13 +514,13 @@ public class Board {
 						}
 					} else if (i == 2) {
 						switch(j) {
-							case 0: t[i][j] = new Harbor(5); break;
+							case 0: t[i][j] = new Harbor(HarborType.ORE); break;
 							case 1: t[i][j] = new Tile(TileType.PASTURE, 2); break;
 							case 2: t[i][j] = new Tile(TileType.HILLS, 4); break;
 							case 3: t[i][j] = new Tile(TileType.MOUNTAINS, 5); break;
 							case 4: t[i][j] = new Tile(TileType.FOREST, 9); break;
 							case 5: t[i][j] = new Tile(TileType.MOUNTAINS, 11); break;
-							case 6: t[i][j] = new Harbor(0); break;
+							case 6: t[i][j] = new Harbor(HarborType.GENERIC); break;
 						}
 					} else if (i == 3) {
 						switch(j) {
@@ -532,13 +533,13 @@ public class Board {
 						}
 					} else if (i == 4) {
 						switch(j) {
-							case 0: t[i][j] = new Harbor(4); break;
+							case 0: t[i][j] = new Harbor(HarborType.GRAIN); break;
 							case 1: t[i][j] = new Tile(TileType.FIELDS, 10); break;
 							case 2: t[i][j] = new Tile(TileType.PASTURE, 4); break;
 							case 3: t[i][j] = new Tile(TileType.HILLS, 8); break;
 							case 4: t[i][j] = new Tile(TileType.MOUNTAINS, 10); break;
 							case 5: t[i][j] = new Tile(TileType.FIELDS, 9); break;
-							case 6: t[i][j] = new Harbor(2); break;
+							case 6: t[i][j] = new Harbor(HarborType.BRICK); break;
 						}
 					} else if (i == 5) {
 						switch(j) {
@@ -549,8 +550,8 @@ public class Board {
 						}
 					} else {
 						switch(j) {
-							case 2: t[i][j] = new Harbor(3); break;
-							case 4: t[i][j] = new Harbor(0); break;
+							case 2: t[i][j] = new Harbor(HarborType.LUMBER); break;
+							case 4: t[i][j] = new Harbor(HarborType.GENERIC); break;
 							default: t[i][j] = new Tile(TileType.SEA, false); break;
 						}
 					}

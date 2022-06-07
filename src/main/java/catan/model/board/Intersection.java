@@ -3,6 +3,7 @@ package catan.model.board;
 import java.util.LinkedList;
 
 import catan.model.Game;
+import catan.model.board.Harbor.HarborType;
 import catan.model.player.Player;
 
 public class Intersection implements Buildable {
@@ -80,7 +81,7 @@ public class Intersection implements Buildable {
 
 		// on regarde si un port est en contact
 		if (game.getBoard().isInContactWithAHarbor(this)) {
-			int typePort = game.getBoard().getHarborInContactWith(this).typeHarbor;
+			HarborType typePort = game.getBoard().getHarborInContactWith(this).harborType;
 			p.changeTradeRate(typePort);
 		}
 

@@ -6,6 +6,7 @@ import java.util.Random;
 
 import catan.model.Game;
 import catan.model.board.Buildable;
+import catan.model.board.Harbor.HarborType;
 import catan.model.board.Intersection;
 import catan.model.board.Path;
 import catan.model.board.Tile;
@@ -180,31 +181,18 @@ public class Player {
 		}
 	}
 
-	public void changeTradeRate(int type) {
-		if (type < 0 || type > 5)
-			throw new IllegalArgumentException("Type inconnu");
-
+	public void changeTradeRate(HarborType type) {
 		switch (type) {
-			case 1:
-				tradeRate.replace("laine", 2);
-				break;
-			case 2:
-				tradeRate.replace("argile", 2);
-				break;
-			case 3:
-				tradeRate.replace("bois", 2);
-				break;
-			case 4:
-				tradeRate.replace("bl�", 2);
-				break;
-			case 5:
-				tradeRate.replace("minerai", 2);
-				break;
+			case BRICK: tradeRate.replace("argile", 2); break;
+			case LUMBER: tradeRate.replace("bois", 2); break;
+			case ORE: tradeRate.replace("minerai", 2); break;
+			case GRAIN: tradeRate.replace("ble", 2); break;
+			case WOOL: tradeRate.replace("laine", 2); break;
 			default:
 				tradeRate.replace("laine", 3);
 				tradeRate.replace("argile", 3);
 				tradeRate.replace("bois", 3);
-				tradeRate.replace("bl�", 3);
+				tradeRate.replace("ble", 3);
 				tradeRate.replace("minerai", 3);
 		}
 	}
