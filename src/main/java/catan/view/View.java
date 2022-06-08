@@ -6,7 +6,7 @@ import javax.swing.border.EmptyBorder;
 
 import catan.controller.Controller;
 import catan.model.Game;
-import catan.model.player.Player;
+import catan.model.player.Human;
 
 import java.util.Scanner;
 import java.util.LinkedList;
@@ -82,7 +82,7 @@ public class View {
 	
 	public int nbJoueurs;
 	public int nbIA;
-	public LinkedList<Player> listeJoueurs = new LinkedList<>();
+	public LinkedList<Human> listeJoueurs = new LinkedList<>();
 	
 	public Game jeu;
 	public int indiceJoueurActuel = 0;

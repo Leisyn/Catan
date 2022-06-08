@@ -8,8 +8,8 @@ import catan.model.board.Board;
 import catan.model.board.Path;
 import catan.model.board.Tile;
 import catan.model.board.Buildable.Construction;
-import catan.model.player.Player;
-import catan.model.player.Player.Resource;
+import catan.model.player.Human;
+import catan.model.player.Human.Resource;
 
 import java.util.LinkedList;
 import java.awt.geom.Ellipse2D;
@@ -211,7 +211,7 @@ public class BoardPanel extends JPanel implements MouseListener {
 		int y = e.getY();
 
 		Object o = getObject(x, y);
-		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
+		Human j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		
 		if (typeAction == 1) {
 			if (!(o instanceof Path))
@@ -311,7 +311,7 @@ public class BoardPanel extends JPanel implements MouseListener {
 				if (!intersections.isEmpty()) {
 					
 					// on recupere tous les joueurs adverses qui ont une intersection construite autour de la nouvelle position du voleur
-					LinkedList<Player> joueurs = new LinkedList<>();
+					LinkedList<Human> joueurs = new LinkedList<>();
 					
 					for (Intersection in : intersections) {
 						if (!joueurs.contains(in.player) && in.player != vue.jeu.getPlayers()[vue.indiceJoueurActuel])

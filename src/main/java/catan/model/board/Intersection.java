@@ -4,11 +4,11 @@ import java.util.LinkedList;
 
 import catan.model.Game;
 import catan.model.board.Harbor.HarborType;
-import catan.model.player.Player;
+import catan.model.player.Human;
 
 public class Intersection implements Buildable {
 	public Construction construction;
-	public Player player; // le joueur qui a construit un batiment sur l'intersection (null si rien n'est construit)
+	public Human player; // le joueur qui a construit un batiment sur l'intersection (null si rien n'est construit)
 
 	public Intersection() {
 		construction = Construction.NOTHING;
@@ -27,7 +27,7 @@ public class Intersection implements Buildable {
 	}
 
 	@Override
-	public void build(Game game, Player p, Construction c) {
+	public void build(Game game, Human p, Construction c) {
 		if (c != Construction.SETTLEMENT && c != Construction.CITY) return;
 		
 		// on regarde si le joueur construit une ville
@@ -49,7 +49,7 @@ public class Intersection implements Buildable {
 		// on r�cup�re les 4 routes environnantes
 		Path[] r = game.getBoard().getAllPathsInContactWith(this);
 
-		LinkedList<Player> ontLeurRouteLaPlusLongueBrise = new LinkedList<>();
+		LinkedList<Human> ontLeurRouteLaPlusLongueBrise = new LinkedList<>();
 
 		// on regarde si une de ces routes appartient � un adversaire
 		for (int i = 0; i < r.length; i++) {
@@ -85,7 +85,7 @@ public class Intersection implements Buildable {
 
 		// pour chaque joueur qui ont eu leur route la plus longue bris�e, on calcule
 		// leur nouvelle route la plus longue
-		for (Player jo : ontLeurRouteLaPlusLongueBrise)
+		for (Human jo : ontLeurRouteLaPlusLongueBrise)
 			jo.longestRoad = Math.max(jo.longestRoad, game.getBoard().calculateLongestRoad(jo));
 
 		// on r�attribue la route la plus longue au cas ou le joueur qui la possede a

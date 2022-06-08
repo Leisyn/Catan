@@ -2,8 +2,8 @@ package catan.model.card;
 
 import catan.model.Game;
 import catan.model.board.Buildable.Construction;
-import catan.model.player.Player;
-import catan.model.player.Player.Resource;
+import catan.model.player.Human;
+import catan.model.player.Human.Resource;
 
 public class ProgressCard extends Card {
 
@@ -11,7 +11,7 @@ public class ProgressCard extends Card {
 		super(1, name);
 	}
 
-	public void jouer(Game game, Player p) {
+	public void jouer(Game game, Human p) {
 		// s'il s'agit d'une carte construction
 		if (this.name.equals("construction")) {
 			

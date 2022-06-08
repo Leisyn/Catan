@@ -3,7 +3,7 @@ package catan;
 import java.util.Scanner;
 
 import catan.model.Game;
-import catan.model.player.Player;
+import catan.model.player.Human;
 import catan.model.player.Robot;
 import catan.view.View;
 
@@ -53,12 +53,12 @@ public class Launcher {
 			}
 			System.out.println();
 			int numAI = Integer.parseInt(answer);
-			LinkedList<Player> players = new LinkedList<>();
+			LinkedList<Human> players = new LinkedList<>();
 			int numHuman = numPlayer - numAI;
 				
 			for (int i = 1; i <= numHuman; i++) {
 				System.out.println("Player " + i + ": What will be your name?");
-				players.add(new Player(sc.next(), game));
+				players.add(new Human(sc.next(), game));
 				System.out.println();
 			}
 			

@@ -13,18 +13,18 @@ import catan.model.card.KnightCard;
 import catan.model.card.ProgressCard;
 import catan.model.card.VictoryCard;
 import catan.model.other.Pair;
-import catan.model.player.Player;
-import catan.model.player.Player.Resource;
+import catan.model.player.Human;
+import catan.model.player.Human.Resource;
 
 public class Game {
 	private Board board;
-	private Player[] players;
+	private Human[] players;
 	
 	public Scanner sc;
 	public LinkedList<Card> availableCards = new LinkedList<>();
 	
-	public Player playerWithLongestRoad;
-	public Player playerWithLargestArmy;
+	public Human playerWithLongestRoad;
+	public Human playerWithLargestArmy;
 	
 	public static int maxAmountOfRoadForEachPlayer = 15;
 	public static int maxAmountOfSettlementForEachPlayer = 5;
@@ -35,7 +35,7 @@ public class Game {
 	
 	public Game(int n, Scanner s) {
 		board = Board.iniBoard();
-		players = new Player[n];
+		players = new Human[n];
 		
 		sc = s;
 		iniAvailableCards();
@@ -44,7 +44,7 @@ public class Game {
 		playerWithLargestArmy = null;
 	}
 	
-	public void iniPlayers(LinkedList<Player> p) {
+	public void iniPlayers(LinkedList<Human> p) {
 		// on verifie que la liste donnee contient le nombre de joueurs correspondant au jeu
 		if (players.length != p.size())
 			throw new IllegalArgumentException("The number of given players is different from the number of players awaited.");
@@ -85,7 +85,7 @@ public class Game {
 		return board;
 	}
 
-	public Player[] getPlayers() {
+	public Human[] getPlayers() {
 		return players;
 	}
 
@@ -98,7 +98,7 @@ public class Game {
 		int max = minAmountOfRoadToGetLongestRoad;
 		
 		// on recupere le joueur qui a la route la plus longue
-		Player avant = playerWithLongestRoad;
+		Human avant = playerWithLongestRoad;
 				
 		// on attribue la route la plus longue au joueur ayant la plus longue route, atteignant au moins le nombre requis
 		for (int i = 0; i < players.length; i++) {
@@ -126,7 +126,7 @@ public class Game {
 		int max = minAmountOfArmyToGetLargestArmy;
 		
 		// on recupere le joueur qui a l'armee la plus puissante
-		Player avant = playerWithLargestArmy;
+		Human avant = playerWithLargestArmy;
 				
 		// on attribue l'armee la plus puissante au joueur ayant joue le plus de cartes chevalier, atteignant au moins le nombre requis
 		for (int i = 0; i < players.length; i++) {
@@ -189,7 +189,7 @@ public class Game {
 		}
 	}
 	
-	private void printTurnBanner(Player p) {
+	private void printTurnBanner(Human p) {
 		String s = "";
 		for (int i = 0; i < p.name.length(); i++)
 			s += "=";
@@ -200,7 +200,7 @@ public class Game {
 	}
 	
 	// Effectue un tour de jeu du joueur et renvoie si le joueur a gagne
-	public boolean oneTurn(Player p) {
+	public boolean oneTurn(Human p) {
 		// on affiche le nom du joueur actuel
 		printTurnBanner(p);
 		
@@ -249,13 +249,13 @@ public class Game {
 		return rd.nextInt(11) + 2;
 	}
 	
-	private void sevenOnDice(Player p) {
+	private void sevenOnDice(Human p) {
 		System.out.println("\n=================");
 		System.out.println("| SEVEN ON DICE |");
 		System.out.println("=================\n");
 		
 		// on regarde si un joueur a plus de 7 ressources
-		for (Player pl : players) {
+		for (Human pl : players) {
 			if (pl.getNumResources() > 7) {
 				// si oui, il doit se defausser de la moitie de ses ressources
 				int n = pl.getNumResources() / 2;
@@ -277,7 +277,7 @@ public class Game {
 		onTheRobber(p);
 	}
 	
-	public void onTheRobber(Player p) {
+	public void onTheRobber(Human p) {
 		Pair pair = null;
 		
 		// on demande sur quelle tuile le joueur veut deplacer le voleur
@@ -300,7 +300,7 @@ public class Game {
 		
 		if (!intersections.isEmpty()) {
 			// on recupere tous les joueurs adverses qui ont une intersection construite autour de la nouvelle position du voleur
-			LinkedList<Player> players = new LinkedList<>();
+			LinkedList<Human> players = new LinkedList<>();
 			
 			for (Intersection in : intersections) {
 				if (!players.contains(in.player) && in.player != p)
@@ -308,7 +308,7 @@ public class Game {
 			}
 			
 			// on demande au joueur a quel joueur adverse il veut aleatoirement prendre une ressource
-			Player opponent = null;
+			Human opponent = null;
 			while (opponent == null) opponent = p.askWhichPlayer(players);
 			
 			// on recupere une ressource du joueur adverse de facon aleatoire
@@ -322,7 +322,7 @@ public class Game {
 		}
 	}
 	
-	public void giveResources(int n, Player p) {
+	public void giveResources(int n, Human p) {
 		Tile[][] t = board.getTiles();
 		
 		// on parcourt le plateau

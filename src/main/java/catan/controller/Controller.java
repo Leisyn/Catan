@@ -4,9 +4,9 @@ import javax.swing.*;
 
 import catan.model.Game;
 import catan.model.card.Card;
-import catan.model.player.Player;
+import catan.model.player.Human;
 import catan.model.player.Robot;
-import catan.model.player.Player.Resource;
+import catan.model.player.Human.Resource;
 import catan.view.View;
 
 import java.awt.*;
@@ -118,7 +118,7 @@ public class Controller {
 		
 		String n = nom.getText();
 		valide.setEnabled(false);
-		vue.listeJoueurs.add(new Player(n, vue.jeu));
+		vue.listeJoueurs.add(new Human(n, vue.jeu));
 		
 		if (vue.listeJoueurs.size() == vue.nbJoueurs) {
 			vue.jeu.iniPlayers(vue.listeJoueurs);
@@ -128,7 +128,7 @@ public class Controller {
 		
 		else if (vue.listeJoueurs.size() == nbHumain) {
 			for (int i = nbHumain + 1; i <= vue.nbJoueurs; i++)
-				vue.listeJoueurs.add(new Player("Robot " + i, vue.jeu));
+				vue.listeJoueurs.add(new Human("Robot " + i, vue.jeu));
 			vue.jeu.iniPlayers(vue.listeJoueurs);
 			vue.cMenu.show(vue.listePanel, vue.listeMenu[2]);
 			setAllCompteurs();
@@ -149,7 +149,7 @@ public class Controller {
 	}
 	
 	public void setCompteursJoueur() {
-		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
+		Human j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 
 		vue.nomJoueurActuel.setText("Tour de " + j.name);
 		vue.nbPointsActuel.setText("Nombre de points : " + j.points);
@@ -170,7 +170,7 @@ public class Controller {
 	}
 	
 	public void setRessourcesJoueur() {
-		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
+		Human j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		
 		vue.nbArgileActuel.setText("Argile : " + j.getResources().get(Resource.BRICK));
 		vue.nbBleActuel.setText("Bl� : " + j.getResources().get(Resource.GRAIN));
@@ -180,14 +180,14 @@ public class Controller {
 	}
 	
 	public void setCartesJoueur() {
-		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
+		Human j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		
 		for (Card c : j.cards)
 			vue.listeCarte.setText(vue.listeCarte.getText() + "\n* " + c);
 	}
 	
 	public void autorisePhaseProductionEtCommerce(JButton jouerCarte) {
-		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
+		Human j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		
 		if (j.hasAPlayableCard())
 			jouerCarte.setEnabled(true);
@@ -198,7 +198,7 @@ public class Controller {
 	public void autoriseMarchander(JButton donnerArg, JButton donnerBle, JButton donnerBois,
 			JButton donnerLaine, JButton donnerMin, JButton recevoirArg, JButton recevoirBle,
 			JButton recevoirBois, JButton recevoirLaine, JButton recevoirMin) {
-		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
+		Human j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		boolean peutEchanger = false;
 		
 		if (j.getResources().get(Resource.BRICK) < j.getTradeRate().get(Resource.BRICK))
@@ -258,7 +258,7 @@ public class Controller {
 	
 	public void autorisePhaseConstruction(JButton route, JButton colonie,
 			JButton ville, JButton achete, JButton jouerCarte) {
-		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
+		Human j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		
 		if (j.hasTheResourcesTo("R"))
 			route.setEnabled(true);

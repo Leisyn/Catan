@@ -1,7 +1,7 @@
 package catan.model.card;
 
 import catan.model.Game;
-import catan.model.player.Player;
+import catan.model.player.Human;
 
 public class KnightCard extends Card {
 
@@ -9,7 +9,7 @@ public class KnightCard extends Card {
 		super(0, "chevalier");
 	}
 
-	public void jouer(Game game, Player p) {
+	public void jouer(Game game, Human p) {
 		// on augmente l'arm�e la plus puissante du joueur
 		p.largestArmy++;
 		

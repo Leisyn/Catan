@@ -18,7 +18,7 @@ import catan.model.card.ProgressCard;
 import catan.model.card.VictoryCard;
 import catan.model.other.Pair;
 
-public class Player {
+public class Human {
 	public enum Resource{BRICK, LUMBER, ORE, GRAIN, WOOL};
 	
 	public Resource stringToResource(String s) {
@@ -52,7 +52,7 @@ public class Player {
 	protected int numCity = 0;  // le nombre de ville (4 max)
 	protected int numRoad = 0;  // le nombre de routes (15 max)
 
-	public Player(String n, Game j) {
+	public Human(String n, Game j) {
 		// on verifie que le nom n'est pas null
 		if (n == null || j == null)
 			throw new IllegalArgumentException("Impossible d'initialiser le joueur : des arguments sont �gals � null");
@@ -950,16 +950,16 @@ public class Player {
 		return resource;
 	}
 
-	public Player askWhichPlayer(LinkedList<Player> joueurs) {
+	public Human askWhichPlayer(LinkedList<Human> joueurs) {
 		// on affiche les joueurs possibles
 		System.out.println("De quel joueur voulez-vous prendre une resource ? (Veuillez entrer le nom entier du joueur voulu)");
-		for (Player j : joueurs)
+		for (Human j : joueurs)
 			System.out.println("  * " + j.name + " (" + j.getNumResources() + " ressources)");
 
 		String nom = actualGame.sc.next().toLowerCase();
 
 		// on regarde s'il s'agit d'un nom d'un joueur possible
-		for (Player j : joueurs) {
+		for (Human j : joueurs) {
 
 			// si oui, on renvoie ce que le joueur avait entre
 			if (j.name.toLowerCase().equals(nom)) {

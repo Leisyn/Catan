@@ -1,7 +1,7 @@
 package catan.model.card;
 
 import catan.model.Game;
-import catan.model.player.Player;
+import catan.model.player.Human;
 
 public class VictoryCard extends Card {
 
@@ -10,7 +10,7 @@ public class VictoryCard extends Card {
 	}
 
 	@Override
-	public void jouer(Game game, Player p) {}
+	public void jouer(Game game, Human p) {}
 
 	@Override
 	public String toString() {

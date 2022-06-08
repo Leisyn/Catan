@@ -1,11 +1,11 @@
 package catan.model.board;
 
 import catan.model.Game;
-import catan.model.player.Player;
+import catan.model.player.Human;
 
 public class Path implements Buildable {
 	public Construction construction;
-	public Player player;
+	public Human player;
 	
 	public Path() {
 		construction = Construction.NOTHING;
@@ -23,7 +23,7 @@ public class Path implements Buildable {
 	}
 
 	@Override
-	public void build(Game game, Player p, Construction c) {
+	public void build(Game game, Human p, Construction c) {
 		if (c != Construction.ROAD) return;
 		
 		construction = c;
