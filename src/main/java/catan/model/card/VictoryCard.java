@@ -5,8 +5,8 @@ import catan.model.player.Player;
 
 public class VictoryCard extends Card {
 
-	public VictoryCard(String name) {
-		super(2, name);
+	public VictoryCard(CardName name) {
+		super(name);
 	}
 
 	@Override
@@ -14,23 +14,11 @@ public class VictoryCard extends Card {
 
 	@Override
 	public String toString() {
-		if (this.name.equals("bibliotheque")) {
-			return "CarteVictoire - Biblioth�que";
-		}
-		
-		if (this.name.equals("marche")) {
-			return "CarteVictoire - Place du march�";
-		}
-		
-		if (this.name.equals("parlement")){
-			return "CarteVictoire - Parlement";
-		}
-		
-		if (this.name.equals("eglise")) {
-			return "CarteVictoire - �glise";
-		}
-		
-		return "CarteVictoire - Universit�";
+		if (name == CardName.MARKET) return "Victory Card - Market";
+		if (name == CardName.UNIVERSITY) return "Victory Card - University";
+		if (name == CardName.GREATHALL) return "Victory Card - Great Hall";
+		if (name == CardName.CHAPEL) return "Victory Card - Chapel";
+		return "Victory Card - Library";
 	}
 }
 

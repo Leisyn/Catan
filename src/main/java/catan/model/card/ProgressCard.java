@@ -7,21 +7,19 @@ import catan.model.player.Player.Resource;
 
 public class ProgressCard extends Card {
 
-	public ProgressCard(String name) {
-		super(1, name);
+	public ProgressCard(CardName name) {
+		super(name);
 	}
 
 	public void jouer(Game game, Player p) {
-		// s'il s'agit d'une carte construction
-		if (this.name.equals("construction")) {
+		if (name == CardName.ROADBUILDING) {
 			
 			// on construit 2 routes
 			//p.build(Construction.ROAD, false);
 			//p.build(Construction.ROAD, false);
 		}
 		
-		// s'il s'agit d'une carte invention
-		if (this.name.equals("invention")) {
+		if (name == CardName.YEAROFPLENTY) {
 			
 			// on demande la ressource que le joueur veut recevoir et on lui donne
 			Resource askedResource = null;
@@ -39,8 +37,7 @@ public class ProgressCard extends Card {
 			p.receiveResources(askedResource2, 1);
 		}
 	
-		// s'il s'agit d'une carte monopole
-		if (this.name.equals("monopole")) {
+		if (name == CardName.MONOPOLY) {
 
 			// on demande la ressource que le joueur veut recevoir
 			Resource askedResource = null;
@@ -66,15 +63,9 @@ public class ProgressCard extends Card {
 
 	@Override
 	public String toString() {
-		if (this.name.equals("construction")) {
-			return "Carte Progr�s - Construction de Routes";
-		}
-		
-		if (this.name.equals("invention")) {
-			return "Carte Progr�s - Invention";
-		}
-		
-		return "Carte Progr�s - Monopole";
+		if (name == CardName.ROADBUILDING) return "Progress Card - Road Building";
+		if (name == CardName.YEAROFPLENTY) return "Progress Card - Year Of Plenty";
+		return "Progress Card - Monopoly";
 	}
 }
 

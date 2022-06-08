@@ -6,23 +6,23 @@ import catan.model.player.Player;
 public class KnightCard extends Card {
 
 	public KnightCard() {
-		super(0, "chevalier");
+		super(CardName.KNIGHT);
 	}
 
 	public void jouer(Game game, Player p) {
-		// on augmente l'arm�e la plus puissante du joueur
+		// on augmente l'armee la plus puissante du joueur
 		p.usedAKnightCard();
 		
-		// on r�attribue l'arm�e la plus puissante si besoin
+		// on r�attribue l'armee la plus puissante si besoin
 		game.assignLargestArmy();
 		
-		// on d�place le voleur
+		// on deplace le voleur
 		game.onTheRobber(p);
 	}
 
 	@Override
 	public String toString() {
-		return "Carte Chevalier - Chevalier";
+		return "Knight Card";
 	}
 }
 

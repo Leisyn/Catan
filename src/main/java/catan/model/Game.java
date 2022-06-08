@@ -9,6 +9,7 @@ import catan.model.board.Board;
 import catan.model.board.Buildable.Construction;
 import catan.model.board.Tile;
 import catan.model.card.Card;
+import catan.model.card.Card.CardName;
 import catan.model.card.KnightCard;
 import catan.model.card.ProgressCard;
 import catan.model.card.VictoryCard;
@@ -67,18 +68,18 @@ public class Game {
 		
 		// 6 cartes progres, 2 de chaque
 		for (int i = 0; i < 2; i++)
-			availableCards.add(new ProgressCard("construction"));
+			availableCards.add(new ProgressCard(CardName.ROADBUILDING));
 		for (int i = 0; i < 2; i++)
-			availableCards.add(new ProgressCard("invention"));
+			availableCards.add(new ProgressCard(CardName.YEAROFPLENTY));
 		for (int i = 0; i < 2; i++)
-			availableCards.add(new ProgressCard("monopole"));
+			availableCards.add(new ProgressCard(CardName.MONOPOLY));
 		
 		// 5 cartes victoires, 5 de chaque
-		availableCards.add(new VictoryCard("bibliotheque"));
-		availableCards.add(new VictoryCard("marche"));
-		availableCards.add(new VictoryCard("parlement"));
-		availableCards.add(new VictoryCard("eglise"));
-		availableCards.add(new VictoryCard("universite"));
+		availableCards.add(new VictoryCard(CardName.MARKET));
+		availableCards.add(new VictoryCard(CardName.UNIVERSITY));
+		availableCards.add(new VictoryCard(CardName.GREATHALL));
+		availableCards.add(new VictoryCard(CardName.CHAPEL));
+		availableCards.add(new VictoryCard(CardName.LIBRARY));
 	}
 	
 	public Board getBoard() {
