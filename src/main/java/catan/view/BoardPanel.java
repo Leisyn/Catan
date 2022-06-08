@@ -326,7 +326,7 @@ public class BoardPanel extends JPanel implements MouseListener {
 					Resource ressource = joueurs.get(n).loseARandomResource();
 					
 					// s'il n'avait aucune ressource, on l'annonce
-					if (ressource.equals("rien"))
+					if (ressource == null)
 						System.out.println("Ce joueur ne poss�dait aucune ressource.\n");
 					
 					// sinon, on donne la ressource recupere au joueur actuel

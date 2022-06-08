@@ -307,16 +307,16 @@ public class Player {
 		System.out.println();
 
 		// on regarde s'il a demande de retourner au menu d'action
-		if (resourceToGive.equals("retour"))
-			return;
+		// if (resourceToGive.equals("retour"))
+		//	 return;
 
 		// on demande contre quoi le joueur veut echanger
 		while (resourceToReceive == null) resourceToReceive = askResourceToReceive(0);
 		System.out.println();
 
 		// on regarde s'il a demande de retourner au menu d'action
-		if (resourceToReceive.equals("retour"))
-			return;
+		// if (resourceToReceive.equals("retour"))
+		// 	return;
 
 		// sinon, on procede a l'echange
 		loseResources(resourceToGive, tradeRate.get(resourceToGive));
@@ -352,11 +352,11 @@ public class Player {
 	// Verifie si le joueur a les ressources necessaires pour faire l'action demandee
 	//  (R construire une route / C construire une colonie / V construire une ville / A acheter une carte)
 	public boolean hasTheResourcesTo(String action) {
-		int laine = resources.get("laine");
-		int bois = resources.get("bois");
-		int argile = resources.get("argile");
-		int ble = resources.get("bl�");
-		int minerai = resources.get("minerai");
+		int laine = resources.get(Resource.WOOL);
+		int bois = resources.get(Resource.LUMBER);
+		int argile = resources.get(Resource.BRICK);
+		int ble = resources.get(Resource.GRAIN);
+		int minerai = resources.get(Resource.ORE);
 
 		switch (action) {
 			case "R": if (argile >= 1 && bois >= 1) return true;
@@ -467,11 +467,11 @@ public class Player {
 	// Affiche ce que le joueur peut faire pendant la phase de construction
 	public void printPossibleActions() {
 		// on recupere son amount actuel de resource
-		int laine = resources.get("laine");
-		int bois = resources.get("bois");
-		int argile = resources.get("argile");
-		int ble = resources.get("bl�");
-		int minerai = resources.get("minerai");
+		int laine = resources.get(Resource.WOOL);
+		int bois = resources.get(Resource.LUMBER);
+		int argile = resources.get(Resource.BRICK);
+		int ble = resources.get(Resource.GRAIN);
+		int minerai = resources.get(Resource.ORE);
 
 		// on regarde s'il a les ressources pour construire une route
 		if (argile >= 1 && bois >= 1)

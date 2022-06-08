@@ -6,6 +6,7 @@ import catan.model.Game;
 import catan.model.card.Card;
 import catan.model.player.Player;
 import catan.model.player.Robot;
+import catan.model.player.Player.Resource;
 import catan.view.View;
 
 import java.awt.*;
@@ -171,11 +172,11 @@ public class Controller {
 	public void setRessourcesJoueur() {
 		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		
-		vue.nbArgileActuel.setText("Argile : " + j.getResources().get("argile"));
-		vue.nbBleActuel.setText("Bl� : " + j.getResources().get("bl�"));
-		vue.nbBoisActuel.setText("Bois : " + j.getResources().get("bois"));
-		vue.nbLaineActuel.setText("Laine : " + j.getResources().get("laine"));
-		vue.nbMineraiActuel.setText("Minerai : " + j.getResources().get("minerai"));
+		vue.nbArgileActuel.setText("Argile : " + j.getResources().get(Resource.BRICK));
+		vue.nbBleActuel.setText("Bl� : " + j.getResources().get(Resource.GRAIN));
+		vue.nbBoisActuel.setText("Bois : " + j.getResources().get(Resource.LUMBER));
+		vue.nbLaineActuel.setText("Laine : " + j.getResources().get(Resource.WOOL));
+		vue.nbMineraiActuel.setText("Minerai : " + j.getResources().get(Resource.ORE));
 	}
 	
 	public void setCartesJoueur() {
@@ -200,7 +201,7 @@ public class Controller {
 		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		boolean peutEchanger = false;
 		
-		if (j.getResources().get("argile") < j.getTradeRate().get("argile"))
+		if (j.getResources().get(Resource.BRICK) < j.getTradeRate().get(Resource.BRICK))
 			donnerArg.setEnabled(false);
 		
 		else {
@@ -208,7 +209,7 @@ public class Controller {
 			donnerArg.setEnabled(true);
 		}
 		
-		if (j.getResources().get("bl�") < j.getTradeRate().get("bl�"))
+		if (j.getResources().get(Resource.GRAIN) < j.getTradeRate().get(Resource.GRAIN))
 			donnerBle.setEnabled(false);
 		
 		else {
@@ -216,7 +217,7 @@ public class Controller {
 			donnerBle.setEnabled(true);
 		}
 		
-		if (j.getResources().get("bois") < j.getTradeRate().get("bois"))
+		if (j.getResources().get(Resource.LUMBER) < j.getTradeRate().get(Resource.LUMBER))
 			donnerBois.setEnabled(false);
 		
 		else {
@@ -224,7 +225,7 @@ public class Controller {
 			donnerBois.setEnabled(true);
 		}
 		
-		if (j.getResources().get("laine") < j.getTradeRate().get("laine"))
+		if (j.getResources().get(Resource.WOOL) < j.getTradeRate().get(Resource.WOOL))
 			donnerLaine.setEnabled(false);
 		
 		else {
@@ -232,7 +233,7 @@ public class Controller {
 			donnerLaine.setEnabled(true);
 		}
 		
-		if (j.getResources().get("minerai") < j.getTradeRate().get("minerai"))
+		if (j.getResources().get(Resource.ORE) < j.getTradeRate().get(Resource.ORE))
 			donnerMin.setEnabled(false);
 		
 		else {

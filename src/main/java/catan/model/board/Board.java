@@ -1,6 +1,5 @@
 package catan.model.board;
 
-import catan.model.Game;
 import catan.model.board.Buildable.Construction;
 import catan.model.board.Harbor.HarborType;
 import catan.model.board.Tile.TileType;
