@@ -1,210 +1,22 @@
 package catan.model.player;
 
 import java.util.LinkedList;
-import java.util.HashMap;
-import java.util.Random;
 
 import catan.model.Game;
 import catan.model.board.Buildable;
 import catan.model.board.Buildable.Construction;
-import catan.model.board.Harbor.HarborType;
 import catan.model.board.Intersection;
 import catan.model.board.Path;
 import catan.model.board.Tile;
-import catan.model.board.Tile.TileType;
 import catan.model.card.Card;
 import catan.model.card.KnightCard;
 import catan.model.card.ProgressCard;
-import catan.model.card.VictoryCard;
 import catan.model.other.Pair;
 
-public class Human {
-	public enum Resource{BRICK, LUMBER, ORE, GRAIN, WOOL};
-	
-	public Resource stringToResource(String s) {
-		s = s.toUpperCase();
-		switch(s) {
-			case "BRICK": return Resource.BRICK;
-			case "LUMBER": return Resource.LUMBER;
-			case "ORE": return Resource.ORE;
-			case "GRAIN": return Resource.GRAIN;
-			case "WOOL": return Resource.WOOL;
-			default: return null;
-		}
+public class Human extends Player {
+	public Human(String s, Game g) {
+		super(s, g);
 	}
-	
-	public static int numPlayer = 1;
-
-	public final Game actualGame;
-
-	public final int id;
-	public final String name;
-
-	public LinkedList<Card> cards = new LinkedList<>();
-	public HashMap<Resource, Integer> tradeRate = new HashMap<>();
-	private HashMap<Resource, Integer> resources = new HashMap<>();
-
-	public int points = 0;
-	public int longestRoad = 0;  // le nombre de routes constituant la route la plus longue du joueur
-	public int largestArmy = 0;  // le nombre de carte chevalier joue
-
-	protected int numSettlement = 0;  // le nombre de colonie (5 max)
-	protected int numCity = 0;  // le nombre de ville (4 max)
-	protected int numRoad = 0;  // le nombre de routes (15 max)
-
-	public Human(String n, Game j) {
-		// on verifie que le nom n'est pas null
-		if (n == null || j == null)
-			throw new IllegalArgumentException("Impossible d'initialiser le joueur : des arguments sont �gals � null");
-
-		actualGame = j;
-
-		// on initialise les informations du joueur (son id et son nom)
-		id = numPlayer;
-		name = n;
-		numPlayer++;
-
-		// on initialise les taux d'echanges du joueur (initialement a 4:1)
-		tradeRate.put(Resource.BRICK, 4);
-		tradeRate.put(Resource.LUMBER, 4);
-		tradeRate.put(Resource.ORE, 4);
-		tradeRate.put(Resource.GRAIN, 4);
-		tradeRate.put(Resource.WOOL, 4);
-
-		// on initialise les ressources que le joueur possede au depart (aucune)
-		resources.put(Resource.BRICK, 0);
-		resources.put(Resource.LUMBER, 0);
-		resources.put(Resource.ORE, 0);
-		resources.put(Resource.GRAIN, 0);
-		resources.put(Resource.WOOL, 0);
-	}
-
-	public HashMap<Resource, Integer> getResources() {
-		return resources;
-	}
-
-	public HashMap<Resource, Integer> getTradeRate() {
-		return tradeRate;
-	}
-
-	public LinkedList<Card> getCards() {
-		return cards;
-	}
-
-	// Renvoie le nombre total de resource du joueur
-	public int getNumResources() {
-		int n = 0;
-		for (Integer i : resources.values())
-			n += i;
-		return n;
-	}
-
-	public int getNumRoad() {
-		return numRoad;
-	}
-
-	public int getNumSettlement() {
-		return numSettlement;
-	}
-
-	public int getNumCity() {
-		return numCity;
-	}
-
-	public void hasBuiltARoad() {
-		numRoad++;
-	}
-
-	public void hasBuiltASettlement() {
-		numSettlement++;
-	}
-
-	public void hasBuiltACity() {
-		numCity++;
-	}
-
-
-
-
-
-	public boolean hasWon() {
-		return points >= 10;
-	}
-
-	public void receiveResource(TileType type, int amount) {
-		Resource resource;
-		switch (type) {
-			case HILLS: resource = Resource.BRICK; break;
-			case FOREST: resource = Resource.LUMBER; break;
-			case MOUNTAINS: resource = Resource.ORE; break;
-			case FIELDS: resource = Resource.GRAIN; break;
-			case PASTURE: resource = Resource.WOOL; break;
-			default: resource = null;
-		}
-
-		// on l'ajoute aux ressources actuelles du joueur
-		if (resource != null) resources.replace(resource, resources.get(resource) + amount);
-	}
-
-	public void receiveResource(Resource resource, int amount) {
-		resources.replace(resource, resources.get(resource) + amount);
-	}
-
-	public void loseResources(TileType type, int amount) {
-		Resource resource;
-		switch (type) {
-			case HILLS: resource = Resource.BRICK; break;
-			case FOREST: resource = Resource.LUMBER; break;
-			case MOUNTAINS: resource = Resource.ORE; break;
-			case FIELDS: resource = Resource.GRAIN; break;
-			case PASTURE: resource = Resource.WOOL; break;
-			default: resource = null;
-		}
-
-		if (resource != null) resources.replace(resource, resources.get(resource) - amount);
-	}
-
-	public void loseResources(Resource resource, int amount) {
-		resources.replace(resource, resources.get(resource) - amount);
-	}
-
-	// TODO: remove the resource instead of only returning it
-	public Resource loseARandomResource() {
-		Random rd = new Random();
-		int n = 0;
-
-		if (getNumResources() == 0) return null;
-		while (true) {
-			n = rd.nextInt(5);
-			switch (n) {
-				case 0: if (resources.get(Resource.BRICK) > 0) return Resource.BRICK;
-				case 1: if (resources.get(Resource.LUMBER) > 0) return Resource.LUMBER;
-				case 2: if (resources.get(Resource.ORE) > 0) return Resource.ORE;
-				case 3: if (resources.get(Resource.GRAIN) > 0) return Resource.GRAIN;
-				default: if (resources.get(Resource.WOOL) > 0) return Resource.WOOL;
-			}
-		}
-	}
-
-	public void changeTradeRate(HarborType type) {
-		switch (type) {
-			case BRICK: tradeRate.replace(Resource.BRICK, 2); break;
-			case LUMBER: tradeRate.replace(Resource.LUMBER, 2); break;
-			case ORE: tradeRate.replace(Resource.ORE, 2); break;
-			case GRAIN: tradeRate.replace(Resource.GRAIN, 2); break;
-			case WOOL: tradeRate.replace(Resource.WOOL, 2); break;
-			default:
-				tradeRate.replace(Resource.BRICK, 3);
-				tradeRate.replace(Resource.LUMBER, 3);
-				tradeRate.replace(Resource.ORE, 3);
-				tradeRate.replace(Resource.GRAIN, 3);
-				tradeRate.replace(Resource.WOOL, 3);
-		}
-	}
-
-
-
-
 
 	public boolean producingPhase() {
 		System.out.println("===================");
@@ -230,13 +42,6 @@ public class Human {
 		return playACard();
 	}
 
-	public boolean hasAPlayableCard() {
-		for (Card c : cards) {
-			if (c instanceof KnightCard || c instanceof ProgressCard)
-				return true;
-		}
-		return false;
-	}
 
 	// Joue une carte du joueur et renvoie si le joueur a gagn� ou non
 	public boolean playACard() {
@@ -320,7 +125,7 @@ public class Human {
 
 		// sinon, on procede a l'echange
 		loseResources(resourceToGive, tradeRate.get(resourceToGive));
-		receiveResource(resourceToReceive, 1);
+		receiveResources(resourceToReceive, 1);
 	}
 
 	public boolean buildingPhase() {
@@ -333,61 +138,36 @@ public class Human {
 		printPossibleActions();
 
 		// on demande ce que le joueur veut faire
-		String action = null;
-		while (action == null)
-			action = askBuildingPhase();
+		Action action = null;
+		while (action == null) action = askBuildingPhase();
 		System.out.println();
 
 		// on effectue l'action demandee
 		switch (action) {
-			case "R": return build(Construction.ROAD, false);
-			case "C": return build(Construction.SETTLEMENT, false);
-			case "V": return build(Construction.CITY, false);
-			case "A": return buyACard();
-			case "J": return playACard();
+			case BUILDROAD: return build(Construction.ROAD, false);
+			case BUILDSETTLEMENT: return build(Construction.SETTLEMENT, false);
+			case BUILDCITY: return build(Construction.CITY, false);
+			case BUYCARD: return buyACard();
+			case PLAYCARD: return playACard();
 			default: return true;
 		}
-	}
-
-	// Verifie si le joueur a les ressources necessaires pour faire l'action demandee
-	//  (R construire une route / C construire une colonie / V construire une ville / A acheter une carte)
-	public boolean hasTheResourcesTo(String action) {
-		int laine = resources.get(Resource.WOOL);
-		int bois = resources.get(Resource.LUMBER);
-		int argile = resources.get(Resource.BRICK);
-		int ble = resources.get(Resource.GRAIN);
-		int minerai = resources.get(Resource.ORE);
-
-		switch (action) {
-			case "R": if (argile >= 1 && bois >= 1) return true;
-					break;
-			case "C": if (argile >= 1 && bois >= 1 && laine >= 1 && ble >= 1) return true;
-					break;
-			case "V": if (minerai >= 3 && ble >= 2) return true;
-					break;
-			case "A": if (minerai >= 1 && laine >= 1 && ble >= 1) return true;
-					break;
-			default: throw new IllegalArgumentException("Identifiant d'action inconnu.");
-		}
-
-		return false;
 	}
 
 	// Demande au joueur la position o� il souhaite construire (0 : route / 1 : colonie / 2 : ville) et renvoie s'il a gagn� ou non
 	public boolean build(Construction c, boolean phaseInitiale) {
 		if (c == Construction.NOTHING) return hasWon();
-		
-		if (c == Construction.ROAD && numRoad >= Game.maxAmountOfRoadForEachPlayer) {
+
+		if (c == Construction.ROAD && numRoadBuilt >= Game.maxAmountOfRoadForEachPlayer) {
 			System.out.println("Vous avez atteint le nombre maximum de routes.");
 			return hasWon();
 		}
 
-		if (c == Construction.SETTLEMENT && numSettlement >= Game.maxAmountOfSettlementForEachPlayer) {
+		if (c == Construction.SETTLEMENT && numSettlementBuilt >= Game.maxAmountOfSettlementForEachPlayer) {
 			System.out.println("Vous avez atteint le nombre maximum de colonies.");
 			return hasWon();
 		}
 
-		if (c == Construction.CITY && numCity >= Game.maxAmountOfCityForEachPlayer) {
+		if (c == Construction.CITY && numCityBuilt >= Game.maxAmountOfCityForEachPlayer) {
 			System.out.println("Vous avez atteint le nombre maximum de villes.");
 			return hasWon();
 		}
@@ -414,26 +194,6 @@ public class Human {
 		// sinon, on construit
 		Buildable construction = actualGame.getBoard().getConstruction(position, direction);
 		construction.build(actualGame, this, c);
-
-		// on renvoie si le joueur a gagne ou non
-		return hasWon();
-	}
-
-	// Achete une carte de la liste de carte disponible
-	protected boolean buyACard() {
-		if (actualGame.availableCards.size() == 0) {
-			System.out.println("Il n'y a plus de cartes disponibles � l'achat.\n");
-			return hasWon();
-		}
-
-		Random rd = new Random();
-		int r = rd.nextInt(actualGame.availableCards.size());
-
-		cards.add(actualGame.availableCards.get(r));
-		if (actualGame.availableCards.get(r) instanceof VictoryCard) {
-			points += 1;
-		}
-		actualGame.availableCards.remove(r);
 
 		// on renvoie si le joueur a gagne ou non
 		return hasWon();
@@ -504,7 +264,7 @@ public class Human {
 	}
 
 	public void printPoints() {
-		System.out.println("Vous avez " + points + " points de victoire.\n");
+		System.out.println("Vous avez " + victoryPoints + " points de victoire.\n");
 	}
 
 	public void printCards() {
@@ -533,7 +293,7 @@ public class Human {
 
 	// METHODES DE DEMANDE AU JOUEUR
 
-	private String askProducingPhase() {
+	public String askProducingPhase() {
 		System.out.println("Que voulez-vous faire ? (Veuillez entrez la lettre capitale se trouvant avant l'action voulue)");
 		String action = actualGame.sc.next().toUpperCase();
 
@@ -560,7 +320,7 @@ public class Human {
 		return null;
 	}
 
-	private String askCardToPlay() {
+	public String askCardToPlay() {
 		System.out.println("Quelle carte voulez-vous jouer ? (Entrez le nom de la carte � jouer, ou \"retour\" pour revenir)");
 		String nomCarte = actualGame.sc.next().toLowerCase();
 
@@ -608,16 +368,16 @@ public class Human {
 		return null;
 	}
 
-	private String askBuildingPhase() {
+	private Action askBuildingPhase() {
 		System.out.println("Que voulez-vous faire ? (Veuillez entrez la lettre capitale se trouvant avant l'action voulue)");
-		String action = actualGame.sc.next().toUpperCase();
+		char answer = Character.toUpperCase(actualGame.sc.next().charAt(0));
+		Action action = charToAction(answer);
 
 		// on regarde s'il a demande de passer son tour
-		if (action.equals("P"))
-			return action;
+		if (action == Action.SKIPPHASE) return action;
 
 		// on regarde si le joueur a demande une action coutant des ressources
-		if (action.equals("R") || action.equals("C") || action.equals("V") || action.equals("A")) {
+		if (action == Action.BUILDROAD || action == Action.BUILDSETTLEMENT || action == Action.BUILDCITY || action == Action.BUYCARD) {
 
 			// on regarde s'il a les ressources necessaires
 			if (!hasTheResourcesTo(action)) {
@@ -630,7 +390,7 @@ public class Human {
 		}
 
 		// on regarde s'il a demande d'utiliser une carte
-		if (action.equals("J")) {
+		if (action == Action.PLAYCARD) {
 
 			// on regarde s'il a une carte jouable
 			for (Card c : cards) {
@@ -735,7 +495,7 @@ public class Human {
 		if (c == Construction.ROAD) {
 
 			// on regarde s'il lui reste des routes disponibles
-			if (numRoad >= 15) {
+			if (numRoadBuilt >= 15) {
 				System.out.println("Vous avez atteint le nombre maximum de routes.\n");
 				return null;
 			}
@@ -804,13 +564,13 @@ public class Human {
 		// on regarde si le joueur veut construire une intersection
 		else {
 			// on regarde s'il lui reste des colonies disponibles s'il veut construire une colonie
-			if (c == Construction.SETTLEMENT && numSettlement >= Game.maxAmountOfSettlementForEachPlayer) {
+			if (c == Construction.SETTLEMENT && numSettlementBuilt >= Game.maxAmountOfSettlementForEachPlayer) {
 				System.out.println("Vous avez atteint le nombre maximum de colonie.\n");
 				return null;
 			}
 
 			// on regarde s'il lui reste des villes disponibles s'il veut construire une ville
-			else if (c == Construction.CITY && numCity >= Game.maxAmountOfCityForEachPlayer) {
+			else if (c == Construction.CITY && numCityBuilt >= Game.maxAmountOfCityForEachPlayer) {
 				System.out.println("Vous avez atteint le nombre maximum de ville.\n");
 				return null;
 			}
@@ -889,8 +649,8 @@ public class Human {
 			System.out.println("Quel resource voulez-vous donner ? (Veuillez entrer le nom entier de la resource � donner)");
 
 		String answer = actualGame.sc.next().toLowerCase();
-		Resource resource = stringToResource(answer);
-		
+		Resource resource = Player.stringToResource(answer);
+
 		// on regarde si le joueur est en train de marchander
 		if (type == 0) {
 
@@ -931,7 +691,7 @@ public class Human {
 
 		// on r�cup�re ce que le joueur a entre
 		String answer = actualGame.sc.next().toLowerCase();
-		Resource resource = stringToResource(answer);
+		Resource resource = Player.stringToResource(answer);
 
 		// s'il est en train de marchander, on regarde s'il a demande de revenir en arriere
 		if (type == 0 && answer.equals("retour")) {
@@ -954,7 +714,7 @@ public class Human {
 		// on affiche les joueurs possibles
 		System.out.println("De quel joueur voulez-vous prendre une resource ? (Veuillez entrer le nom entier du joueur voulu)");
 		for (Human j : joueurs)
-			System.out.println("  * " + j.name + " (" + j.getNumResources() + " ressources)");
+			System.out.println("  * " + j.name + " (" + j.getNumOfResources() + " ressources)");
 
 		String nom = actualGame.sc.next().toLowerCase();
 
@@ -970,6 +730,18 @@ public class Human {
 
 		// sinon, il a entre quelque chose d'inconnu
 		System.out.println("Nom inconnu.\n");
+		return null;
+	}
+
+	@Override
+	public String askResourceToTrade() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String askCombinedTradeBuildPhase() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }

@@ -1,11 +1,11 @@
 package catan.model.board;
 
 import catan.model.Game;
-import catan.model.player.Human;
+import catan.model.player.Player;
 
 public class Path implements Buildable {
 	public Construction construction;
-	public Human player;
+	public Player player;
 	
 	public Path() {
 		construction = Construction.NOTHING;
@@ -23,21 +23,21 @@ public class Path implements Buildable {
 	}
 
 	@Override
-	public void build(Game game, Human p, Construction c) {
+	public void build(Game game, Player p, Construction c) {
 		if (c != Construction.ROAD) return;
 		
 		construction = c;
 		player = p;
-		p.hasBuiltARoad();
+		p.builtARoad();
 
 		// on calcule quelle est la longueur de cette route
 		int n = game.getBoard().calculateRoadLength(this);
 		
 		// on stocke sa nouvelle longueur
-		p.longestRoad = n;
+		p.setPersonalLongestRoad(n);
 
 		// si elle est plus longue que la route la plus longue precedente
-		if (n > 5 && n > p.longestRoad) {
+		if (n > 5 && n > p.getPersonalLongestRoad()) {
 
 			// on reattribue la route la plus longue au cas-ou le joueur qui la possede change
 			game.assignLongestRoad();

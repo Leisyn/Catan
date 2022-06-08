@@ -13,18 +13,18 @@ import catan.model.card.KnightCard;
 import catan.model.card.ProgressCard;
 import catan.model.card.VictoryCard;
 import catan.model.other.Pair;
-import catan.model.player.Human;
-import catan.model.player.Human.Resource;
+import catan.model.player.Player;
+import catan.model.player.Player.Resource;
 
 public class Game {
 	private Board board;
-	private Human[] players;
+	private Player[] players;
 	
 	public Scanner sc;
 	public LinkedList<Card> availableCards = new LinkedList<>();
 	
-	public Human playerWithLongestRoad;
-	public Human playerWithLargestArmy;
+	public Player playerWithLongestRoad;
+	public Player playerWithLargestArmy;
 	
 	public static int maxAmountOfRoadForEachPlayer = 15;
 	public static int maxAmountOfSettlementForEachPlayer = 5;
@@ -35,7 +35,7 @@ public class Game {
 	
 	public Game(int n, Scanner s) {
 		board = Board.iniBoard();
-		players = new Human[n];
+		players = new Player[n];
 		
 		sc = s;
 		iniAvailableCards();
@@ -44,7 +44,7 @@ public class Game {
 		playerWithLargestArmy = null;
 	}
 	
-	public void iniPlayers(LinkedList<Human> p) {
+	public void iniPlayers(LinkedList<Player> p) {
 		// on verifie que la liste donnee contient le nombre de joueurs correspondant au jeu
 		if (players.length != p.size())
 			throw new IllegalArgumentException("The number of given players is different from the number of players awaited.");
@@ -85,7 +85,7 @@ public class Game {
 		return board;
 	}
 
-	public Human[] getPlayers() {
+	public Player[] getPlayers() {
 		return players;
 	}
 
@@ -98,12 +98,12 @@ public class Game {
 		int max = minAmountOfRoadToGetLongestRoad;
 		
 		// on recupere le joueur qui a la route la plus longue
-		Human avant = playerWithLongestRoad;
+		Player avant = playerWithLongestRoad;
 				
 		// on attribue la route la plus longue au joueur ayant la plus longue route, atteignant au moins le nombre requis
 		for (int i = 0; i < players.length; i++) {
-			if (players[i].longestRoad > max) {
-				max = players[i].longestRoad;
+			if (players[i].getPersonalLongestRoad() > max) {
+				max = players[i].getPersonalLongestRoad();
 				playerWithLongestRoad = players[i];
 			}
 		}
@@ -112,12 +112,10 @@ public class Game {
 		if (playerWithLongestRoad != avant) {
 			
 			// on enleve 2 points au joueur qui avait la route la plus longue
-			if (avant != null)
-				avant.points -= 2;
+			if (avant != null) avant.lostTheLongestRoad();
 			
 			// on ajoute 2 points au joueur qui a la route la plus longue
-			if (playerWithLongestRoad != null)
-				playerWithLongestRoad.points += 2;
+			if (playerWithLongestRoad != null) playerWithLongestRoad.gotTheLongestRoad();
 		}
 	}
 	
@@ -126,12 +124,12 @@ public class Game {
 		int max = minAmountOfArmyToGetLargestArmy;
 		
 		// on recupere le joueur qui a l'armee la plus puissante
-		Human avant = playerWithLargestArmy;
+		Player avant = playerWithLargestArmy;
 				
 		// on attribue l'armee la plus puissante au joueur ayant joue le plus de cartes chevalier, atteignant au moins le nombre requis
 		for (int i = 0; i < players.length; i++) {
-			if (players[i].largestArmy > max) {
-				max = players[i].largestArmy;
+			if (players[i].getPersonalLargestArmy() > max) {
+				max = players[i].getPersonalLargestArmy();
 				playerWithLargestArmy = players[i];
 			}
 		}
@@ -140,12 +138,10 @@ public class Game {
 		if (playerWithLargestArmy != avant) {
 			
 			// on enleve 2 points au joueur qui avait l'armee la plus puissante
-			if (avant != null)
-				avant.points -= 2;
+			if (avant != null) avant.lostTheLargestArmy();
 			
 			// on ajoute 2 points au joueur qui a l'armee la plus puissante
-			if (playerWithLargestArmy != null)
-				playerWithLargestArmy.points += 2;
+			if (playerWithLargestArmy != null) playerWithLargestArmy.gotTheLargestArmy();
 		}
 	}
 	
@@ -166,14 +162,15 @@ public class Game {
 	
 	// Lance la phase initiale du jeu
 	private void setupPhase() {
+		/*
 		// 1er tour
 		for (int i = 0; i < players.length; i++) {
 			printTurnBanner(players[i]);
 			board.printBoard();
-			while (players[i].getNumSettlement() != 1)
+			while (players[i].getNumSettlementBuilt() != 1)
 				players[i].build(Construction.SETTLEMENT, true);  // on demande au joueur de placer une colonie
 			board.printBoard();
-			while (players[i].getNumRoad() != 1)
+			while (players[i].getNumRoadBuilt() != 1)
 				players[i].build(Construction.ROAD, true);  // on demande au joueur de placer une route pres de la colonie qu'il vient de placer
 		}
 		
@@ -181,15 +178,15 @@ public class Game {
 		for (int i = players.length - 1; i >= 0; i--) {
 			printTurnBanner(players[i]);
 			board.printBoard();
-			while (players[i].getNumSettlement() != 2)
+			while (players[i].getNumSettlementBuilt() != 2)
 				players[i].build(Construction.SETTLEMENT, true);  // on demande au joueur de placer une colonie
 			board.printBoard();
-			while (players[i].getNumRoad() != 2)
+			while (players[i].getNumRoadBuilt() != 2)
 				players[i].build(Construction.ROAD, true);  // on demande au joueur de placer une route pres de la colonie qu'il vient de placer
-		}
+		}*/
 	}
 	
-	private void printTurnBanner(Human p) {
+	private void printTurnBanner(Player p) {
 		String s = "";
 		for (int i = 0; i < p.name.length(); i++)
 			s += "=";
@@ -200,7 +197,7 @@ public class Game {
 	}
 	
 	// Effectue un tour de jeu du joueur et renvoie si le joueur a gagne
-	public boolean oneTurn(Human p) {
+	public boolean oneTurn(Player p) {
 		// on affiche le nom du joueur actuel
 		printTurnBanner(p);
 		
@@ -208,8 +205,8 @@ public class Game {
 		board.printBoard();
 		
 		// on affiche ses points et ses cartes actuelles
-		p.printCards();
-		p.printPoints();
+		//p.printCards();
+		//p.printPoints();
 		
 		// on lance sa phase de production
 		boolean next = false;
@@ -226,19 +223,19 @@ public class Game {
 		else giveResources(n, p);
 		
 		// on affiche ses ressources et ses points
-		p.printResources();
-		p.printPoints();
+		//p.printResources();
+		//p.printPoints();
 		
 		// on lance sa phase de commerce
 		next = false;
-		while (next == false) next = p.tradingPhase();
+		//while (next == false) next = p.tradingPhase();
 		
 		// on regarde si le joueur a gagne
 		if (p.hasWon()) return true;
 		
 		// on lance sa phase de construction
 		next = false;
-		while (next == false) next = p.buildingPhase();
+		//while (next == false) next = p.buildingPhase();
 		
 		// on renvoie si le joueur a gagne
 		return p.hasWon();
@@ -249,26 +246,26 @@ public class Game {
 		return rd.nextInt(11) + 2;
 	}
 	
-	private void sevenOnDice(Human p) {
+	private void sevenOnDice(Player p) {
 		System.out.println("\n=================");
 		System.out.println("| SEVEN ON DICE |");
 		System.out.println("=================\n");
 		
 		// on regarde si un joueur a plus de 7 ressources
-		for (Human pl : players) {
-			if (pl.getNumResources() > 7) {
+		for (Player pl : players) {
+			if (pl.getNumOfResources() > 7) {
 				// si oui, il doit se defausser de la moitie de ses ressources
-				int n = pl.getNumResources() / 2;
+				int n = pl.getNumOfResources() / 2;
 				if (pl == p) System.out.println("You have more than 7 resources, please throw " + n + " resources.\n");
 				else System.out.println(pl.name + " has more than 7 resources, he has to throw " + n + " resources.\n");
 				
 				// on affiche ses ressources
-				pl.printResources();
+				//pl.printResources();
 				
 				// on lui demande de se defausser d'une ressource a la fois
 				for (int i = 0; i < n; i++) {
 					Resource resource = null;
-					while (resource == null) resource = pl.askResourceToGive(1);
+					//while (resource == null) resource = pl.askResourceToGive(1);
 					pl.loseResources(resource, 1);
 				}
 			}
@@ -277,12 +274,12 @@ public class Game {
 		onTheRobber(p);
 	}
 	
-	public void onTheRobber(Human p) {
+	public void onTheRobber(Player p) {
 		Pair pair = null;
 		
 		// on demande sur quelle tuile le joueur veut deplacer le voleur
 		while (pair == null) {
-			pair = p.askPosition(1, Construction.NOTHING, true);
+			//pair = p.askPosition(1, Construction.NOTHING, true);
 			
 			// on verifie que le voleur n'est pas deja sur la tuile (d'apres les regles, il est obligatoire de deplacer le voleur)
 			if (board.getTiles()[pair.x][pair.y].robberIsHere) {
@@ -300,7 +297,7 @@ public class Game {
 		
 		if (!intersections.isEmpty()) {
 			// on recupere tous les joueurs adverses qui ont une intersection construite autour de la nouvelle position du voleur
-			LinkedList<Human> players = new LinkedList<>();
+			LinkedList<Player> players = new LinkedList<>();
 			
 			for (Intersection in : intersections) {
 				if (!players.contains(in.player) && in.player != p)
@@ -308,8 +305,8 @@ public class Game {
 			}
 			
 			// on demande au joueur a quel joueur adverse il veut aleatoirement prendre une ressource
-			Human opponent = null;
-			while (opponent == null) opponent = p.askWhichPlayer(players);
+			Player opponent = null;
+			//while (opponent == null) opponent = p.askWhichPlayer(players);
 			
 			// on recupere une ressource du joueur adverse de facon aleatoire
 			Resource resource = opponent.loseARandomResource();
@@ -318,11 +315,11 @@ public class Game {
 			if (resource == null) System.out.println("This player has no resources.\n");
 			
 			// sinon, on donne la ressource recupere au joueur actuel
-			else p.receiveResource(resource, 1);
+			else p.receiveResources(resource, 1);
 		}
 	}
 	
-	public void giveResources(int n, Human p) {
+	public void giveResources(int n, Player p) {
 		Tile[][] t = board.getTiles();
 		
 		// on parcourt le plateau
@@ -348,7 +345,7 @@ public class Game {
 						if (resource != null) {
 							if (in.player == p) System.out.println("You get " + in.construction + " " + resource + ".");
 							else System.out.println(in.player.name + " get " + in.construction + " " + resource + ".");
-							in.player.receiveResource(resource, in.construction.ordinal() - 1);
+							in.player.receiveResources(resource, in.construction.ordinal() - 1);
 						}
 					}
 				}

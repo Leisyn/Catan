@@ -1,7 +1,7 @@
 package catan.model.card;
 
 import catan.model.Game;
-import catan.model.player.Human;
+import catan.model.player.Player;
 
 public abstract class Card {
 	protected int type;  // 0 : chevalier / 1 : progres / 2 : victoire
@@ -28,7 +28,7 @@ public abstract class Card {
 		this.name = name;
 	}
 	
-	public abstract void jouer(Game game, Human p);
+	public abstract void jouer(Game game, Player p);
 	public abstract String toString();
 }
 

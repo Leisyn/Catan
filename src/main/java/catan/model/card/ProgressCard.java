@@ -2,8 +2,8 @@ package catan.model.card;
 
 import catan.model.Game;
 import catan.model.board.Buildable.Construction;
-import catan.model.player.Human;
-import catan.model.player.Human.Resource;
+import catan.model.player.Player;
+import catan.model.player.Player.Resource;
 
 public class ProgressCard extends Card {
 
@@ -11,13 +11,13 @@ public class ProgressCard extends Card {
 		super(1, name);
 	}
 
-	public void jouer(Game game, Human p) {
+	public void jouer(Game game, Player p) {
 		// s'il s'agit d'une carte construction
 		if (this.name.equals("construction")) {
 			
 			// on construit 2 routes
-			p.build(Construction.ROAD, false);
-			p.build(Construction.ROAD, false);
+			//p.build(Construction.ROAD, false);
+			//p.build(Construction.ROAD, false);
 		}
 		
 		// s'il s'agit d'une carte invention
@@ -25,18 +25,18 @@ public class ProgressCard extends Card {
 			
 			// on demande la ressource que le joueur veut recevoir et on lui donne
 			Resource askedResource = null;
-			while (askedResource == null) askedResource = p.askResourceToReceive(1);
+			//while (askedResource == null) askedResource = p.askResourceToReceive(1);
 			
 			// on donne au joueur la ressource qu'il a souhait�
-			p.receiveResource(askedResource, 1);
+			p.receiveResources(askedResource, 1);
 
 			
 			// on demande la 2e ressource que le joueur veut recevoir et on lui donne
 			Resource askedResource2 = null;
-			while (askedResource2 == null) askedResource2 = p.askResourceToReceive(1);
+			//while (askedResource2 == null) askedResource2 = p.askResourceToReceive(1);
 			
 			// on donne au joueur la ressource qu'il a souhait�
-			p.receiveResource(askedResource2, 1);
+			p.receiveResources(askedResource2, 1);
 		}
 	
 		// s'il s'agit d'une carte monopole
@@ -44,10 +44,10 @@ public class ProgressCard extends Card {
 
 			// on demande la ressource que le joueur veut recevoir
 			Resource askedResource = null;
-			while (askedResource == null) askedResource = p.askResourceToReceive(1);
+			//while (askedResource == null) askedResource = p.askResourceToReceive(1);
 			
 			// on donne au joueur la ressource qu'il a souhait�
-			p.receiveResource(askedResource, 1);		
+			p.receiveResources(askedResource, 1);		
 
 			// on compte et on retire toutes les ressources de ce type que les autres joueurs ont
 			int cmpt = 0;
@@ -59,7 +59,7 @@ public class ProgressCard extends Card {
 			}
 			
 			// on donne le nombre compt� au joueur
-			p.receiveResource(askedResource, cmpt2);
+			p.receiveResources(askedResource, cmpt2);
 		}
 
 	}

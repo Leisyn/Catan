@@ -4,7 +4,7 @@ import catan.model.board.Buildable.Construction;
 import catan.model.board.Harbor.HarborType;
 import catan.model.board.Tile.TileType;
 import catan.model.other.Pair;
-import catan.model.player.Human;
+import catan.model.player.Player;
 
 public class Board {
 	private Tile[][] tiles;
@@ -287,7 +287,7 @@ public class Board {
 	}
 
 	// Calcule la route la plus longue du joueur donn�
-	public int calculateLongestRoad(Human p) {
+	public int calculateLongestRoad(Player p) {
 		int max = 0;
 		for (int i = 1; i < roads.length - 1; i++) {
 			for (int j = 0; j < roads[i].length - 1; j++) {
@@ -304,7 +304,7 @@ public class Board {
 		return calculateRoadLengthAux(visitedRoad, r.player, r, 0);
 	}
 
-	private int calculateRoadLengthAux(boolean[][] visitedRoad, Human p, Path r, int n) {
+	private int calculateRoadLengthAux(boolean[][] visitedRoad, Player p, Path r, int n) {
 		// on regarde s'il s'agit d'une route existante
 		if (r == null)
 			return n;

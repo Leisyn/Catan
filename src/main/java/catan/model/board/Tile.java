@@ -3,7 +3,7 @@ package catan.model.board;
 import java.util.LinkedList;
 
 import catan.model.board.Buildable.Construction;
-import catan.model.player.Human;
+import catan.model.player.Player;
 
 public class Tile {
 	public enum TileType{SEA, HARBOR, HILLS, FOREST, MOUNTAINS, FIELDS, PASTURE, DESERT};
@@ -91,7 +91,7 @@ public class Tile {
 	 * @param s	the initial of the wanted direction
 	 * @param p	the player who built this path
 	 */
-	public void setPath(String s, Human p) {
+	public void setPath(String s, Player p) {
 		switch (s) {
 			case "N": pathN.player = p; break;
 			case "S": pathS.player = p; break;
@@ -121,7 +121,7 @@ public class Tile {
 	 * @param p		the player who built this intersection
 	 * @param type	the type of building built
 	 */
-	public void setIntersection(String s, Human p, Construction c) {
+	public void setIntersection(String s, Player p, Construction c) {
 		switch (s) {
 			case "NO": interNW.player = p; interNW.construction = c; break;
 			case "NE": interNE.player = p; interNE.construction = c; break;

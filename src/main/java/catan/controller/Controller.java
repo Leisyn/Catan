@@ -5,8 +5,10 @@ import javax.swing.*;
 import catan.model.Game;
 import catan.model.card.Card;
 import catan.model.player.Human;
+import catan.model.player.Player;
 import catan.model.player.Robot;
-import catan.model.player.Human.Resource;
+import catan.model.player.Player.Resource;
+import catan.model.player.Player.Action;
 import catan.view.View;
 
 import java.awt.*;
@@ -128,7 +130,7 @@ public class Controller {
 		
 		else if (vue.listeJoueurs.size() == nbHumain) {
 			for (int i = nbHumain + 1; i <= vue.nbJoueurs; i++)
-				vue.listeJoueurs.add(new Human("Robot " + i, vue.jeu));
+				vue.listeJoueurs.add(new Robot("Robot " + i, vue.jeu));
 			vue.jeu.iniPlayers(vue.listeJoueurs);
 			vue.cMenu.show(vue.listePanel, vue.listeMenu[2]);
 			setAllCompteurs();
@@ -149,28 +151,28 @@ public class Controller {
 	}
 	
 	public void setCompteursJoueur() {
-		Human j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
+		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 
 		vue.nomJoueurActuel.setText("Tour de " + j.name);
-		vue.nbPointsActuel.setText("Nombre de points : " + j.points);
-		vue.routeLaPlusLongueActuel.setText("Route la plus longue : " + j.longestRoad);
-		vue.armeeLaPlusPuissanteActuel.setText("Arm�e la plus puissante : " + j.largestArmy);
+		vue.nbPointsActuel.setText("Nombre de points : " + j.getVictoryPoints());
+		vue.routeLaPlusLongueActuel.setText("Route la plus longue : " + j.getPersonalLongestRoad());
+		vue.armeeLaPlusPuissanteActuel.setText("Arm�e la plus puissante : " + j.getPersonalLargestArmy());
 	}
 	
 	public void setCompteursJeu() {
 		if (vue.jeu.playerWithLongestRoad != null)
-			vue.routeLaPlusLongueJeu.setText("Route la plus longue : " + vue.jeu.playerWithLongestRoad + " (" + vue.jeu.playerWithLongestRoad.longestRoad + ")");
+			vue.routeLaPlusLongueJeu.setText("Route la plus longue : " + vue.jeu.playerWithLongestRoad + " (" + vue.jeu.playerWithLongestRoad.getPersonalLongestRoad() + ")");
 		else
 			vue.routeLaPlusLongueJeu.setText("Route la plus longue : personne");
 		
 		if (vue.jeu.playerWithLargestArmy != null)
-			vue.armeeLaPlusPuissanteJeu.setText("Arm�e la plus puissante : " + vue.jeu.playerWithLargestArmy + " (" + vue.jeu.playerWithLargestArmy.largestArmy + ")");
+			vue.armeeLaPlusPuissanteJeu.setText("Arm�e la plus puissante : " + vue.jeu.playerWithLargestArmy + " (" + vue.jeu.playerWithLargestArmy.getPersonalLargestArmy() + ")");
 		else
 			vue.armeeLaPlusPuissanteJeu.setText("Arm�e la plus puissante : personne");
 	}
 	
 	public void setRessourcesJoueur() {
-		Human j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
+		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		
 		vue.nbArgileActuel.setText("Argile : " + j.getResources().get(Resource.BRICK));
 		vue.nbBleActuel.setText("Bl� : " + j.getResources().get(Resource.GRAIN));
@@ -180,14 +182,14 @@ public class Controller {
 	}
 	
 	public void setCartesJoueur() {
-		Human j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
+		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		
-		for (Card c : j.cards)
+		for (Card c : j.getCards())
 			vue.listeCarte.setText(vue.listeCarte.getText() + "\n* " + c);
 	}
 	
 	public void autorisePhaseProductionEtCommerce(JButton jouerCarte) {
-		Human j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
+		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		
 		if (j.hasAPlayableCard())
 			jouerCarte.setEnabled(true);
@@ -198,7 +200,7 @@ public class Controller {
 	public void autoriseMarchander(JButton donnerArg, JButton donnerBle, JButton donnerBois,
 			JButton donnerLaine, JButton donnerMin, JButton recevoirArg, JButton recevoirBle,
 			JButton recevoirBois, JButton recevoirLaine, JButton recevoirMin) {
-		Human j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
+		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		boolean peutEchanger = false;
 		
 		if (j.getResources().get(Resource.BRICK) < j.getTradeRate().get(Resource.BRICK))
@@ -258,24 +260,24 @@ public class Controller {
 	
 	public void autorisePhaseConstruction(JButton route, JButton colonie,
 			JButton ville, JButton achete, JButton jouerCarte) {
-		Human j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
+		Player j = vue.jeu.getPlayers()[vue.indiceJoueurActuel];
 		
-		if (j.hasTheResourcesTo("R"))
+		if (j.hasTheResourcesTo(Action.BUILDROAD))
 			route.setEnabled(true);
 		else
 			route.setEnabled(false);
 		
-		if (j.hasTheResourcesTo("C"))
+		if (j.hasTheResourcesTo(Action.BUILDSETTLEMENT))
 			colonie.setEnabled(true);
 		else
 			colonie.setEnabled(false);
 		
-		if (j.hasTheResourcesTo("V"))
+		if (j.hasTheResourcesTo(Action.BUILDCITY))
 			ville.setEnabled(true);
 		else
 			ville.setEnabled(false);
 		
-		if (j.hasTheResourcesTo("A"))
+		if (j.hasTheResourcesTo(Action.BUYCARD))
 			achete.setEnabled(true);
 		else
 			achete.setEnabled(false);
@@ -287,7 +289,7 @@ public class Controller {
 	}
 	
 	public void changeJoueurOuPassePhaseProduction() {
-		int c = vue.jeu.getPlayers()[vue.indiceJoueurActuel].getNumSettlement();
+		int c = vue.jeu.getPlayers()[vue.indiceJoueurActuel].getNumSettlementBuilt();
 		
 		if (c == 2 && vue.indiceJoueurActuel == 0) {
 			vue.cChoix.show(vue.listePanelChoix, vue.listeChoix[1]);
@@ -309,7 +311,7 @@ public class Controller {
 	
 	public boolean phaseInitialeFini() {
 		for (int i = 0; i < vue.nbJoueurs; i++) {
-			if (vue.jeu.getPlayers()[i].getNumSettlement() != 2 || vue.jeu.getPlayers()[i].getNumRoad() != 2)
+			if (vue.jeu.getPlayers()[i].getNumSettlementBuilt() != 2 || vue.jeu.getPlayers()[i].getNumRoadBuilt() != 2)
 				return false;
 		}
 		return true;

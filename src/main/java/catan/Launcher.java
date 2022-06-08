@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import catan.model.Game;
 import catan.model.player.Human;
+import catan.model.player.Player;
 import catan.model.player.Robot;
 import catan.view.View;
 
@@ -53,7 +54,7 @@ public class Launcher {
 			}
 			System.out.println();
 			int numAI = Integer.parseInt(answer);
-			LinkedList<Human> players = new LinkedList<>();
+			LinkedList<Player> players = new LinkedList<>();
 			int numHuman = numPlayer - numAI;
 				
 			for (int i = 1; i <= numHuman; i++) {
