@@ -113,10 +113,10 @@ public class Game {
 		if (playerWithLongestRoad != avant) {
 			
 			// on enleve 2 points au joueur qui avait la route la plus longue
-			if (avant != null) avant.lostTheLongestRoad();
+			if (avant != null) avant.lostASpecialCard();
 			
 			// on ajoute 2 points au joueur qui a la route la plus longue
-			if (playerWithLongestRoad != null) playerWithLongestRoad.gotTheLongestRoad();
+			if (playerWithLongestRoad != null) playerWithLongestRoad.gotASpecialCard();
 		}
 	}
 	
@@ -139,10 +139,10 @@ public class Game {
 		if (playerWithLargestArmy != avant) {
 			
 			// on enleve 2 points au joueur qui avait l'armee la plus puissante
-			if (avant != null) avant.lostTheLargestArmy();
+			if (avant != null) avant.lostASpecialCard();
 			
 			// on ajoute 2 points au joueur qui a l'armee la plus puissante
-			if (playerWithLargestArmy != null) playerWithLargestArmy.gotTheLargestArmy();
+			if (playerWithLargestArmy != null) playerWithLargestArmy.gotASpecialCard();
 		}
 	}
 	

@@ -10,7 +10,7 @@ public class VictoryCard extends Card {
 	}
 
 	@Override
-	public void jouer(Game game, Player p) {}
+	public void play(Game game, Player p) {}
 
 	@Override
 	public String toString() {

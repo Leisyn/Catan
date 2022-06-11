@@ -56,103 +56,182 @@ public abstract class Player {
 		resources.put(Resource.WOOL, 0);
 	}
 
+	/**
+	 * Get the player's list of cards.
+	 * @return the player's list of cards
+	 */
 	public LinkedList<Card> getCards() {
 		return cards;
 	}
 
+	/**
+	 * Get the player's resources.
+	 * @return the player's resources
+	 */
 	public HashMap<Resource, Integer> getResources() {
 		return resources;
 	}
 
+	/**
+	 * Get the player's trade rate.
+	 * @return the player's trade rate
+	 */
 	public HashMap<Resource, Integer> getTradeRate() {
 		return tradeRate;
 	}
 
+	/**
+	 * Get the player's number of resources.
+	 * @return the player's number of resources
+	 */
 	public int getNumOfResources() {
 		int n = 0;
 		for (Integer i : resources.values()) n += i;
 		return n;
 	}
 
+	/**
+	 * Get the player's number of victory points
+	 * @return the player's number of victory points
+	 */
 	public int getVictoryPoints() {
 		return victoryPoints;
 	}
 
-	public void gotTheLongestRoad() {
+	/**
+	 * Assign 2 victory points to the player. This method should only be used if the player
+	 * got a special card (Longest Road or Largest Army).
+	 */
+	public void gotASpecialCard() {
 		victoryPoints += 2;
 	}
 
-	public void lostTheLongestRoad() {
+	/**
+	 * Remove 2 victory points from the player. This method should only be used if the player
+	 * lost a special card (Longest Road or Largest Army).
+	 */
+	public void lostASpecialCard() {
 		victoryPoints -= 2;
 	}
 
-	public void gotTheLargestArmy() {
-		victoryPoints += 2;
-	}
-
-	public void lostTheLargestArmy() {
-		victoryPoints -= 2;
-	}
-
+	/**
+	 * Get the player's longest road length.
+	 * @return the player's longest road length.
+	 */
 	public int getPersonalLongestRoad() {
 		return personalLongestRoad;
 	}
 
+	/**
+	 * Set the player's longest road to the given integer.
+	 * @param n the new length of the longest road
+	 */
 	public void setPersonalLongestRoad(int n) {
 		personalLongestRoad = n;
 	}
 
+	/**
+	 * Get the player's largest army.
+	 * @return the player's largest army
+	 */
 	public int getPersonalLargestArmy() {
 		return personalLargestArmy;
 	}
 
+	/**
+	 * Raise by one the player's largest army. This method should only be used if the player
+	 * used a knight card.
+	 */
 	public void usedAKnightCard() {
 		personalLargestArmy++;
 	}
 
+	/**
+	 * Get the player's number of road built.
+	 * @return the player's number of road built
+	 */
 	public int getNumRoadBuilt() {
 		return numRoadBuilt;
 	}
 
+	/**
+	 * Raise by one the player's number of road built. This method should only be used if the
+	 * player built a road.
+	 */
 	public void builtARoad() {
 		numRoadBuilt++;
 	}
 
+	/**
+	 * Get the player's number of settlement built.
+	 * @return the player's number of settlement built.
+	 */
 	public int getNumSettlementBuilt() {
 		return numSettlementBuilt;
 	}
 
+	/**
+	 * Raise by one the player's victory points and number of settlement built. This method
+	 * should only be used if the player built a settlement.
+	 */
 	public void builtASettlement() {
 		victoryPoints++;
 		numSettlementBuilt++;
 	}
 
+	/**
+	 * Get the player's number of city built.
+	 * @return the player's number of city built
+	 */
 	public int getNumCityBuilt() {
 		return numCityBuilt;
 	}
 
+	/**
+	 * Decrease by one the number of settlement built and raise by one the player's victory
+	 * points and number of city built. This method should only be used if the player built a city.
+	 */
 	public void builtACity() {
 		victoryPoints++;
+		numSettlementBuilt--;
 		numCityBuilt++;
 	}
 
 
 
+	/**
+	 * Verify if the player has won the game.
+	 * @return whether the player has won
+	 */
 	public boolean hasWon() {
 		return victoryPoints >= 10;
 	}
 
+	/**
+	 * Verify if the player has a playable card. Playable cards can be knight cards or progress cards.
+	 * @return whether the player has a playable card
+	 */
 	public boolean hasAPlayableCard() {
 		for (Card c : cards)
 			if (c instanceof KnightCard || c instanceof ProgressCard) return true;
 		return false;
 	}
 
-	// TODO: write a method that will play the card and remove it from the list
+	/**
+	 * Play the given card.
+	 * @param c the card to play
+	 * @return whether the player has won
+	 */
 	public boolean playACard(Card c) {
-		return true;
+		c.play(actualGame, this);
+		cards.remove(c);
+		return hasWon();
 	}
 
+	/**
+	 * Change the player's trade rate depending on the given harbor type.
+	 * @param type the harbor the player has built on
+	 */
 	public void changeTradeRate(HarborType type) {
 		switch (type) {
 			case BRICK: tradeRate.replace(Resource.BRICK, 2); break;
@@ -169,14 +248,28 @@ public abstract class Player {
 		}
 	}
 
+	/**
+	 * Give a certain amount of a resource to the player.
+	 * @param r			the resource to give
+	 * @param amount	the amount to give
+	 */
 	public void receiveResources(Resource r, int amount) {
 		resources.replace(r, resources.get(r) + amount);
 	}
 
+	/**
+	 * Take a certain amount of a resource from the player.
+	 * @param r			the resource to take
+	 * @param amount	the amount to take
+	 */
 	public void loseResources(Resource r, int amount) {
 		resources.replace(r, resources.get(r) - amount);
 	}
 
+	/**
+	 * Take a random resource from the player.
+	 * @return the taken resource or null
+	 */
 	public Resource loseARandomResource() {
 		if (getNumOfResources() == 0) return null;
 		Random rd = new Random();
@@ -208,6 +301,11 @@ public abstract class Player {
 		}
 	}
 
+	/**
+	 * Verify if the player has the resources necessary to execute the given action.
+	 * @param a	the action to execute
+	 * @return whether the action can be executed
+	 */
 	public boolean hasTheResourcesTo(Action a) {
 		int brick = resources.get(Resource.BRICK);
 		int lumber = resources.get(Resource.LUMBER);
@@ -236,6 +334,10 @@ public abstract class Player {
 		return true;
 	}
 
+	/**
+	 * Buy a card from the list of available cards of the game.
+	 * @return whether the player has won
+	 */
 	public boolean buyACard() {
 		int numOfAvailableCards = actualGame.availableCards.size();
 		if (numOfAvailableCards == 0) return hasWon();
@@ -246,6 +348,10 @@ public abstract class Player {
 		Card c = actualGame.availableCards.remove(n);
 		cards.add(c);
 		if (c instanceof VictoryCard) victoryPoints++;
+		
+		loseResources(Resource.ORE, 1);
+		loseResources(Resource.GRAIN, 1);
+		loseResources(Resource.WOOL, 1);
 
 		return hasWon();
 	}

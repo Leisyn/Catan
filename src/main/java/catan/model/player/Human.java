@@ -60,7 +60,7 @@ public class Human extends Player {
 		for (Card c : cards) {
 			if (c.name.equals(carte)) {
 				cards.remove(c);
-				c.jouer(actualGame, this);
+				c.play(actualGame, this);
 				return hasWon();
 			}
 		}

@@ -12,7 +12,7 @@ public abstract class Card {
 		this.name = name;
 	}
 	
-	public abstract void jouer(Game game, Player p);
+	public abstract void play(Game game, Player p);
 	public abstract String toString();
 }
 

@@ -8,7 +8,7 @@ import catan.model.player.Player;
 
 public class Intersection implements Buildable {
 	public Construction construction;
-	public Player player; // le joueur qui a construit un batiment sur l'intersection (null si rien n'est construit)
+	public Player player;
 
 	public Intersection() {
 		construction = Construction.NOTHING;

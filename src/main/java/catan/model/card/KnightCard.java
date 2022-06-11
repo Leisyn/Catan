@@ -9,7 +9,7 @@ public class KnightCard extends Card {
 		super(CardName.KNIGHT);
 	}
 
-	public void jouer(Game game, Player p) {
+	public void play(Game game, Player p) {
 		// on augmente l'armee la plus puissante du joueur
 		p.usedAKnightCard();
 		

@@ -11,7 +11,7 @@ public class ProgressCard extends Card {
 		super(name);
 	}
 
-	public void jouer(Game game, Player p) {
+	public void play(Game game, Player p) {
 		if (name == CardName.ROADBUILDING) {
 			
 			// on construit 2 routes
