@@ -16,7 +16,7 @@ import catan.model.other.Action;
 import catan.model.other.Resource;
 
 public abstract class Player {
-	public static int numPlayer = 0;
+	public static int noPlayer = 0;
 	public final int id;
 	public final Game actualGame;
 
@@ -27,13 +27,13 @@ public abstract class Player {
 	protected int victoryPoints = 0;
 	protected int personalLongestRoad = 0;
 	protected int personalLargestArmy = 0;
-	protected int numRoadBuilt = 0;
-	protected int numSettlementBuilt = 0;
-	protected int numCityBuilt = 0;
+	protected int noRoadBuilt = 0;
+	protected int noSettlementBuilt = 0;
+	protected int noCityBuilt = 0;
 
 	public Player(String s, Game g) {
-		numPlayer++;
-		id = numPlayer;
+		noPlayer++;
+		id = noPlayer;
 		actualGame = g;
 		name = s;
 
@@ -75,18 +75,18 @@ public abstract class Player {
 	}
 
 	/**
-	 * Get the player's number of resources.
-	 * @return the player's number of resources
+	 * Get the player's nober of resources.
+	 * @return the player's nober of resources
 	 */
-	public int getNumOfResources() {
+	public int getNoOfResources() {
 		int n = 0;
 		for (Integer i : resources.values()) n += i;
 		return n;
 	}
 
 	/**
-	 * Get the player's number of victory points
-	 * @return the player's number of victory points
+	 * Get the player's nober of victory points
+	 * @return the player's nober of victory points
 	 */
 	public int getVictoryPoints() {
 		return victoryPoints;
@@ -141,54 +141,54 @@ public abstract class Player {
 	}
 
 	/**
-	 * Get the player's number of road built.
-	 * @return the player's number of road built
+	 * Get the player's nober of road built.
+	 * @return the player's nober of road built
 	 */
-	public int getNumRoadBuilt() {
-		return numRoadBuilt;
+	public int getNoRoadBuilt() {
+		return noRoadBuilt;
 	}
 
 	/**
-	 * Raise by one the player's number of road built. This method should only be used if the
+	 * Raise by one the player's nober of road built. This method should only be used if the
 	 * player built a road.
 	 */
 	public void builtARoad() {
-		numRoadBuilt++;
+		noRoadBuilt++;
 	}
 
 	/**
-	 * Get the player's number of settlement built.
-	 * @return the player's number of settlement built.
+	 * Get the player's nober of settlement built.
+	 * @return the player's nober of settlement built.
 	 */
-	public int getNumSettlementBuilt() {
-		return numSettlementBuilt;
+	public int getNoSettlementBuilt() {
+		return noSettlementBuilt;
 	}
 
 	/**
-	 * Raise by one the player's victory points and number of settlement built. This method
+	 * Raise by one the player's victory points and nober of settlement built. This method
 	 * should only be used if the player built a settlement.
 	 */
 	public void builtASettlement() {
 		victoryPoints++;
-		numSettlementBuilt++;
+		noSettlementBuilt++;
 	}
 
 	/**
-	 * Get the player's number of city built.
-	 * @return the player's number of city built
+	 * Get the player's nober of city built.
+	 * @return the player's nober of city built
 	 */
-	public int getNumCityBuilt() {
-		return numCityBuilt;
+	public int getNoCityBuilt() {
+		return noCityBuilt;
 	}
 
 	/**
-	 * Decrease by one the number of settlement built and raise by one the player's victory
-	 * points and number of city built. This method should only be used if the player built a city.
+	 * Decrease by one the nober of settlement built and raise by one the player's victory
+	 * points and nober of city built. This method should only be used if the player built a city.
 	 */
 	public void builtACity() {
 		victoryPoints++;
-		numSettlementBuilt--;
-		numCityBuilt++;
+		noSettlementBuilt--;
+		noCityBuilt++;
 	}
 
 
@@ -265,7 +265,7 @@ public abstract class Player {
 	 * @return the taken resource or null
 	 */
 	public Resource loseARandomResource() {
-		if (getNumOfResources() == 0) return null;
+		if (getNoOfResources() == 0) return null;
 		Random rd = new Random();
 		int n = 0;
 		while (true) {
@@ -333,11 +333,11 @@ public abstract class Player {
 	 * @return whether the player has won
 	 */
 	public boolean buyACard() {
-		int numOfAvailableCards = actualGame.availableCards.size();
-		if (numOfAvailableCards == 0) return hasWon();
+		int noOfAvailableCards = actualGame.availableCards.size();
+		if (noOfAvailableCards == 0) return hasWon();
 
 		Random rd = new Random();
-		int n = rd.nextInt(numOfAvailableCards);
+		int n = rd.nextInt(noOfAvailableCards);
 
 		Card c = actualGame.availableCards.remove(n);
 		cards.add(c);

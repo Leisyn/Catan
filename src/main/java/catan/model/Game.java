@@ -47,7 +47,7 @@ public class Game {
 	public void iniPlayers(LinkedList<Player> p) {
 		// on verifie que la liste donnee contient le nombre de joueurs correspondant au jeu
 		if (players.length != p.size())
-			throw new IllegalArgumentException("The number of given players is different from the number of players awaited.");
+			throw new IllegalArgumentException("The nober of given players is different from the nober of players awaited.");
 		
 		// on tire les joueurs aleatoirement, afin que le joueur qui commence soit aleatoire
 		Random rd = new Random();
@@ -167,10 +167,10 @@ public class Game {
 		for (int i = 0; i < players.length; i++) {
 			printTurnBanner(players[i]);
 			board.printBoard();
-			while (players[i].getNumSettlementBuilt() != 1)
+			while (players[i].getNoSettlementBuilt() != 1)
 				players[i].build(Construction.SETTLEMENT, true);  // on demande au joueur de placer une colonie
 			board.printBoard();
-			while (players[i].getNumRoadBuilt() != 1)
+			while (players[i].getNoRoadBuilt() != 1)
 				players[i].build(Construction.ROAD, true);  // on demande au joueur de placer une route pres de la colonie qu'il vient de placer
 		}
 		
@@ -178,10 +178,10 @@ public class Game {
 		for (int i = players.length - 1; i >= 0; i--) {
 			printTurnBanner(players[i]);
 			board.printBoard();
-			while (players[i].getNumSettlementBuilt() != 2)
+			while (players[i].getNoSettlementBuilt() != 2)
 				players[i].build(Construction.SETTLEMENT, true);  // on demande au joueur de placer une colonie
 			board.printBoard();
-			while (players[i].getNumRoadBuilt() != 2)
+			while (players[i].getNoRoadBuilt() != 2)
 				players[i].build(Construction.ROAD, true);  // on demande au joueur de placer une route pres de la colonie qu'il vient de placer
 		}*/
 	}
@@ -253,9 +253,9 @@ public class Game {
 		
 		// on regarde si un joueur a plus de 7 ressources
 		for (Player pl : players) {
-			if (pl.getNumOfResources() > 7) {
+			if (pl.getNoOfResources() > 7) {
 				// si oui, il doit se defausser de la moitie de ses ressources
-				int n = pl.getNumOfResources() / 2;
+				int n = pl.getNoOfResources() / 2;
 				if (pl == p) System.out.println("You have more than 7 resources, please throw " + n + " resources.\n");
 				else System.out.println(pl.name + " has more than 7 resources, he has to throw " + n + " resources.\n");
 				
@@ -327,7 +327,7 @@ public class Game {
 			for (int j = 0; j < t[i].length; j++) {
 				
 				// si le jeton de la tuile correspond et qu'il n'y a pas de voleur
-				if (t[i][j].numToken == n && !t[i][j].robberIsHere) {
+				if (t[i][j].noToken == n && !t[i][j].robberIsHere) {
 					
 					// on recupere toutes les intersections construites autour et on donne les ressources selon le type de batiment construit
 					for (Intersection in : t[i][j].getAllBuiltIntersections()) {

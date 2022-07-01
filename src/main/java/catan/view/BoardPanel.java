@@ -164,7 +164,7 @@ public class BoardPanel extends JPanel implements MouseListener {
 		
 		for (int i = 0; i < p.getTiles().length; i++) {
 			for (int j = 0; j < p.getTiles()[i].length; j++) {
-				int jeton = p.getTiles()[i][j].numToken;
+				int jeton = p.getTiles()[i][j].noToken;
 				
 				if (jeton > 1) {
 					String nb = "" + jeton;

@@ -159,17 +159,17 @@ public class Human extends Player {
 	public boolean build(Construction c, boolean phaseInitiale) {
 		if (c == Construction.NOTHING) return hasWon();
 
-		if (c == Construction.ROAD && numRoadBuilt >= Game.maxAmountOfRoadForEachPlayer) {
+		if (c == Construction.ROAD && noRoadBuilt >= Game.maxAmountOfRoadForEachPlayer) {
 			System.out.println("Vous avez atteint le nombre maximum de routes.");
 			return hasWon();
 		}
 
-		if (c == Construction.SETTLEMENT && numSettlementBuilt >= Game.maxAmountOfSettlementForEachPlayer) {
+		if (c == Construction.SETTLEMENT && noSettlementBuilt >= Game.maxAmountOfSettlementForEachPlayer) {
 			System.out.println("Vous avez atteint le nombre maximum de colonies.");
 			return hasWon();
 		}
 
-		if (c == Construction.CITY && numCityBuilt >= Game.maxAmountOfCityForEachPlayer) {
+		if (c == Construction.CITY && noCityBuilt >= Game.maxAmountOfCityForEachPlayer) {
 			System.out.println("Vous avez atteint le nombre maximum de villes.");
 			return hasWon();
 		}
@@ -455,7 +455,7 @@ public class Human extends Player {
 			return new Pair(3, 3);
 		}
 
-		// on parse ce que l'utilisateur a rentre pour obtenir le type de la tuile et le numero du jeton
+		// on parse ce que l'utilisateur a rentre pour obtenir le type de la tuile et le noero du jeton
 		String nom = position.substring(0, 2);
 		String nb = position.substring(2);
 		int jeton = 0;
@@ -497,7 +497,7 @@ public class Human extends Player {
 		if (c == Construction.ROAD) {
 
 			// on regarde s'il lui reste des routes disponibles
-			if (numRoadBuilt >= 15) {
+			if (noRoadBuilt >= 15) {
 				System.out.println("Vous avez atteint le nombre maximum de routes.\n");
 				return null;
 			}
@@ -566,13 +566,13 @@ public class Human extends Player {
 		// on regarde si le joueur veut construire une intersection
 		else {
 			// on regarde s'il lui reste des colonies disponibles s'il veut construire une colonie
-			if (c == Construction.SETTLEMENT && numSettlementBuilt >= Game.maxAmountOfSettlementForEachPlayer) {
+			if (c == Construction.SETTLEMENT && noSettlementBuilt >= Game.maxAmountOfSettlementForEachPlayer) {
 				System.out.println("Vous avez atteint le nombre maximum de colonie.\n");
 				return null;
 			}
 
 			// on regarde s'il lui reste des villes disponibles s'il veut construire une ville
-			else if (c == Construction.CITY && numCityBuilt >= Game.maxAmountOfCityForEachPlayer) {
+			else if (c == Construction.CITY && noCityBuilt >= Game.maxAmountOfCityForEachPlayer) {
 				System.out.println("Vous avez atteint le nombre maximum de ville.\n");
 				return null;
 			}
@@ -716,7 +716,7 @@ public class Human extends Player {
 		// on affiche les joueurs possibles
 		System.out.println("De quel joueur voulez-vous prendre une resource ? (Veuillez entrer le nom entier du joueur voulu)");
 		for (Human j : joueurs)
-			System.out.println("  * " + j.name + " (" + j.getNumOfResources() + " ressources)");
+			System.out.println("  * " + j.name + " (" + j.getNoOfResources() + " ressources)");
 
 		String nom = actualGame.sc.next().toLowerCase();
 

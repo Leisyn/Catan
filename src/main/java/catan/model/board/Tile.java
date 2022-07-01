@@ -8,28 +8,28 @@ import catan.model.player.Player;
 
 public class Tile {
 	public final TileType type;
-	public final int numToken;
+	public final int noToken;
 	public boolean robberIsHere;
 	
 	public Path pathN, pathS, pathE, pathW;
 	public Intersection interNW, interNE, interSW, interSE;
 	
 	/**
-	 * Creates a general terrain tile with a number token on it.
+	 * Creates a general terrain tile with a nober token on it.
 	 * @param type		the type of the tile
-	 * @param numToken	the number token of the tile
+	 * @param noToken	the nober token of the tile
 	 */
-	public Tile(TileType type, int numToken) {
-		if (numToken < 2 || numToken > 12) throw new IllegalArgumentException("Can't create the tile: unreachable token number");
-		if (numToken == 7) throw new IllegalArgumentException("Can't create the tile: a tile can't have 7 as a token number");
+	public Tile(TileType type, int noToken) {
+		if (noToken < 2 || noToken > 12) throw new IllegalArgumentException("Can't create the tile: unreachable token nober");
+		if (noToken == 7) throw new IllegalArgumentException("Can't create the tile: a tile can't have 7 as a token nober");
 		
 		this.type = type;
-		this.numToken = numToken;
+		this.noToken = noToken;
 		this.robberIsHere = false;
 	}
 	
 	/**
-	 * Creates a tile with no number token on it.
+	 * Creates a tile with no nober token on it.
 	 * @param type			the type of the tile
 	 * @param robberIsHere	whether the robber is here or not
 	 */
@@ -38,7 +38,7 @@ public class Tile {
 			throw new IllegalArgumentException("Can't create the tile: given type not corresponding");
 		
 		this.type = type;
-		this.numToken = 0;
+		this.noToken = 0;
 		this.robberIsHere = robberIsHere;
 	}
 	
@@ -143,7 +143,7 @@ public class Tile {
 	}
 
 	/**
-	 * Print the name of the tile, with its number token if it has one.
+	 * Print the name of the tile, with its nober token if it has one.
 	 */
 	public void printName() {
 		switch (type) {
@@ -156,8 +156,8 @@ public class Tile {
 			case DESERT: System.out.print("  DES  "); return;
 			default: System.out.print("       "); return;
 		}
-		if (numToken < 10) System.out.print(" " + numToken + " ");
-		else System.out.print(numToken + " ");
+		if (noToken < 10) System.out.print(" " + noToken + " ");
+		else System.out.print(noToken + " ");
 	}
 	
 	/**

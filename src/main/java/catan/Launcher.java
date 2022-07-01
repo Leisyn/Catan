@@ -37,33 +37,33 @@ public class Launcher {
 			}
 			System.out.println();
 			
-			int numPlayer = Integer.parseInt(answer);
-			Game game = new Game(numPlayer, sc);
+			int noPlayer = Integer.parseInt(answer);
+			Game game = new Game(noPlayer, sc);
 			answer = null;
 			
 			while (answer == null) {
-				System.out.println("How many AI? " + "[" + numPlayer + " maximum]");
+				System.out.println("How many AI? " + "[" + noPlayer + " maximum]");
 				answer = sc.next();
 				if (!answer.matches("\\d*")) {
 					System.out.println("Wrong.\n");
 					answer = null;
-				} else if (Integer.parseInt(answer) < 0 || Integer.parseInt(answer) > numPlayer) {
+				} else if (Integer.parseInt(answer) < 0 || Integer.parseInt(answer) > noPlayer) {
 					System.out.println("Wrong.\n");
 					answer = null;
 				}
 			}
 			System.out.println();
-			int numAI = Integer.parseInt(answer);
+			int noAI = Integer.parseInt(answer);
 			LinkedList<Player> players = new LinkedList<>();
-			int numHuman = numPlayer - numAI;
+			int noHuman = noPlayer - noAI;
 				
-			for (int i = 1; i <= numHuman; i++) {
+			for (int i = 1; i <= noHuman; i++) {
 				System.out.println("Player " + i + ": What will be your name?");
 				players.add(new Human(sc.next(), game));
 				System.out.println();
 			}
 			
-			for (int i = numHuman + 1; i <= numPlayer; i++)
+			for (int i = noHuman + 1; i <= noPlayer; i++)
 				players.add(new Robot("IA " + i, game));
 	
 			game.iniPlayers(players);

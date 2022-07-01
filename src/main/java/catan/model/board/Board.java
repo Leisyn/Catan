@@ -195,7 +195,7 @@ public class Board {
 
 		for (int i = 0; i < tiles.length; i++) {
 			for (int j = 0; j < tiles[i].length; j++) {
-				if (tiles[i][j].type == type && tiles[i][j].numToken == jeton)
+				if (tiles[i][j].type == type && tiles[i][j].noToken == jeton)
 					return new Pair(i, j);
 			}
 		}

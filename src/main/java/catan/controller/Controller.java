@@ -289,7 +289,7 @@ public class Controller {
 	}
 	
 	public void changeJoueurOuPassePhaseProduction() {
-		int c = vue.jeu.getPlayers()[vue.indiceJoueurActuel].getNumSettlementBuilt();
+		int c = vue.jeu.getPlayers()[vue.indiceJoueurActuel].getNoSettlementBuilt();
 		
 		if (c == 2 && vue.indiceJoueurActuel == 0) {
 			vue.cChoix.show(vue.listePanelChoix, vue.listeChoix[1]);
@@ -311,7 +311,7 @@ public class Controller {
 	
 	public boolean phaseInitialeFini() {
 		for (int i = 0; i < vue.nbJoueurs; i++) {
-			if (vue.jeu.getPlayers()[i].getNumSettlementBuilt() != 2 || vue.jeu.getPlayers()[i].getNumRoadBuilt() != 2)
+			if (vue.jeu.getPlayers()[i].getNoSettlementBuilt() != 2 || vue.jeu.getPlayers()[i].getNoRoadBuilt() != 2)
 				return false;
 		}
 		return true;
