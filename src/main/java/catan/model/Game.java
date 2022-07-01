@@ -6,16 +6,15 @@ import java.util.Scanner;
 
 import catan.model.board.Intersection;
 import catan.model.board.Board;
-import catan.model.board.Buildable.Construction;
 import catan.model.board.Tile;
 import catan.model.card.Card;
-import catan.model.card.Card.CardName;
+import catan.model.other.CardName;
 import catan.model.card.KnightCard;
 import catan.model.card.ProgressCard;
 import catan.model.card.VictoryCard;
 import catan.model.other.Pair;
 import catan.model.player.Player;
-import catan.model.player.Player.Resource;
+import catan.model.other.Resource;
 
 public class Game {
 	private Board board;

@@ -1,6 +1,7 @@
 package catan.model.card;
 
 import catan.model.Game;
+import catan.model.other.CardName;
 import catan.model.player.Player;
 
 public class KnightCard extends Card {

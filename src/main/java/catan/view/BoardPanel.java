@@ -7,9 +7,9 @@ import catan.model.board.Intersection;
 import catan.model.board.Board;
 import catan.model.board.Path;
 import catan.model.board.Tile;
-import catan.model.board.Buildable.Construction;
+import catan.model.other.Construction;
 import catan.model.player.Player;
-import catan.model.player.Player.Resource;
+import catan.model.other.Resource;
 
 import java.util.LinkedList;
 import java.awt.geom.Ellipse2D;

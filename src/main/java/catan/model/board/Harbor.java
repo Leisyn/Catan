@@ -1,8 +1,9 @@
 package catan.model.board;
 
+import catan.model.other.HarborType;
+import catan.model.other.TileType;
+
 public class Harbor extends Tile {
-	public enum HarborType{GENERIC, BRICK, LUMBER, ORE, GRAIN, WOOL};
-	
 	public final HarborType harborType;
 	
 	public Harbor(HarborType type) {

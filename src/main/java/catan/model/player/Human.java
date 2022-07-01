@@ -4,14 +4,16 @@ import java.util.LinkedList;
 
 import catan.model.Game;
 import catan.model.board.Buildable;
-import catan.model.board.Buildable.Construction;
+import catan.model.other.Construction;
 import catan.model.board.Intersection;
 import catan.model.board.Path;
 import catan.model.board.Tile;
 import catan.model.card.Card;
 import catan.model.card.KnightCard;
 import catan.model.card.ProgressCard;
+import catan.model.other.Action;
 import catan.model.other.Pair;
+import catan.model.other.Resource;
 
 public class Human extends Player {
 	public Human(String s, Game g) {
@@ -370,11 +372,11 @@ public class Human extends Player {
 
 	private Action askBuildingPhase() {
 		System.out.println("Que voulez-vous faire ? (Veuillez entrez la lettre capitale se trouvant avant l'action voulue)");
-		char answer = Character.toUpperCase(actualGame.sc.next().charAt(0));
-		Action action = charToAction(answer);
+		String answer = actualGame.sc.next().toUpperCase();
+		Action action = Action.toAction(answer);
 
 		// on regarde s'il a demande de passer son tour
-		if (action == Action.SKIPPHASE) return action;
+		if (action == Action.ENDTURN) return action;
 
 		// on regarde si le joueur a demande une action coutant des ressources
 		if (action == Action.BUILDROAD || action == Action.BUILDSETTLEMENT || action == Action.BUILDCITY || action == Action.BUYCARD) {
@@ -649,7 +651,7 @@ public class Human extends Player {
 			System.out.println("Quel resource voulez-vous donner ? (Veuillez entrer le nom entier de la resource � donner)");
 
 		String answer = actualGame.sc.next().toLowerCase();
-		Resource resource = Player.stringToResource(answer);
+		Resource resource = Resource.toResource(answer);
 
 		// on regarde si le joueur est en train de marchander
 		if (type == 0) {
@@ -691,7 +693,7 @@ public class Human extends Player {
 
 		// on r�cup�re ce que le joueur a entre
 		String answer = actualGame.sc.next().toLowerCase();
-		Resource resource = Player.stringToResource(answer);
+		Resource resource = Resource.toResource(answer);
 
 		// s'il est en train de marchander, on regarde s'il a demande de revenir en arriere
 		if (type == 0 && answer.equals("retour")) {

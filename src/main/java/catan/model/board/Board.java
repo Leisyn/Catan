@@ -1,8 +1,8 @@
 package catan.model.board;
 
-import catan.model.board.Buildable.Construction;
-import catan.model.board.Harbor.HarborType;
-import catan.model.board.Tile.TileType;
+import catan.model.other.Construction;
+import catan.model.other.HarborType;
+import catan.model.other.TileType;
 import catan.model.other.Pair;
 import catan.model.player.Player;
 

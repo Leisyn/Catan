@@ -1,12 +1,12 @@
 package catan.model.card;
 
 import catan.model.Game;
-import catan.model.board.Buildable.Construction;
+import catan.model.other.CardName;
 import catan.model.player.Player;
-import catan.model.player.Player.Resource;
+import catan.model.other.Resource;
 
 public class ProgressCard extends Card {
-
+	
 	public ProgressCard(CardName name) {
 		super(name);
 	}

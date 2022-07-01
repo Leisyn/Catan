@@ -2,12 +2,11 @@ package catan.model.board;
 
 import java.util.LinkedList;
 
-import catan.model.board.Buildable.Construction;
+import catan.model.other.Construction;
+import catan.model.other.TileType;
 import catan.model.player.Player;
 
 public class Tile {
-	public enum TileType{SEA, HARBOR, HILLS, FOREST, MOUNTAINS, FIELDS, PASTURE, DESERT};
-	
 	public final TileType type;
 	public final int numToken;
 	public boolean robberIsHere;

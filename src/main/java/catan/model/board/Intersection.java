@@ -3,7 +3,8 @@ package catan.model.board;
 import java.util.LinkedList;
 
 import catan.model.Game;
-import catan.model.board.Harbor.HarborType;
+import catan.model.other.Construction;
+import catan.model.other.HarborType;
 import catan.model.player.Player;
 
 public class Intersection implements Buildable {

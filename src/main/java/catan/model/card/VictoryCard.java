@@ -1,10 +1,11 @@
 package catan.model.card;
 
 import catan.model.Game;
+import catan.model.other.CardName;
 import catan.model.player.Player;
 
 public class VictoryCard extends Card {
-
+	
 	public VictoryCard(CardName name) {
 		super(name);
 	}

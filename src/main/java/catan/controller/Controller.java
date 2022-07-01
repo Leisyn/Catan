@@ -7,8 +7,8 @@ import catan.model.card.Card;
 import catan.model.player.Human;
 import catan.model.player.Player;
 import catan.model.player.Robot;
-import catan.model.player.Player.Resource;
-import catan.model.player.Player.Action;
+import catan.model.other.Resource;
+import catan.model.other.Action;
 import catan.view.View;
 
 import java.awt.*;

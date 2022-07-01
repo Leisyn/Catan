@@ -6,22 +6,16 @@ import java.util.Random;
 
 import catan.model.Game;
 import catan.model.board.Buildable;
-import catan.model.board.Buildable.Construction;
-import catan.model.board.Harbor.HarborType;
-import catan.model.board.Intersection;
-import catan.model.board.Path;
-import catan.model.board.Tile;
-import catan.model.board.Tile.TileType;
+import catan.model.other.Construction;
+import catan.model.other.HarborType;
 import catan.model.card.Card;
 import catan.model.card.KnightCard;
 import catan.model.card.ProgressCard;
 import catan.model.card.VictoryCard;
-import catan.model.other.Pair;
+import catan.model.other.Action;
+import catan.model.other.Resource;
 
 public abstract class Player {
-	public enum Resource{BRICK, LUMBER, ORE, GRAIN, WOOL};
-	public enum Action{THROWDICE, BUILDROAD, BUILDSETTLEMENT, BUILDCITY, PLAYCARD, BUYCARD, SKIPPHASE};
-
 	public static int numPlayer = 0;
 	public final int id;
 	public final Game actualGame;
@@ -370,30 +364,4 @@ public abstract class Player {
 	public abstract String askResourceToTrade();
 	public abstract String askProducingPhase();
 	public abstract String askCombinedTradeBuildPhase();
-
-	public static Resource stringToResource(String s) {
-		s = s.toUpperCase();
-		switch (s) {
-			case "BRICK": return Resource.BRICK;
-			case "LUMBER": return Resource.LUMBER;
-			case "ORE": return Resource.ORE;
-			case "GRAIN": return Resource.GRAIN;
-			case "WOOL": return Resource.WOOL;
-			default: return null;
-		}
-	}
-
-	public static Action charToAction(char c) {
-		c = Character.toUpperCase(c);
-		switch (c) {
-			case 'T': return Action.THROWDICE;
-			case 'R': return Action.BUILDROAD;
-			case 'S': return Action.BUILDSETTLEMENT;
-			case 'C': return Action.BUILDCITY;
-			case 'P': return Action.PLAYCARD;
-			case 'B': return Action.BUYCARD;
-			case 'K': return Action.SKIPPHASE;
-			default: return null;
-		}
-	}
 }
